@@ -1,0 +1,100 @@
+import 'package:plot_twist_app/models/domain/base/abstract_model.dart';
+import '../../../controller/errors/errorLog.dart';
+import '../../../controller/uxException.dart';
+
+import {AbstractModel, IAbstractModel} from '../../../base/abstractModel';
+import {ErrorLog} from '../../../base/errors/errorLog';
+import {UxException} from '../../../base/errors/uxException';
+
+export type CallStatus = 'active' | 'closed' | 'failed' | 'created';
+
+export type CallType =
+  | 'disorientation'
+  | 'gossip'
+  | 'treasureHunt'
+  | 'inferring'
+  | 'lackOfChoice'
+  | 'deprivation'
+  | 'requestOfHelp'
+  | 'temptation'
+  | 'synchronism'
+  | 'pushToAction'
+  | 'heraldOfChange';
+
+export interface ICallModel extends IAbstractModel {
+  partyMotivation: string;
+  challengeId: string;
+  status?: CallStatus;
+  type?: CallType;
+}
+
+export class CallModel extends AbstractModel {
+  static readonly PARTY_MOTIVATION = 2048;
+
+  _partyMotivation = '';
+  _challengeId = '';
+  _status?: CallStatus;
+  _type?: CallType;
+
+  constructor(data: ICallModel) {
+    super(data);
+    this.setChallengeId(data.challengeId);
+    this.setStatus(data.status ?? 'created');
+    this.setType(data.type ?? 'gossip');
+    this.setPartyMotivation(data.partyMotivation);
+  }
+
+  setChallengeId(newValue: string): void {
+    this._challengeId = newValue;
+  }
+
+  setStatus(newValue: CallStatus): void {
+    this._status = newValue;
+  }
+
+  setType(newValue: CallType): void {
+    this._type = newValue;
+  }
+
+  setPartyMotivation(newValue: string): void {
+    this._partyMotivation = newValue;
+  }
+
+  validateMap(data: ICallModel): void {
+    const emptyProperties: string[] = [];
+    const notSatisfiedProps: Record<string, string> = {};
+
+    if (data.challengeId == null) {
+      emptyProperties.push('challengeId');
+    }
+
+    if (data.type == null) {
+      emptyProperties.push('type');
+    }
+
+    if (data.name == null) {
+      emptyProperties.push('name');
+    }
+
+    if (data.partyMotivation == null) {
+      emptyProperties.push('partyMotivation');
+    } else if (data.partyMotivation.length > CallModel.PARTY_MOTIVATION) {
+      notSatisfiedProps.partyMotivation = 'more_then_$PARTY_MOTIVATION';
+    }
+
+    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
+      notSatisfiedProps.emptyProperties = emptyProperties.toString();
+
+      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
+    }
+  }
+
+  getAdditionalProperties(): Record<string, unknown> {
+    return {
+      partyMotivation: this._partyMotivation,
+      challengeId: this._challengeId,
+      status: this._status,
+      type: this._type,
+    };
+  }
+}
