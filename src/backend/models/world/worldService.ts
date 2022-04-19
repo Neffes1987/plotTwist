@@ -1,24 +1,17 @@
 import {AbstractService} from '../../base/service/abstractService';
-import {Command} from '../../base/service/command';
 import {ServiceMediator} from '../../controller/serviceMediator';
 
 import {ILawModel, LawModel} from './law/lawModel';
 import {LawRepository} from './law/lawRepository';
 import {ICommonWorld, WorldModel, WorldStatus} from './world/worldModel';
 import {WorldRepository} from './world/worldRepository';
-import {WorldCommands} from './worldCommands';
 
 export class WorldService extends AbstractService {
   _worldRepository = new WorldRepository();
   _lawRepository = new LawRepository();
-  _commands = new WorldCommands();
 
   constructor(mediator: ServiceMediator) {
     super(mediator);
-  }
-
-  get commands(): WorldCommands {
-    return this._commands;
   }
 
   async getWorldsList(plotId: string): Promise<WorldModel[]> {
@@ -66,9 +59,7 @@ export class WorldService extends AbstractService {
       isPlotActive = false;
     }
 
-    await this.sendMediatorCommand(this.mediator.plotService.commands.updatePlotStatus(changedWorld.plotId, isPlotActive));
-
-    return true;
+    return this.mediator.plotService.changePlotStatus(changedWorld.plotId, isPlotActive);
   }
 
   // laws
@@ -105,16 +96,5 @@ export class WorldService extends AbstractService {
     }
 
     return this._lawRepository.remove(lawId);
-  }
-
-  async executeCommand(command: Command): Promise<unknown> {
-    switch (command.operationName) {
-      case WorldCommands.getWorldsListOperation:
-        return this.getWorldsList(command.payload.plotId as string);
-      case WorldCommands.removeWorldsOperation:
-        return this.removeWorlds(command.payload.plotId as string);
-      default:
-        return null;
-    }
   }
 }

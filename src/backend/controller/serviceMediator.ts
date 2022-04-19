@@ -1,18 +1,8 @@
-import {Command} from '../base/service/command';
 import {ChallengeService} from '../models/challenge/challengeService';
 import {CharacterService} from '../models/character/characterService';
 import {PlotService} from '../models/plot/plotService';
 import {WaterholeService} from '../models/waterhole/waterholeService';
 import {WorldService} from '../models/world/worldService';
-
-export enum ServiceType {
-  world = 'world',
-  plot = 'plot',
-  character = 'character',
-  challenge = 'challenge',
-  waterhole = 'waterhole',
-  mediator = 'mediator',
-}
 
 export class ServiceMediator {
   private readonly _worldService: WorldService;
@@ -47,23 +37,5 @@ export class ServiceMediator {
 
   get challengeService(): ChallengeService {
     return this._challengeService;
-  }
-
-  async sendCommand(command: Command): Promise<unknown> {
-    switch (command.type) {
-      case ServiceType.world:
-        return this.worldService.executeCommand(command);
-      case ServiceType.plot:
-        return this.plotService.executeCommand(command);
-      case ServiceType.challenge:
-        return this.challengeService.executeCommand(command);
-      case ServiceType.character:
-        return this.characterService.executeCommand(command);
-      case ServiceType.waterhole:
-        return this.waterholeService.executeCommand(command);
-      case ServiceType.mediator:
-      default:
-        return null;
-    }
   }
 }

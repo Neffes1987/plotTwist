@@ -13,7 +13,7 @@ jest.mock('../world/worldRepository');
 jest.mock('../law/lawRepository');
 jest.mock('../../plot/plot/plotRepository');
 
-describe('', () => {
+describe('WorldService', () => {
   const mockedWorldRepository = new WorldRepository();
   const mockedLawRepository = new LawRepository();
   const mockedPlotRepository = new PlotRepository();

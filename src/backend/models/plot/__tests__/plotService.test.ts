@@ -6,7 +6,7 @@ import {PlotRepository} from '../plot/plotRepository';
 
 jest.mock('../plot/plotRepository');
 
-describe('', () => {
+describe('PlotService', () => {
   const mediator = new ServiceMediator();
   const page = 1;
   const limit = 1;
@@ -118,22 +118,6 @@ describe('', () => {
 
     it('MUST call "plotRepository.replace"', async () => {
       await mediator.plotService.changePlotStatus(plot.id, true);
-    });
-  });
-
-  describe('WHEN "executeCommand" is called', () => {
-    beforeEach(() => {
-      (mockedPlotRepository.get as jest.Mock).mockReturnValue(plot);
-    });
-
-    it('AND operation name is "updatePlotStatus", MUST change plot status', async () => {
-      await mediator.plotService.executeCommand(mediator.plotService.commands.updatePlotStatus(plot.id, true));
-    });
-
-    it('MUST return boolean value', async () => {
-      await mediator.plotService.executeCommand(mediator.plotService.commands.updatePlotStatus(plot.id, true));
-
-      expect(await mediator.plotService.executeCommand(mediator.plotService.commands.updatePlotStatus(plot.id, true))).toEqual(true);
     });
   });
 });

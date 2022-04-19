@@ -1,6 +1,5 @@
 import {IAbstractModel} from '../../base/abstractModel';
 import {AbstractService} from '../../base/service/abstractService';
-import {Command} from '../../base/service/command';
 import {ServiceMediator} from '../../controller/serviceMediator';
 
 import {ICharacterModel} from './character/characterModel';
@@ -65,9 +64,5 @@ export class CharacterService extends AbstractService {
 
   clean(worldIds: string) {
     return true;
-  }
-
-  executeCommand(command: Command): Promise<unknown> {
-    return Promise.resolve(null);
   }
 }

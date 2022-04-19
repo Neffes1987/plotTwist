@@ -1,8 +1,6 @@
 import {ServiceMediator} from '../../controller/serviceMediator';
 import {ErrorLog} from '../errors/errorLog';
 
-import {Command} from './command';
-
 export abstract class AbstractService {
   static cleanWorldDataOperation = 'cleanWorldData';
 
@@ -22,10 +20,4 @@ export abstract class AbstractService {
   get errorLog(): ErrorLog {
     return this._errorLog;
   }
-
-  async sendMediatorCommand(command: Command): Promise<unknown> {
-    return this._mediator.sendCommand(command);
-  }
-
-  abstract executeCommand(command: Command): Promise<unknown>;
 }

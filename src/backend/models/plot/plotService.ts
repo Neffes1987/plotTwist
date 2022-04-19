@@ -1,24 +1,16 @@
 import {AbstractService} from '../../base/service/abstractService';
-import {Command} from '../../base/service/command';
 import {ServiceMediator} from '../../controller/serviceMediator';
 
 import {IPlotModel, PlotModel} from './plot/plotModel';
 import {PlotRepository} from './plot/plotRepository';
-import {PlotCommands} from './plotCommands';
 
 export class PlotService extends AbstractService {
   private readonly _plotRepository;
-  private readonly _commands;
 
   constructor(mediator: ServiceMediator) {
     super(mediator);
 
     this._plotRepository = new PlotRepository();
-    this._commands = new PlotCommands();
-  }
-
-  get commands(): PlotCommands {
-    return this._commands;
   }
 
   async getPlotsList(page: number, limit: number): Promise<PlotModel[]> {
@@ -59,14 +51,5 @@ export class PlotService extends AbstractService {
     await this._plotRepository.replace(plot);
 
     return true;
-  }
-
-  async executeCommand(command: Command): Promise<unknown> {
-    switch (command.operationName) {
-      case PlotCommands.updatePlotStatusOperationName:
-        return this.changePlotStatus(command.payload.plotId as string, command.payload.isActive as boolean);
-      default:
-        return null;
-    }
   }
 }

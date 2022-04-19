@@ -1,5 +1,4 @@
 import {AbstractService} from '../../base/service/abstractService';
-import {Command} from '../../base/service/command';
 import {ServiceMediator} from '../../controller/serviceMediator';
 
 import {CallStatus, ICallModel} from './call/callModel';
@@ -86,6 +85,4 @@ export class ChallengeService extends AbstractService {
   clean(worldIds: string[]) {
     return true;
   }
-
-  async executeCommand(command: Command) {}
 }
