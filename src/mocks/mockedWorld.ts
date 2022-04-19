@@ -1,5 +1,5 @@
-import {ILawModel} from '@backend/models/world/law/lawModel';
-import {IPlainWorldWorld} from '@backend/models/world/world/plainWorldModel';
+import { ILawModel } from '@backend/models/world/law/lawModel';
+import { IPlainWorldWorld } from '@backend/models/world/world/plainWorldModel';
 
 export const MOCKED_WORLD: IPlainWorldWorld = {
   id: '1',
@@ -16,7 +16,6 @@ export const MOCKED_WORLD: IPlainWorldWorld = {
   plotId: 'plotId',
   status: 'draft',
   worldType: 'plainWorld',
-  lawIds: ['lawsIds', 'lawsIds'],
 };
 
 export const MOCKED_RELEASED_WORLD: IPlainWorldWorld = {
@@ -34,7 +33,6 @@ export const MOCKED_RELEASED_WORLD: IPlainWorldWorld = {
   plotId: 'plotId',
   status: 'release',
   worldType: 'plainWorld',
-  lawIds: ['lawsIds', 'lawsIds', 'lawsIds'],
 };
 
 export const MOCKED_LAW: ILawModel = {

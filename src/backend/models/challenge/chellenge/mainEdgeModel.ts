@@ -1,12 +1,6 @@
-import 'package:plot_twist_app/models/domain/base/abstract_model.dart';
-import '../../../controller/errors/errorLog.dart';
-import '../../../controller/uxException.dart';
-import 'challenge_model.dart';
+import { DEFINED_VALUE, IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
-
-import {ChallengeModel, IChallengeModel} from './challengeModel';
+import { ChallengeModel, IChallengeModel } from './challengeModel';
 
 export type MainEdgeType =
   | 'meetingWithMainFear'
@@ -35,12 +29,12 @@ export interface IMainEdgeModel extends IChallengeModel {
 export class MainEdgeModel extends ChallengeModel {
   static readonly CHALLENGE_IDS_MIN_VALUE = 2;
 
-  _shadowId = '';
-  _edgeImpact = '';
-  _challengeIds: string[] = [];
-  _mainEdgeType?: MainEdgeType;
-  _shadowEncounterType?: ShadowEncounterType;
-  _heartCrisis?: HeartCrisisType;
+  private _shadowId = '';
+  private _edgeImpact = '';
+  private _challengeIds: string[] = [];
+  private _mainEdgeType?: MainEdgeType;
+  private _shadowEncounterType?: ShadowEncounterType;
+  private _heartCrisis?: HeartCrisisType;
 
   constructor(data: IMainEdgeModel) {
     super(data);
@@ -70,47 +64,6 @@ export class MainEdgeModel extends ChallengeModel {
     this._challengeIds = newValue;
   }
 
-  validateMap(data: IMainEdgeModel): void {
-    super.validateMap(data);
-
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.shadowId == null) {
-      emptyProperties.push('shadowId');
-    }
-
-    if (data.mainEdgeType == null) {
-      emptyProperties.push('mainEdgeType');
-    }
-
-    if (data.mainEdgeType === 'heartCrisis' && data.heartCrisis == null) {
-      emptyProperties.push('heartCrisisType');
-    }
-
-    if (data.mainEdgeType === 'shadowEncounter' && data.shadowEncounterType == null) {
-      emptyProperties.push('shadowEncounterType');
-    }
-
-    if (data.challengeIds == null) {
-      emptyProperties.push('challengeIds');
-    } else if (data.challengeIds.length < MainEdgeModel.CHALLENGE_IDS_MIN_VALUE) {
-      notSatisfiedProps.challengeIds = 'less_then_$CHALLENGE_IDS_MIN_VALUE';
-    }
-
-    if (data.edgeImpact == null) {
-      emptyProperties.push('edgeImpact');
-    } else if (data.edgeImpact.length > this.MIDDLE_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.edgeImpact = 'more_then_$MIDDLE_VALUE_MAX_LENGTH';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
-  }
-
   getAdditionalProperties(): Record<string, unknown> {
     return {
       ...super.getAdditionalProperties(),
@@ -121,5 +74,41 @@ export class MainEdgeModel extends ChallengeModel {
       shadowEncounterType: this._shadowEncounterType,
       heartCrisis: this._heartCrisis,
     };
+  }
+
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      ...super.getValidationConfig(),
+      { name: 'shadowId' },
+      { name: 'mainEdgeType' },
+      {
+        name: 'heartCrisis',
+        when: [
+          {
+            rootFieldName: 'mainEdgeType',
+            rootFieldConditionValue: 'heartCrisis',
+            expectedValue: DEFINED_VALUE,
+          },
+        ],
+      },
+      {
+        name: 'shadowEncounterType',
+        when: [
+          {
+            rootFieldName: 'mainEdgeType',
+            rootFieldConditionValue: 'shadowEncounter',
+            expectedValue: DEFINED_VALUE,
+          },
+        ],
+      },
+      {
+        name: 'challengeIds',
+        min: MainEdgeModel.CHALLENGE_IDS_MIN_VALUE,
+      },
+      {
+        name: 'edgeImpact',
+        max: this.MIDDLE_VALUE_MAX_LENGTH,
+      },
+    ];
   }
 }

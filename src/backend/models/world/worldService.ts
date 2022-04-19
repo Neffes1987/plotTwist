@@ -1,17 +1,20 @@
-import {AbstractService} from '../../base/service/abstractService';
-import {ServiceMediator} from '../../controller/serviceMediator';
+import { AbstractService } from '../../base/service/abstractService';
+import { ServiceMediator } from '../../controller/serviceMediator';
 
-import {ILawModel, LawModel} from './law/lawModel';
-import {LawRepository} from './law/lawRepository';
-import {ICommonWorld, WorldModel, WorldStatus} from './world/worldModel';
-import {WorldRepository} from './world/worldRepository';
+import { ILawModel, LawModel } from './law/lawModel';
+import { LawRepository } from './law/lawRepository';
+import { ICommonWorld, WorldModel, WorldStatus } from './world/worldModel';
+import { WorldRepository } from './world/worldRepository';
 
 export class WorldService extends AbstractService {
-  _worldRepository = new WorldRepository();
-  _lawRepository = new LawRepository();
+  _worldRepository: WorldRepository;
+  _lawRepository: LawRepository;
 
   constructor(mediator: ServiceMediator) {
     super(mediator);
+
+    this._worldRepository = new WorldRepository();
+    this._lawRepository = new LawRepository();
   }
 
   async getWorldsList(plotId: string): Promise<WorldModel[]> {
@@ -27,7 +30,11 @@ export class WorldService extends AbstractService {
   }
 
   async createWorld(worldData: ICommonWorld): Promise<string> {
-    return this._worldRepository.add(this._worldRepository.generateModel(worldData));
+    const world = this._worldRepository.generateModel(worldData);
+
+    this._worldRepository.generateModelId(world);
+
+    return this._worldRepository.add(world);
   }
 
   async updateWorld(worldData: ICommonWorld): Promise<boolean> {
@@ -38,7 +45,7 @@ export class WorldService extends AbstractService {
     const changedWorld = await this.getWorld(worldId);
 
     if (changedWorld == null) {
-      throw this.errorLog.formatWrongFieldsError({wrongWorldId: worldId});
+      throw this.errorLog.formatWrongFieldsError({ wrongWorldId: worldId });
     }
 
     changedWorld.setStatus(status);
@@ -73,7 +80,11 @@ export class WorldService extends AbstractService {
   }
 
   async createLaw(lawData: ILawModel): Promise<string> {
-    return this._lawRepository.add(this._lawRepository.generateModel(lawData));
+    const model = this._lawRepository.generateModel(lawData);
+
+    this._lawRepository.generateModelId(model);
+
+    return this._lawRepository.add(model);
   }
 
   async updateLaw(lawData: ILawModel): Promise<boolean> {

@@ -1,16 +1,16 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {CharacterModel, ICharacterModel} from './characterModel';
+import { CharacterModel, ICharacterModel } from './characterModel';
 
 export type KnowledgeType = 'education' | 'presentationGifts' | 'teacherAdvice' | 'motivation' | 'sproutsInformation';
 
 export type MentorType = 'dark' | 'fallen' | 'permanent' | 'comic' | 'shaman';
 
 export interface IMentorModel extends ICharacterModel {
-  knowledgeType?: KnowledgeType;
-  mentorType?: MentorType;
+  knowledgeType: KnowledgeType;
+  mentorType: MentorType;
   rewardId: string;
+  waterholesIds: string[];
   lawIds: string[];
 }
 
@@ -18,7 +18,8 @@ export class MentorModel extends CharacterModel {
   private _knowledgeType?: KnowledgeType;
   private _mentorType?: MentorType;
   private _rewardId = '';
-  private _lawIds: string[] = [];
+  private _waterholeIds: string[] = [];
+  private _lawsIds: string[] = [];
 
   constructor(data: IMentorModel) {
     super(data);
@@ -26,7 +27,16 @@ export class MentorModel extends CharacterModel {
     this.setKnowledgeType(data.knowledgeType);
     this.setMentorType(data.mentorType);
     this.setRewardId(data.rewardId);
+    this.setWaterholes(data.waterholesIds);
     this.setLaws(data.lawIds);
+  }
+
+  get lawIds(): string[] {
+    return this._lawsIds;
+  }
+
+  get waterholeIds(): string[] {
+    return this._waterholeIds;
   }
 
   setKnowledgeType(newValue?: KnowledgeType): void {
@@ -41,28 +51,16 @@ export class MentorModel extends CharacterModel {
     this._rewardId = newValue;
   }
 
-  setLaws(newValue: string[]): void {
-    this._lawIds = newValue;
+  setWaterholes(newValue: string[]): void {
+    this._waterholeIds = newValue;
   }
 
-  validateMap(data: IMentorModel): void {
-    super.validateMap(data);
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
+  setLaws(newValue: string[]): void {
+    this._lawsIds = newValue;
+  }
 
-    if (data.mentorType == null) {
-      emptyProperties.push('mentorType');
-    }
-
-    if (data.knowledgeType == null) {
-      emptyProperties.push('knowledgeType');
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [...super.getValidationConfig(), { name: 'mentorType' }, { name: 'knowledgeType' }, { name: 'waterholesIds' }, { name: 'lawIds' }];
   }
 
   getAdditionalProperties(): Record<string, unknown> {
@@ -71,7 +69,8 @@ export class MentorModel extends CharacterModel {
       mentorType: this._mentorType,
       knowledgeType: this._knowledgeType,
       rewardId: this._rewardId,
-      lawIds: this._lawIds,
+      waterholeIds: this._waterholeIds,
+      lawsIds: this._lawsIds,
     };
   }
 }

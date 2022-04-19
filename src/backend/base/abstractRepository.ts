@@ -1,5 +1,5 @@
-import {AbstractModel, IAbstractModel} from './abstractModel';
-import {ErrorLog} from './errors/errorLog';
+import { AbstractModel, IAbstractModel } from './abstractModel';
+import { ErrorLog } from './errors/errorLog';
 
 export interface IListQuery {
   page?: number;

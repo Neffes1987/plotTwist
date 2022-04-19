@@ -1,8 +1,8 @@
-import {ChallengeService} from '../models/challenge/challengeService';
-import {CharacterService} from '../models/character/characterService';
-import {PlotService} from '../models/plot/plotService';
-import {WaterholeService} from '../models/waterhole/waterholeService';
-import {WorldService} from '../models/world/worldService';
+import { ChallengeService } from '../models/challenge/challengeService';
+import { CharacterService } from '../models/character/characterService';
+import { PlotService } from '../models/plot/plotService';
+import { WaterholeService } from '../models/waterhole/waterholeService';
+import { WorldService } from '../models/world/worldService';
 
 export class ServiceMediator {
   private readonly _worldService: WorldService;

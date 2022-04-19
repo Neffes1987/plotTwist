@@ -1,8 +1,8 @@
-import {IAbstractModel} from '@backend/base/abstractModel';
+import { IAbstractModel } from '@backend/base/abstractModel';
 
-import {AbstractRepository, IListQuery} from '../../../base/abstractRepository';
+import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
 
-import {RewardModel} from './rewardModel';
+import { RewardModel } from './rewardModel';
 
 export class RewardRepository extends AbstractRepository<RewardModel> {
   createDbTable(): string {

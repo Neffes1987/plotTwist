@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "code-fix": "prettier --write \"**/*.ts(x)?\"",
     "test": "jest",
     "lint": "eslint ."
   },

@@ -1,8 +1,9 @@
-import {MOCKED_PLOT} from '../../../../mocks/mockedPlot';
-import {UxException} from '../../../base/errors/uxException';
-import {ServiceMediator} from '../../../controller/serviceMediator';
-import {PlotModel} from '../plot/plotModel';
-import {PlotRepository} from '../plot/plotRepository';
+import { MOCKED_PLOT } from '@mocks/mockedPlot';
+
+import { UxException } from '../../../base/errors/uxException';
+import { ServiceMediator } from '../../../controller/serviceMediator';
+import { PlotModel } from '../plot/plotModel';
+import { PlotRepository } from '../plot/plotRepository';
 
 jest.mock('../plot/plotRepository');
 
@@ -47,7 +48,7 @@ describe('PlotService', () => {
       try {
         await mediator.plotService.getPlot(plot.id);
       } catch (e) {
-        expect(e).toEqual(new UxException('empty_fields', {plotId: '1'}));
+        expect(e).toEqual(new UxException('empty_fields', { plotId: '1' }));
       }
     });
   });
@@ -112,7 +113,7 @@ describe('PlotService', () => {
       try {
         await mediator.plotService.changePlotStatus(plot.id, true);
       } catch (e) {
-        expect(e).toEqual(new UxException('empty_fields', {plotId: '1'}));
+        expect(e).toEqual(new UxException('empty_fields', { plotId: '1' }));
       }
     });
 

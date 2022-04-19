@@ -1,6 +1,4 @@
-import {AbstractModel, IAbstractModel} from '../../../base/abstractModel';
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
 
 export interface ILawModel extends IAbstractModel {
   worldId: string;
@@ -29,26 +27,7 @@ export class LawModel extends AbstractModel {
     };
   }
 
-  validateMap(data: ILawModel): void {
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.worldId == null) {
-      emptyProperties.push('worldId');
-    }
-
-    if (data.name == null) {
-      emptyProperties.push('name');
-    }
-
-    if (data.description == null) {
-      emptyProperties.push('description');
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [{ name: 'worldId' }, { name: 'name' }, { name: 'description' }];
   }
 }

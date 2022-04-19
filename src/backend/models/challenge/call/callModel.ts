@@ -1,10 +1,4 @@
-import 'package:plot_twist_app/models/domain/base/abstract_model.dart';
-import '../../../controller/errors/errorLog.dart';
-import '../../../controller/uxException.dart';
-
-import {AbstractModel, IAbstractModel} from '../../../base/abstractModel';
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
 
 export type CallStatus = 'active' | 'closed' | 'failed' | 'created';
 
@@ -60,35 +54,6 @@ export class CallModel extends AbstractModel {
     this._partyMotivation = newValue;
   }
 
-  validateMap(data: ICallModel): void {
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.challengeId == null) {
-      emptyProperties.push('challengeId');
-    }
-
-    if (data.type == null) {
-      emptyProperties.push('type');
-    }
-
-    if (data.name == null) {
-      emptyProperties.push('name');
-    }
-
-    if (data.partyMotivation == null) {
-      emptyProperties.push('partyMotivation');
-    } else if (data.partyMotivation.length > CallModel.PARTY_MOTIVATION) {
-      notSatisfiedProps.partyMotivation = 'more_then_$PARTY_MOTIVATION';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
-  }
-
   getAdditionalProperties(): Record<string, unknown> {
     return {
       partyMotivation: this._partyMotivation,
@@ -96,5 +61,17 @@ export class CallModel extends AbstractModel {
       status: this._status,
       type: this._type,
     };
+  }
+
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      { name: 'challengeId' },
+      { name: 'type' },
+      { name: 'name' },
+      {
+        name: 'partyMotivation',
+        max: CallModel.PARTY_MOTIVATION,
+      },
+    ];
   }
 }

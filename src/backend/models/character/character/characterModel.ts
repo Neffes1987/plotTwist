@@ -1,14 +1,9 @@
-import 'package:plot_twist_app/models/domain/base/abstract_model.dart';
-import '../../../controller/errors/errorLog.dart';
-import '../../../controller/uxException.dart';
-
-import {AbstractModel, IAbstractModel} from '../../../base/abstractModel';
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
 
 export type CharacterType = 'mentor' | 'guard' | 'messenger' | 'ally' | 'enemy' | 'shadow';
 
 export interface ICharacterModel extends IAbstractModel {
+  plotId: string;
   age: string;
   race: string;
   gender: string;
@@ -19,6 +14,7 @@ export interface ICharacterModel extends IAbstractModel {
   type: CharacterType;
   strongest: string[];
   weakness: string[];
+  resultIds: string[];
 }
 
 export abstract class CharacterModel extends AbstractModel {
@@ -34,6 +30,8 @@ export abstract class CharacterModel extends AbstractModel {
   private readonly _type: CharacterType;
   private _strongest: string[] = [];
   private _weakness: string[] = [];
+  private _resultIds: string[] = [];
+  private readonly _plotId: string;
 
   protected constructor(data: ICharacterModel) {
     super(data);
@@ -46,8 +44,21 @@ export abstract class CharacterModel extends AbstractModel {
     this.setProfession(data.profession);
     this.setGroup(data.group);
     this._type = data.type;
+    this._plotId = data.plotId;
     this.setStrongest(data.strongest);
     this.setWeakness(data.weakness);
+  }
+
+  get plotId(): string {
+    return this._plotId;
+  }
+
+  get type(): CharacterType {
+    return this._type;
+  }
+
+  get resultIds(): string[] {
+    return this._resultIds;
   }
 
   setAge(newValue: string) {
@@ -86,69 +97,25 @@ export abstract class CharacterModel extends AbstractModel {
     this._weakness = newValue;
   }
 
-  validateMap(data: ICharacterModel) {
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
+  setResultIds(newValue: string[]) {
+    this._resultIds = newValue;
+  }
 
-    if (data.age == null) {
-      emptyProperties.push('age');
-    }
-
-    if (data.race == null) {
-      emptyProperties.push('race');
-    } else if (data.race.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.race = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.gender == null) {
-      emptyProperties.push('gender');
-    } else if (data.gender.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.gender = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.goal == null) {
-      emptyProperties.push('goal');
-    } else if (data.goal.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.goal = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.profession == null) {
-      emptyProperties.push('profession');
-    } else if (data.profession.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.profession = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.group == null) {
-      emptyProperties.push('group');
-    } else if (data.group.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.group = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.strongest == null) {
-      emptyProperties.push('strongest');
-    } else if (data.strongest.length < CharacterModel.ABILITIES_MIN_LENGTH) {
-      notSatisfiedProps.strongest = 'less_then_$ABILITIES_MIN_LENGTH';
-    }
-
-    if (data.weakness == null) {
-      emptyProperties.push('weakness');
-    } else if (data.weakness.length < CharacterModel.ABILITIES_MIN_LENGTH) {
-      notSatisfiedProps.weakness = 'less_then_$ABILITIES_MIN_LENGTH';
-    }
-
-    if (data.name == null) {
-      emptyProperties.push('name');
-    }
-
-    if (data.description == null) {
-      emptyProperties.push('description');
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      { name: 'age' },
+      { name: 'plotId' },
+      { name: 'race', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'gender', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'goal', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'profession', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'group', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'name', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'description', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'strongest', min: CharacterModel.ABILITIES_MIN_LENGTH },
+      { name: 'weakness', min: CharacterModel.ABILITIES_MIN_LENGTH },
+      { name: 'resultIds' },
+    ];
   }
 
   getAdditionalProperties(): Record<string, unknown> {
@@ -163,6 +130,8 @@ export abstract class CharacterModel extends AbstractModel {
       weakness: this._weakness,
       type: this._type,
       group: this._group,
+      plotId: this._plotId,
+      resultIds: this._resultIds,
     };
   }
 }

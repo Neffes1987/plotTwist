@@ -1,4 +1,4 @@
-import {UxException} from './uxException';
+import { UxException } from './uxException';
 
 export class ErrorLog {
   static validationError = 'validation_error';
@@ -33,7 +33,7 @@ export class ErrorLog {
   }
 
   formatEmptyFieldsError(props: string[]): UxException {
-    return new UxException(ErrorLog.emptyFields, {message: props.toString()});
+    return new UxException(ErrorLog.emptyFields, { message: props.toString() });
   }
 
   formatWrongFieldsError(props: Record<string, string>): UxException {

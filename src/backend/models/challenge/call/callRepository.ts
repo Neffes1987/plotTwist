@@ -1,6 +1,6 @@
-import {AbstractRepository, IListQuery} from '../../../base/abstractRepository';
+import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
 
-import {CallModel, ICallModel} from './callModel';
+import { CallModel, ICallModel } from './callModel';
 
 export class CallRepository extends AbstractRepository<CallModel> {
   async list(page: number, limit: number): Promise<CallModel[]> {

@@ -1,7 +1,6 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {CharacterModel, ICharacterModel} from './characterModel';
+import { CharacterModel, ICharacterModel } from './characterModel';
 
 export type AllyType = 'bosomFriend' | 'highWorldAlly' | 'animal' | 'undeadAlly' | 'agileServant';
 
@@ -45,36 +44,14 @@ export class AllyModel extends CharacterModel {
     this._allyType = newValue;
   }
 
-  validateMap(data: IAllyModel): void {
-    super.validateMap(data);
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.isAllyForParty == null) {
-      emptyProperties.push('isAllyForParty');
-    }
-
-    if (data.allyForHero == null) {
-      emptyProperties.push('allyForHero');
-    } else if (data.allyForHero.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.allyForHero = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.callForAlly == null) {
-      emptyProperties.push('callForAlly');
-    } else if (data.callForAlly.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.callForAlly = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.allyType == null) {
-      emptyProperties.push('allyType');
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      ...super.getValidationConfig(),
+      { name: 'isAllyForParty' },
+      { name: 'allyType' },
+      { name: 'allyForHero', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'callForAlly', max: this.SHORT_VALUE_MAX_LENGTH },
+    ];
   }
 
   getAdditionalProperties(): Record<string, unknown> {

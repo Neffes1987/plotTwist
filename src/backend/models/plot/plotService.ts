@@ -1,8 +1,8 @@
-import {AbstractService} from '../../base/service/abstractService';
-import {ServiceMediator} from '../../controller/serviceMediator';
+import { AbstractService } from '../../base/service/abstractService';
+import { ServiceMediator } from '../../controller/serviceMediator';
 
-import {IPlotModel, PlotModel} from './plot/plotModel';
-import {PlotRepository} from './plot/plotRepository';
+import { IPlotModel, PlotModel } from './plot/plotModel';
+import { PlotRepository } from './plot/plotRepository';
 
 export class PlotService extends AbstractService {
   private readonly _plotRepository;
@@ -21,7 +21,7 @@ export class PlotService extends AbstractService {
     const plot = await this._plotRepository.get(plotId);
 
     if (plot == null) {
-      throw this.errorLog.formatWrongFieldsError({plotId});
+      throw this.errorLog.formatWrongFieldsError({ plotId });
     }
 
     return plot;
@@ -43,7 +43,7 @@ export class PlotService extends AbstractService {
     const plot = await this.getPlot(plotId);
 
     if (!plot) {
-      throw this.errorLog.formatWrongFieldsError({wrongId: plotId});
+      throw this.errorLog.formatWrongFieldsError({ wrongId: plotId });
     }
 
     plot.setIsActive(isActive);

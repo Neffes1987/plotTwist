@@ -1,6 +1,4 @@
-import {AbstractModel, IAbstractModel} from '../../../base/abstractModel';
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
 
 export type ChallengeType = 'challenge' | 'edge' | 'mainEdge';
 
@@ -62,61 +60,6 @@ export class ChallengeModel extends AbstractModel {
     this._weight = newValue;
   }
 
-  validateMap(data: IChallengeModel): void {
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.rewardId == null) {
-      emptyProperties.push('rewardId');
-    }
-
-    if (data.type == null) {
-      emptyProperties.push('type');
-    }
-
-    if (data.name == null) {
-      emptyProperties.push('name');
-    } else if (data.name.length > this.MIDDLE_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.name = 'more_then_$MIDDLE_VALUE_MAX_LENGTH';
-    }
-
-    if (data.description == null) {
-      emptyProperties.push('description');
-    } else if (data.description.length > this.BIG_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.description = 'more_then_$BIG_VALUE_MAX_LENGTH';
-    }
-
-    if (data.plotGoal == null) {
-      emptyProperties.push('plotGoal');
-    } else if (data.plotGoal.length > this.BIG_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.plotGoal = 'more_then_$BIG_VALUE_MAX_LENGTH';
-    }
-
-    if (data.callIds == null) {
-      emptyProperties.push('callIds');
-    } else if (data.callIds.length < ChallengeModel.CALLS_MIN_VALUE) {
-      notSatisfiedProps.callIds = 'less_then_$CALLS_MIN_VALUE';
-    }
-
-    if (data.characterIds == null) {
-      emptyProperties.push('characterIds');
-    } else if (data.characterIds.length < ChallengeModel.CHARACTERS_MIN_VALUE) {
-      notSatisfiedProps.characterIds = 'less_then_$CHARACTERS_MIN_VALUE';
-    }
-
-    if (data.brokenLawIds == null) {
-      emptyProperties.push('brokenLawIds');
-    } else if (data.brokenLawIds.length < ChallengeModel.BROKEN_LAWS_MIN_VALUE) {
-      notSatisfiedProps.brokenLawIds = 'less_then_$BROKEN_LAWS_MIN_VALUE';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
-  }
-
   getAdditionalProperties(): Record<string, unknown> {
     return {
       callIds: this._callIds,
@@ -127,5 +70,18 @@ export class ChallengeModel extends AbstractModel {
       weight: this._weight,
       type: this._type,
     };
+  }
+
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      { name: 'rewardId' },
+      { name: 'type' },
+      { name: 'name', max: this.MIDDLE_VALUE_MAX_LENGTH },
+      { name: 'description', max: this.BIG_VALUE_MAX_LENGTH },
+      { name: 'plotGoal', max: this.BIG_VALUE_MAX_LENGTH },
+      { name: 'callIds', min: ChallengeModel.CALLS_MIN_VALUE },
+      { name: 'characterIds', min: ChallengeModel.CHARACTERS_MIN_VALUE },
+      { name: 'brokenLawIds', min: ChallengeModel.BROKEN_LAWS_MIN_VALUE },
+    ];
   }
 }

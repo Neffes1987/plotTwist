@@ -1,6 +1,4 @@
-import {AbstractModel, IAbstractModel} from '../../../base/abstractModel';
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
 
 export type WorldType = 'plainWorld' | 'privateWorld' | 'hiddenCave' | 'holiday' | 'returnWithPotion';
 
@@ -14,17 +12,10 @@ export interface ICommonWorld extends IAbstractModel {
   status: WorldStatus;
   edgeId: string;
   plotId: string;
-  lawIds: string[];
   worldType: Nullable<WorldType>;
 }
 
 export abstract class WorldModel extends AbstractModel {
-  static readonly STORY_MAX_LENGTH = 2048;
-  static readonly REFERENCE_MAX_LENGTH = 2048;
-  static readonly FAIL_PRICE_MAX_LENGTH = 2048;
-  static readonly TIMELINE_MAX_LENGTH = 512;
-  static readonly LAWS_MIN_LENGT = 2;
-
   worldType: Nullable<WorldType> = null;
   _story = '';
   _plotId = '';
@@ -32,7 +23,6 @@ export abstract class WorldModel extends AbstractModel {
   _timeline = '';
   _failPrice = '';
   _edgeId = '';
-  _lawsIds: string[] = [];
   _status: WorldStatus = 'draft';
 
   protected constructor(type: WorldType, data: ICommonWorld) {
@@ -44,8 +34,6 @@ export abstract class WorldModel extends AbstractModel {
     this._timeline = data.timeline;
     this._failPrice = data.failPrice;
     this._edgeId = data.edgeId;
-    this._lawsIds = data.lawIds;
-    this._lawsIds = data.lawIds;
     this._status = data.status;
   }
 
@@ -55,10 +43,6 @@ export abstract class WorldModel extends AbstractModel {
 
   get plotId(): string {
     return this._plotId;
-  }
-
-  get lawsIds(): string[] {
-    return this._lawsIds;
   }
 
   get story(): string {
@@ -83,10 +67,6 @@ export abstract class WorldModel extends AbstractModel {
 
   setStory(newValue: string): void {
     this._story = newValue;
-  }
-
-  setLawsIds(newValue: string[]): void {
-    this._lawsIds = newValue;
   }
 
   setStatus(newValue: WorldStatus): void {
@@ -114,56 +94,17 @@ export abstract class WorldModel extends AbstractModel {
       status: this._status,
       edgeId: this._edgeId,
       plotId: this._plotId,
-      lawIds: this._lawsIds,
     };
   }
 
-  validateMap(data: ICommonWorld): void {
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.story == null) {
-      emptyProperties.push('story');
-    } else if (data.story.length > WorldModel.STORY_MAX_LENGTH) {
-      notSatisfiedProps.story = 'more_then_$STORY_MAX_LENGTH';
-    }
-
-    if (data.lawIds == null) {
-      emptyProperties.push('lawsIds');
-    } else if (data.lawIds.length < WorldModel.LAWS_MIN_LENGT) {
-      notSatisfiedProps.lawsIds = 'less_then_$LAWS_MIN_LENGT';
-    }
-
-    if (data.references == null) {
-      emptyProperties.push('references');
-    } else if (data.references.length > WorldModel.REFERENCE_MAX_LENGTH) {
-      notSatisfiedProps.references = 'more_then_$REFERENCE_MAX_LENGTH';
-    }
-
-    if (data.timeline == null) {
-      emptyProperties.push('timeline');
-    } else if (data.timeline.length > WorldModel.TIMELINE_MAX_LENGTH) {
-      notSatisfiedProps.timeline = 'more_then_$TIMELINE_MAX_LENGTH';
-    }
-
-    if (data.failPrice == null) {
-      emptyProperties.push('failPrice');
-    } else if (data.failPrice.length > WorldModel.FAIL_PRICE_MAX_LENGTH) {
-      notSatisfiedProps.failPrice = 'more_then_$FAIL_PRICE_MAX_LENGTH';
-    }
-
-    if (data.edgeId == null) {
-      emptyProperties.push('edgeId');
-    }
-
-    if (data.plotId == null) {
-      emptyProperties.push('plotId');
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      { name: 'story', max: this.BIG_VALUE_MAX_LENGTH },
+      { name: 'references', max: this.BIG_VALUE_MAX_LENGTH },
+      { name: 'timeline', max: this.MIDDLE_VALUE_MAX_LENGTH },
+      { name: 'failPrice', max: this.BIG_VALUE_MAX_LENGTH },
+      { name: 'edgeId' },
+      { name: 'plotId' },
+    ];
   }
 }

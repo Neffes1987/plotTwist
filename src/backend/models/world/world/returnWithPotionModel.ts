@@ -1,7 +1,6 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {ICommonWorld, WorldModel} from './worldModel';
+import { ICommonWorld, WorldModel } from './worldModel';
 
 export type FinalType = 'cycle' | 'achievePerfect' | 'openEnd';
 
@@ -14,8 +13,6 @@ export interface IReturnWithPotionWorldModel extends ICommonWorld {
 }
 
 export class ReturnWithPotionWorldModel extends WorldModel {
-  static readonly PLOT_TWIST_MAX_LENGTH = 2048;
-
   _finalType?: FinalType;
   _potionType?: PotionType;
   _plotTwist = '';
@@ -49,30 +46,15 @@ export class ReturnWithPotionWorldModel extends WorldModel {
     };
   }
 
-  validateMap(data: IReturnWithPotionWorldModel): void {
-    super.validateMap(data);
-
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.finalType == null) {
-      emptyProperties.push('finalType');
-    }
-
-    if (data.potionType == null) {
-      emptyProperties.push('potionType');
-    }
-
-    if (data.plotTwist == null) {
-      emptyProperties.push('plotTwist');
-    } else if (data.plotTwist.length < ReturnWithPotionWorldModel.PLOT_TWIST_MAX_LENGTH) {
-      notSatisfiedProps.plotTwist = 'less_then_$PLOT_TWIST_MAX_LENGTH';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      ...super.getValidationConfig(),
+      { name: 'finalType' },
+      { name: 'potionType' },
+      {
+        name: 'plotTwist',
+        max: this.BIG_VALUE_MAX_LENGTH,
+      },
+    ];
   }
 }

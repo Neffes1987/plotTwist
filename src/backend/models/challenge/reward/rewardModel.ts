@@ -1,6 +1,4 @@
-import {AbstractModel, IAbstractModel} from '../../../base/abstractModel';
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
 
 export interface IRewardModel extends IAbstractModel {
   challengeId: string;
@@ -18,27 +16,8 @@ export class RewardModel extends AbstractModel {
     this._challengeId = newValue;
   }
 
-  validateMap(data: IRewardModel): void {
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.challengeId == null) {
-      emptyProperties.push('challengeId');
-    }
-
-    if (data.name == null) {
-      emptyProperties.push('name');
-    }
-
-    if (data.description == null) {
-      emptyProperties.push('description');
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [{ name: 'challengeId' }, { name: 'name' }, { name: 'description' }];
   }
 
   getAdditionalProperties(): Record<string, unknown> {

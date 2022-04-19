@@ -1,27 +1,12 @@
-import {AbstractModel, IAbstractModel} from '../../../base/abstractModel';
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
 
 export class ResultModel extends AbstractModel {
   constructor(data: IAbstractModel) {
     super(data);
   }
 
-  validateMap(data: IAbstractModel): void {
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.description == null) {
-      emptyProperties.push('description');
-    } else if (data.description.length > this.MIDDLE_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.description = 'more_then_$MIDDLE_VALUE_MAX_LENGTH';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [{ name: 'description', max: this.MIDDLE_VALUE_MAX_LENGTH }];
   }
 
   getAdditionalProperties(): Record<string, unknown> {

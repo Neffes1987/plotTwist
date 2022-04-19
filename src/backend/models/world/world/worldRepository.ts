@@ -1,12 +1,12 @@
-import {AbstractRepository, IListQuery} from '../../../base/abstractRepository';
-import {UxException} from '../../../base/errors/uxException';
+import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
+import { UxException } from '../../../base/errors/uxException';
 
-import {HiddenCaveWorldModel, IHiddenCaveWorldModel} from './hiddenCaveWorldModel';
-import {HolidayWorldModel, IHolidayWorldModel} from './holidayWorldModel';
-import {IPlainWorldWorld, PlainWorldModel} from './plainWorldModel';
-import {IPrivateWorld, PrivateWorld} from './privateWorldModel';
-import {IReturnWithPotionWorldModel, ReturnWithPotionWorldModel} from './returnWithPotionModel';
-import {ICommonWorld, WorldModel} from './worldModel';
+import { HiddenCaveWorldModel, IHiddenCaveWorldModel } from './hiddenCaveWorldModel';
+import { HolidayWorldModel, IHolidayWorldModel } from './holidayWorldModel';
+import { IPlainWorldWorld, PlainWorldModel } from './plainWorldModel';
+import { IPrivateWorld, PrivateWorld } from './privateWorldModel';
+import { IReturnWithPotionWorldModel, ReturnWithPotionWorldModel } from './returnWithPotionModel';
+import { ICommonWorld, WorldModel } from './worldModel';
 
 export interface IWorldListQuery extends IListQuery {
   plotId: string;

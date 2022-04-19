@@ -1,6 +1,6 @@
-import {AbstractRepository, IListQuery} from '../../../base/abstractRepository';
+import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
 
-import {IPlotModel, PlotModel} from './plotModel';
+import { IPlotModel, PlotModel } from './plotModel';
 
 export class PlotRepository extends AbstractRepository<PlotModel> {
   list(page: number, limit: number): Promise<PlotModel[]> {

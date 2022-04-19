@@ -1,7 +1,6 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {ICommonWorld, WorldModel} from './worldModel';
+import { ICommonWorld, WorldModel } from './worldModel';
 
 export type HolidayType = 'inAShelter' | 'treasure' | 'victory' | 'getSword';
 
@@ -17,9 +16,6 @@ export interface IHolidayWorldModel extends ICommonWorld {
 }
 
 export class HolidayWorldModel extends WorldModel {
-  static readonly INTRODUCTION_MAX_LENGTH = 2048;
-  static readonly WORLD_PROBLEMS_MIN_LENGTH = 2;
-
   private _shadowRevenge = ''; // not required
   private _holidayType: HolidayType = 'inAShelter';
   private _holidaySubType?: HolidaySubType; // not required
@@ -59,24 +55,7 @@ export class HolidayWorldModel extends WorldModel {
     };
   }
 
-  validateMap(data: IHolidayWorldModel): void {
-    super.validateMap(data);
-
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.holidayType == null) {
-      emptyProperties.push('introduction');
-    }
-
-    if (data.chase == null) {
-      emptyProperties.push('worldProblems');
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [...super.getValidationConfig(), { name: 'holidayType' }, { name: 'chase' }];
   }
 }

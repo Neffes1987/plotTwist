@@ -1,7 +1,6 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {ICommonWorld, WorldModel} from './worldModel';
+import { ICommonWorld, WorldModel } from './worldModel';
 
 export interface IHiddenCaveWorldModel extends ICommonWorld {
   mainEdgeInformation: string;
@@ -10,10 +9,6 @@ export interface IHiddenCaveWorldModel extends ICommonWorld {
 }
 
 export class HiddenCaveWorldModel extends WorldModel {
-  static readonly PARTY_PLAN_MAX_LENGTH = 2048;
-  static readonly SHADOW_INTRO_MAX_LENGTH = 2048;
-  static readonly MAIN_EDGE_MAX_LENGTH = 2048;
-
   private _mainEdgeInformation = '';
   private _shadowIntroduction = '';
   private _partyPlan = '';
@@ -47,34 +42,12 @@ export class HiddenCaveWorldModel extends WorldModel {
     };
   }
 
-  validateMap(data: IHiddenCaveWorldModel): void {
-    super.validateMap(data);
-
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.partyPlan == null) {
-      emptyProperties.push('partyPlan');
-    } else if (data.partyPlan.length > HiddenCaveWorldModel.PARTY_PLAN_MAX_LENGTH) {
-      notSatisfiedProps.partyPlan = 'more_then_$PARTY_PLAN_MAX_LENGTH';
-    }
-
-    if (data.shadowIntroduction == null) {
-      emptyProperties.push('shadowIntroduction');
-    } else if (data.shadowIntroduction.length > HiddenCaveWorldModel.SHADOW_INTRO_MAX_LENGTH) {
-      notSatisfiedProps.shadowIntroduction = 'more_then_$SHADOW_INTRO_MAX_LENGTH';
-    }
-
-    if (data.mainEdgeInformation == null) {
-      emptyProperties.push('mainEdgeInformation');
-    } else if (data.mainEdgeInformation.length > HiddenCaveWorldModel.MAIN_EDGE_MAX_LENGTH) {
-      notSatisfiedProps.mainEdgeInformation = 'more_then_$MAIN_EDGE_MAX_LENGTH';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      ...super.getValidationConfig(),
+      { name: 'partyPlan', max: this.BIG_VALUE_MAX_LENGTH },
+      { name: 'shadowIntroduction', max: this.BIG_VALUE_MAX_LENGTH },
+      { name: 'mainEdgeInformation', max: this.BIG_VALUE_MAX_LENGTH },
+    ];
   }
 }

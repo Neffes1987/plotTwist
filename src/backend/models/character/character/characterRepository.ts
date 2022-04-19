@@ -1,18 +1,26 @@
-import {AbstractRepository, IListQuery} from '../../../base/abstractRepository';
+import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
 
-import {AllyModel, IAllyModel} from './allyModel';
-import {CharacterModel, ICharacterModel} from './characterModel';
-import {EnemyModel, IEnemyModel} from './enemyModel';
-import {GuardModel, IGuardModel} from './guardModel';
-import {IMentorModel, MentorModel} from './mentorModel';
-import {IShadowModel, ShadowModel} from './shadowModel';
+import { AllyModel, IAllyModel } from './allyModel';
+import { CharacterModel, ICharacterModel } from './characterModel';
+import { EnemyModel, IEnemyModel } from './enemyModel';
+import { GuardModel, IGuardModel } from './guardModel';
+import { IMentorModel, MentorModel } from './mentorModel';
+import { IShadowModel, ShadowModel } from './shadowModel';
+
+export interface ICharacterListQuery extends IListQuery {
+  plotId?: string;
+  characterIds?: string[];
+  waterholeIds?: string[];
+}
+
+export interface UpdateCharactersPropsType {
+  add?: Record<string, string[]>;
+  remove?: Record<string, string[]>;
+}
 
 export class CharacterRepository extends AbstractRepository<CharacterModel> {
-  async list(page: number, limit: number): Promise<CharacterModel[]> {
-    return super.getList({
-      page,
-      limit,
-    });
+  async list(query: ICharacterListQuery): Promise<CharacterModel[]> {
+    return super.getList<ICharacterListQuery>(query);
   }
 
   createDbTable(): string {
@@ -31,7 +39,7 @@ export class CharacterRepository extends AbstractRepository<CharacterModel> {
     return Promise.resolve(null);
   }
 
-  dbFindAll(query: IListQuery): Promise<CharacterModel[]> {
+  dbFindAll(query: ICharacterListQuery): Promise<CharacterModel[]> {
     return Promise.resolve([]);
   }
 
@@ -54,5 +62,17 @@ export class CharacterRepository extends AbstractRepository<CharacterModel> {
       case 'messenger':
         return new MentorModel(data as IMentorModel);
     }
+  }
+
+  async updateMessengersCalls(props: UpdateCharactersPropsType): Promise<boolean> {
+    return Promise.resolve(true);
+  }
+
+  async updateMentorsLaws(props: UpdateCharactersPropsType): Promise<boolean> {
+    return Promise.resolve(true);
+  }
+
+  async updateCharactersResults(props: UpdateCharactersPropsType): Promise<boolean> {
+    return Promise.resolve(true);
   }
 }

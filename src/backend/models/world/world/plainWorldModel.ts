@@ -1,7 +1,6 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {ICommonWorld, WorldModel} from './worldModel';
+import { ICommonWorld, WorldModel } from './worldModel';
 
 export interface IPlainWorldWorld extends ICommonWorld {
   introduction: string;
@@ -10,7 +9,6 @@ export interface IPlainWorldWorld extends ICommonWorld {
 }
 
 export class PlainWorldModel extends WorldModel {
-  static readonly INTRODUCTION_MAX_LENGTH = 2048;
   static readonly WORLD_PROBLEMS_MIN_LENGTH = 2;
 
   _introduction = '';
@@ -46,28 +44,11 @@ export class PlainWorldModel extends WorldModel {
     };
   }
 
-  validateMap(data: IPlainWorldWorld): void {
-    super.validateMap(data);
-
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.introduction == null) {
-      emptyProperties.push('introduction');
-    } else if (data.introduction.length > PlainWorldModel.INTRODUCTION_MAX_LENGTH) {
-      notSatisfiedProps.introduction = 'more_then_$INTRODUCTION_MAX_LENGTH';
-    }
-
-    if (data.worldProblems == null) {
-      emptyProperties.push('worldProblems');
-    } else if (data.worldProblems.length < PlainWorldModel.WORLD_PROBLEMS_MIN_LENGTH) {
-      notSatisfiedProps.worldProblems = 'less_then_$WORLD_PROBLEMS_MIN_LENGTH';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      ...super.getValidationConfig(),
+      { name: 'introduction', max: this.BIG_VALUE_MAX_LENGTH },
+      { name: 'worldProblems', min: PlainWorldModel.WORLD_PROBLEMS_MIN_LENGTH },
+    ];
   }
 }

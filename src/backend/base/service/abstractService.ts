@@ -1,5 +1,5 @@
-import {ServiceMediator} from '../../controller/serviceMediator';
-import {ErrorLog} from '../errors/errorLog';
+import { ServiceMediator } from '../../controller/serviceMediator';
+import { ErrorLog } from '../errors/errorLog';
 
 export abstract class AbstractService {
   static cleanWorldDataOperation = 'cleanWorldData';

@@ -1,6 +1,9 @@
-import {ICallModel} from '@backend/models/challenge/call/callModel';
-import {IEdgeModel} from '@backend/models/challenge/chellenge/edgeModel';
-import {IRewardModel} from '@backend/models/challenge/reward/rewardModel';
+import { ICallModel } from '@backend/models/challenge/call/callModel';
+import { IEdgeModel } from '@backend/models/challenge/chellenge/edgeModel';
+import { IMainEdgeModel } from '@backend/models/challenge/chellenge/mainEdgeModel';
+import { IRewardModel } from '@backend/models/challenge/reward/rewardModel';
+
+import { MOCKED_SHADOW } from './mockedCharacter';
 
 export const MOCKED_REWARD: IRewardModel = {
   id: '1',
@@ -32,4 +35,23 @@ export const MOCKED_CHALLENGE: IEdgeModel = {
   guardId: '1',
   challengeIds: ['1', '2'],
   type: 'edge',
+};
+
+export const MOCKED_MAIN_EDGE: IMainEdgeModel = {
+  brokenLawIds: ['brokenLawId', 'brokenLawId2'],
+  callIds: ['callId', 'callIds2'],
+  challengeIds: ['challengeId', 'challengeId2'],
+  characterIds: ['characterId', 'characterId2'],
+  description: 'description',
+  edgeImpact: 'edgeImpact',
+  heartCrisis: undefined,
+  id: 'mainEdgeId',
+  mainEdgeType: 'shadowEncounter',
+  name: 'name',
+  plotGoal: 'plotGoal',
+  rewardId: 'rewardId',
+  shadowEncounterType: 'deathOfVillain',
+  shadowId: MOCKED_SHADOW.id,
+  type: 'mainEdge',
+  weight: 0,
 };

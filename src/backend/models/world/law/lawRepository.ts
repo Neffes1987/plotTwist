@@ -1,6 +1,6 @@
-import {AbstractRepository, IListQuery} from '../../../base/abstractRepository';
+import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
 
-import {ILawModel, LawModel} from './lawModel';
+import { ILawModel, LawModel } from './lawModel';
 
 export interface ILawListQuery extends IListQuery {
   worldId?: string;

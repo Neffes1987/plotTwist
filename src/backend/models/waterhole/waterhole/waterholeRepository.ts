@@ -1,12 +1,15 @@
-import {AbstractRepository, IListQuery} from '../../../base/abstractRepository';
+import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
 
-import {IWaterholeModel, WaterholeModel} from './waterholeModel';
+import { IWaterholeModel, WaterholeModel } from './waterholeModel';
+
+export interface IWaterholeListQuery extends IListQuery {
+  worldId?: string;
+}
 
 export class WaterholeRepository extends AbstractRepository<WaterholeModel> {
-  async list(page: number, limit: number): Promise<WaterholeModel[]> {
-    return super.getList<IListQuery>({
-      page,
-      limit,
+  async list(worldId: string): Promise<WaterholeModel[]> {
+    return super.getList<IWaterholeListQuery>({
+      worldId,
     });
   }
 
@@ -26,7 +29,7 @@ export class WaterholeRepository extends AbstractRepository<WaterholeModel> {
     return Promise.resolve(null);
   }
 
-  dbFindAll(query: IListQuery): Promise<WaterholeModel[]> {
+  dbFindAll(query: IWaterholeListQuery): Promise<WaterholeModel[]> {
     return Promise.resolve([]);
   }
 

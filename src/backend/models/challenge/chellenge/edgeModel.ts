@@ -1,7 +1,6 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {ChallengeModel, IChallengeModel} from './challengeModel';
+import { ChallengeModel, IChallengeModel } from './challengeModel';
 
 export interface IEdgeModel extends IChallengeModel {
   guardId: string;
@@ -26,34 +25,22 @@ export class EdgeModel extends ChallengeModel {
     this._challengeIds = newValue;
   }
 
-  validateMap(data: IEdgeModel): void {
-    super.validateMap(data);
-
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.guardId == null) {
-      emptyProperties.push('guardId');
-    }
-
-    if (data.challengeIds == null) {
-      emptyProperties.push('challengeIds');
-    } else if (data.challengeIds.length < EdgeModel.CHALLENGE_IDS_MIN_VALUE) {
-      notSatisfiedProps.challengeIds = 'less_then_$CHALLENGE_IDS_MIN_VALUE';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
-  }
-
   getAdditionalProperties(): Record<string, unknown> {
     return {
       ...super.getAdditionalProperties(),
       guardId: this._guardId,
       challengeIds: this._challengeIds,
     };
+  }
+
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      ...super.getValidationConfig(),
+      { name: 'guardId' },
+      {
+        name: 'challengeIds',
+        min: EdgeModel.CHALLENGE_IDS_MIN_VALUE,
+      },
+    ];
   }
 }

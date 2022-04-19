@@ -1,7 +1,6 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {CharacterModel, ICharacterModel} from './characterModel';
+import { CharacterModel, ICharacterModel } from './characterModel';
 
 export interface IShadowModel extends ICharacterModel {
   rewardId: string;
@@ -34,34 +33,13 @@ export class ShadowModel extends CharacterModel {
     this._visionOnSituation = newValue;
   }
 
-  validateMap(data: IShadowModel): void {
-    super.validateMap(data);
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.rewardId == null) {
-      emptyProperties.push('rewardId');
-    } else if (data.rewardId.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.rewardId = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.motivation == null) {
-      emptyProperties.push('motivation');
-    } else if (data.motivation.length > this.MIDDLE_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.motivation = 'more_then_$MIDDLE_VALUE_MAX_LENGTH';
-    }
-
-    if (data.visionOnSituation == null) {
-      emptyProperties.push('visionOnSituation');
-    } else if (data.visionOnSituation.length > this.BIG_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.visionOnSituation = 'more_then_$BIG_VALUE_MAX_LENGTH';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      ...super.getValidationConfig(),
+      { name: 'rewardId', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'motivation', max: this.MIDDLE_VALUE_MAX_LENGTH },
+      { name: 'visionOnSituation', max: this.BIG_VALUE_MAX_LENGTH },
+    ];
   }
 
   getAdditionalProperties(): Record<string, unknown> {

@@ -1,9 +1,9 @@
-import {AbstractService} from '../../base/service/abstractService';
-import {ServiceMediator} from '../../controller/serviceMediator';
+import { AbstractService } from '../../base/service/abstractService';
+import { ServiceMediator } from '../../controller/serviceMediator';
 
-import {CallStatus, ICallModel} from './call/callModel';
-import {IChallengeModel} from './chellenge/challengeModel';
-import {IRewardModel} from './reward/rewardModel';
+import { CallStatus, ICallModel } from './call/callModel';
+import { IChallengeModel } from './chellenge/challengeModel';
+import { IRewardModel } from './reward/rewardModel';
 
 export class ChallengeService extends AbstractService {
   constructor(mediator: ServiceMediator) {
@@ -79,10 +79,6 @@ export class ChallengeService extends AbstractService {
   }
 
   removeChallenge(challengeId: string) {
-    return true;
-  }
-
-  clean(worldIds: string[]) {
     return true;
   }
 }

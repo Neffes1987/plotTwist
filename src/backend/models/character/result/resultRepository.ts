@@ -1,7 +1,7 @@
-import {IAbstractModel} from '../../../base/abstractModel';
-import {AbstractRepository, IListQuery} from '../../../base/abstractRepository';
+import { IAbstractModel } from '../../../base/abstractModel';
+import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
 
-import {ResultModel} from './resultModel';
+import { ResultModel } from './resultModel';
 
 export class ResultRepository extends AbstractRepository<ResultModel> {
   async list(page: number, limit: number): Promise<ResultModel[]> {

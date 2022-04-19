@@ -1,13 +1,14 @@
-import {MOCKED_PLOT} from '../../../../mocks/mockedPlot';
-import {MOCKED_LAW, MOCKED_RELEASED_WORLD, MOCKED_WORLD} from '../../../../mocks/mockedWorld';
-import {UxException} from '../../../base/errors/uxException';
-import {ServiceMediator} from '../../../controller/serviceMediator';
-import {PlotModel} from '../../plot/plot/plotModel';
-import {PlotRepository} from '../../plot/plot/plotRepository';
-import {LawModel} from '../law/lawModel';
-import {LawRepository} from '../law/lawRepository';
-import {PlainWorldModel} from '../world/plainWorldModel';
-import {WorldRepository} from '../world/worldRepository';
+import { MOCKED_PLOT } from '@mocks/mockedPlot';
+import { MOCKED_LAW, MOCKED_RELEASED_WORLD, MOCKED_WORLD } from '@mocks/mockedWorld';
+
+import { UxException } from '../../../base/errors/uxException';
+import { ServiceMediator } from '../../../controller/serviceMediator';
+import { PlotModel } from '../../plot/plot/plotModel';
+import { PlotRepository } from '../../plot/plot/plotRepository';
+import { LawModel } from '../law/lawModel';
+import { LawRepository } from '../law/lawRepository';
+import { PlainWorldModel } from '../world/plainWorldModel';
+import { WorldRepository } from '../world/worldRepository';
 
 jest.mock('../world/worldRepository');
 jest.mock('../law/lawRepository');
@@ -124,7 +125,7 @@ describe('WorldService', () => {
         try {
           await mediator.worldService.activateWorld(world.id, 'release');
         } catch (e) {
-          expect(e).toEqual(new UxException('empty_fields', {wrongWorldId: '1'}));
+          expect(e).toEqual(new UxException('empty_fields', { wrongWorldId: '1' }));
         }
       });
 
@@ -260,7 +261,7 @@ describe('WorldService', () => {
           await mediator.worldService.removeLaw(law.id);
         } catch (e) {
           // eslint-disable-next-line jest/valid-expect
-          expect(new UxException('empty_fields', {lawId: 'not_enough_laws_in_world'}).toString());
+          expect(new UxException('empty_fields', { lawId: 'not_enough_laws_in_world' }).toString());
         }
       });
     });

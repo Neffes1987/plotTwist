@@ -1,7 +1,6 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {CharacterModel, ICharacterModel} from './characterModel';
+import { CharacterModel, ICharacterModel } from './characterModel';
 
 export interface IEnemyModel extends ICharacterModel {
   rewardId: string;
@@ -34,35 +33,13 @@ export class EnemyModel extends CharacterModel {
     this._possibleToMoveAlly = newValue;
   }
 
-  validateMap(data: IEnemyModel): void {
-    super.validateMap(data);
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.rewardId == null) {
-      emptyProperties.push('rewardId');
-    } else if (data.rewardId.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.rewardId = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.motivation == null) {
-      emptyProperties.push('motivation');
-    } else if (data.motivation.length > this.MIDDLE_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.motivation = 'more_then_$MIDDLE_VALUE_MAX_LENGTH';
-    }
-
-    if (data.possibleToMoveAlly == null) {
-      emptyProperties.push('possibleToMoveAlly');
-    } else if (data.possibleToMoveAlly.length > this.MIDDLE_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.possibleToMoveAlly =
-        'more_then_$MIDDLE_VALUE_MAX_LENGTH';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      ...super.getValidationConfig(),
+      { name: 'rewardId', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'motivation', max: this.SHORT_VALUE_MAX_LENGTH },
+      { name: 'possibleToMoveAlly', max: this.MIDDLE_VALUE_MAX_LENGTH },
+    ];
   }
 
   getAdditionalProperties(): Record<string, unknown> {

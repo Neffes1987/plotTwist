@@ -1,8 +1,8 @@
-import {AbstractRepository, IListQuery} from '../../../base/abstractRepository';
+import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
 
-import {ChallengeModel, IChallengeModel} from './challengeModel';
-import {EdgeModel, IEdgeModel} from './edgeModel';
-import {IMainEdgeModel, MainEdgeModel} from './mainEdgeModel';
+import { ChallengeModel, IChallengeModel } from './challengeModel';
+import { EdgeModel, IEdgeModel } from './edgeModel';
+import { IMainEdgeModel, MainEdgeModel } from './mainEdgeModel';
 
 export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
   async list(page: number, limit: number): Promise<ChallengeModel[]> {

@@ -1,4 +1,4 @@
-import {IPlotModel} from '@backend/models/plot/plot/plotModel';
+import { IPlotModel } from '@backend/models/plot/plot/plotModel';
 
 export const MOCKED_PLOT: IPlotModel = {
   id: '1',

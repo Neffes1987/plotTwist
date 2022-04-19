@@ -1,23 +1,15 @@
-import {IAbstractModel} from '../base/abstractModel';
-import {IListQuery} from '../base/abstractRepository';
-import {
-  CallModel,
-  CallStatus,
-  ICallModel,
-} from '../models/challenge/call/callModel';
-import {IChallengeModel} from '../models/challenge/chellenge/challengeModel';
-import {IRewardModel} from '../models/challenge/reward/rewardModel';
-import {ICharacterModel} from '../models/character/character/characterModel';
-import {IPlotModel, PlotModel} from '../models/plot/plot/plotModel';
-import {IWaterholeModel} from '../models/waterhole/waterhole/waterholeModel';
-import {ILawModel} from '../models/world/law/lawModel';
-import {
-  ICommonWorld,
-  WorldModel,
-  WorldStatus,
-} from '../models/world/world/worldModel';
+import { IAbstractModel } from '../base/abstractModel';
+import { IListQuery } from '../base/abstractRepository';
+import { CallModel, CallStatus, ICallModel } from '../models/challenge/call/callModel';
+import { IChallengeModel } from '../models/challenge/chellenge/challengeModel';
+import { IRewardModel } from '../models/challenge/reward/rewardModel';
+import { ICharacterModel } from '../models/character/character/characterModel';
+import { IPlotModel, PlotModel } from '../models/plot/plot/plotModel';
+import { IWaterholeModel } from '../models/waterhole/waterhole/waterholeModel';
+import { ILawModel } from '../models/world/law/lawModel';
+import { ICommonWorld, WorldModel, WorldStatus } from '../models/world/world/worldModel';
 
-import {ServiceMediator} from './serviceMediator';
+import { ServiceMediator } from './serviceMediator';
 
 export class PlotController {
   static readonly PAGE = 1;
@@ -29,10 +21,7 @@ export class PlotController {
   }
 
   getPlotsList(data: IListQuery): Promise<PlotModel[]> {
-    return this.mediator.plotService.getPlotsList(
-      data.page ?? PlotController.PAGE,
-      data.limit ?? PlotController.LIMIT,
-    );
+    return this.mediator.plotService.getPlotsList(data.page ?? PlotController.PAGE, data.limit ?? PlotController.LIMIT);
   }
 
   getPlot(plotId: string): Promise<PlotModel> {
@@ -107,16 +96,8 @@ export class PlotController {
     return this.mediator.worldService.removeLaw(lawId);
   }
 
-  getCallsList(
-    page: number,
-    limit: number,
-    challengeIds: string[],
-  ): CallModel[] {
-    return this.mediator.challengeService.getCallsList(
-      page,
-      limit,
-      challengeIds,
-    );
+  getCallsList(page: number, limit: number, challengeIds: string[]): CallModel[] {
+    return this.mediator.challengeService.getCallsList(page, limit, challengeIds);
   }
 
   getCall(callId: string) {
@@ -140,10 +121,7 @@ export class PlotController {
   }
 
   assignCallToMessenger(callId: string, characterId: string): boolean {
-    return this.mediator.characterService.assignCallToMessenger(
-      callId,
-      characterId,
-    );
+    return this.mediator.characterService.assignCallToMessenger(callId, characterId);
   }
 
   assignLawToMentor(lawId: string, characterId: string): boolean {
@@ -151,11 +129,7 @@ export class PlotController {
   }
 
   getCharactersList(page: number, limit: number, queries: string) {
-    return this.mediator.characterService.getCharactersList(
-      page,
-      limit,
-      queries,
-    );
+    return this.mediator.characterService.getCharactersList(page, limit, queries);
   }
 
   getCharacter(characterId: string) {
@@ -163,10 +137,7 @@ export class PlotController {
   }
 
   assignResultForCharacters(resultId: string, characterIds: string[]): boolean {
-    return this.mediator.characterService.assignResultForCharacters(
-      resultId,
-      characterIds,
-    );
+    return this.mediator.characterService.assignResultForCharacters(resultId, characterIds);
   }
 
   createCharacter(data: ICharacterModel) {
@@ -218,18 +189,15 @@ export class PlotController {
   }
 
   toggleChallenge(challengeId: string, isPassed: boolean): boolean {
-    return this.mediator.challengeService.toggleChallenge(
-      challengeId,
-      isPassed,
-    );
+    return this.mediator.challengeService.toggleChallenge(challengeId, isPassed);
   }
 
   removeChallenge(challengeId: string): boolean {
     return this.mediator.challengeService.removeChallenge(challengeId);
   }
 
-  getWaterholesList(page: number, limit: number) {
-    return this.mediator.waterholeService.getWaterholesList(page, limit);
+  getWaterholesList(worldId: string) {
+    return this.mediator.waterholeService.getWaterholesList(worldId);
   }
 
   getWaterhole(waterholeId: string) {

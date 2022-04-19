@@ -1,12 +1,12 @@
-import {ErrorLog} from '../../../base/errors/errorLog';
-import {UxException} from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
 
-import {CharacterModel, ICharacterModel} from './characterModel';
+import { CharacterModel, ICharacterModel } from './characterModel';
 
 export interface IGuardModel extends ICharacterModel {
   becameAlly: string;
   becameEnemy: string;
 }
+
 export class GuardModel extends CharacterModel {
   private _becameAlly = '';
   private _becameEnemy = '';
@@ -25,28 +25,18 @@ export class GuardModel extends CharacterModel {
     this._becameEnemy = newValue;
   }
 
-  validateMap(data: IGuardModel): void {
-    super.validateMap(data);
-    const emptyProperties: string[] = [];
-    const notSatisfiedProps: Record<string, string> = {};
-
-    if (data.becameAlly == null) {
-      emptyProperties.push('becameAlly');
-    } else if (data.becameAlly.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.becameAlly = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (data.becameEnemy == null) {
-      emptyProperties.push('becameEnemy');
-    } else if (data.becameEnemy.length > this.SHORT_VALUE_MAX_LENGTH) {
-      notSatisfiedProps.becameEnemy = 'more_then_$SHORT_VALUE_MAX_LENGTH';
-    }
-
-    if (emptyProperties.length || notSatisfiedProps.isNotEmpty) {
-      notSatisfiedProps.emptyProperties = emptyProperties.toString();
-
-      throw new UxException(ErrorLog.validationError, notSatisfiedProps);
-    }
+  getValidationConfig(): IValidatorConfiguration[] {
+    return [
+      ...super.getValidationConfig(),
+      {
+        name: 'becameAlly',
+        max: this.SHORT_VALUE_MAX_LENGTH,
+      },
+      {
+        name: 'becameEnemy',
+        max: this.SHORT_VALUE_MAX_LENGTH,
+      },
+    ];
   }
 
   getAdditionalProperties(): Record<string, unknown> {
