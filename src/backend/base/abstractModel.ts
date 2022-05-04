@@ -88,7 +88,7 @@ export abstract class AbstractModel implements IAbstractModel {
         }
       } else {
         if (dataFieldValue === expectedValue) {
-          // when property should has particular value from config
+          // when property should has particular value from config without any dependencies
           expectsResult = true;
 
           break;
