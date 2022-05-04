@@ -8,7 +8,7 @@ export interface IAllyModel extends ICharacterModel {
   isAllyForParty: boolean;
   allyForHero: string;
   callForAlly: string;
-  allyType?: AllyType;
+  allyType: AllyType;
 }
 
 export class AllyModel extends CharacterModel {

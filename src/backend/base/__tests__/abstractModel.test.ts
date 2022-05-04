@@ -1,9 +1,6 @@
-import { MOCKED_MAIN_EDGE } from '@mocks/mockedChallenge';
-
-import { MainEdgeModel } from '../../models/challenge/chellenge/mainEdgeModel';
 import { IAbstractModel } from '../abstractModel';
 
-import { ConfigModel, EmptyConfigModel, EmptyFieldConfigModel, ExpectConfigModel } from './mocks';
+import { ConfigModel, EmptyConfigModel, EmptyFieldConfigModel } from './mocks';
 
 describe('WHEN "AbstractModel" is generated', () => {
   const data: IAbstractModel = {
@@ -155,34 +152,10 @@ describe('WHEN "AbstractModel" is generated', () => {
         );
       });
     });
-
-    describe('AND "configuration" item contains "expects" set', () => {
-      it('AND "data" value not satisfied any of expects, MUST collect ui error', () => {
-        let error: Nullable<Error> = null;
-
-        try {
-          // eslint-disable-next-line no-new
-          new ExpectConfigModel({
-            description: 'more then 10',
-            id: '111',
-            name: '',
-            number: 9,
-          });
-        } catch (e) {
-          error = e;
-        }
-
-        expect(error).toEqual(new Error(JSON.stringify({ message: 'validation_error', expects: 'Props does not satisfy expectations', emptyProperties: '' })));
-      });
-
-      it('AND "data" value satisfied one of expects, MUST NOT collect ui error', () => {
-        expect(new MainEdgeModel(MOCKED_MAIN_EDGE)).toBeTruthy();
-      });
-    });
   });
 
   it('AND "serialize" is called, MUST returns props object', () => {
-    const model = new ExpectConfigModel({
+    const model = new ConfigModel({
       description: 'more then 10',
       id: '10',
       name: '',

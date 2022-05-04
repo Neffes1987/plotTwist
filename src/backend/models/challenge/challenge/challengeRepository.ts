@@ -4,12 +4,15 @@ import { ChallengeModel, IChallengeModel } from './challengeModel';
 import { EdgeModel, IEdgeModel } from './edgeModel';
 import { IMainEdgeModel, MainEdgeModel } from './mainEdgeModel';
 
+export interface ChallengeRepositoryProps extends IListQuery {
+  challengeIds?: string[];
+  shadowId?: string;
+  guardId?: string;
+}
+
 export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
-  async list(page: number, limit: number): Promise<ChallengeModel[]> {
-    return super.getList({
-      page,
-      limit,
-    });
+  async list(props: ChallengeRepositoryProps): Promise<ChallengeModel[]> {
+    return super.getList(props);
   }
 
   createDbTable(): string {
@@ -28,7 +31,7 @@ export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
     return Promise.resolve(null);
   }
 
-  dbFindAll(query: IListQuery): Promise<ChallengeModel[]> {
+  dbFindAll(query: ChallengeRepositoryProps): Promise<ChallengeModel[]> {
     return Promise.resolve([]);
   }
 

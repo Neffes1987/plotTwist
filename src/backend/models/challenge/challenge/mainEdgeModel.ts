@@ -1,4 +1,5 @@
-import { DEFINED_VALUE, IValidatorConfiguration } from '../../../base/abstractModel';
+import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { UxException } from '../../../base/errors/uxException';
 
 import { ChallengeModel, IChallengeModel } from './challengeModel';
 
@@ -38,13 +39,30 @@ export class MainEdgeModel extends ChallengeModel {
 
   constructor(data: IMainEdgeModel) {
     super(data);
+
+    this.setShadowId(data.shadowId);
+    this.setEdgeImpact(data.edgeImpact);
+    this.setChallengeIds(data.challengeIds);
+    this.setMainEdgeType(data.mainEdgeType);
+
+    if (data.mainEdgeType === 'heartCrisis' && !data.heartCrisis) {
+      throw new UxException('"MainEdgeType" is "heartCrisis", but field "heartCrisis" is not provided');
+    } else {
+      this.setHeartCrisis(data.heartCrisis);
+    }
+
+    if (data.mainEdgeType === 'shadowEncounter' && !data.shadowEncounterType) {
+      throw new UxException('"MainEdgeType" is "shadowEncounter", but field "shadowEncounterType" is not provided');
+    } else {
+      this.setShadowEncounterType(data.shadowEncounterType);
+    }
   }
 
   setShadowId(newValue: string): void {
     this._shadowId = newValue;
   }
 
-  setEdgeImpart(newValue: string): void {
+  setEdgeImpact(newValue: string): void {
     this._edgeImpact = newValue;
   }
 
@@ -81,26 +99,6 @@ export class MainEdgeModel extends ChallengeModel {
       ...super.getValidationConfig(),
       { name: 'shadowId' },
       { name: 'mainEdgeType' },
-      {
-        name: 'heartCrisis',
-        when: [
-          {
-            rootFieldName: 'mainEdgeType',
-            rootFieldConditionValue: 'heartCrisis',
-            expectedValue: DEFINED_VALUE,
-          },
-        ],
-      },
-      {
-        name: 'shadowEncounterType',
-        when: [
-          {
-            rootFieldName: 'mainEdgeType',
-            rootFieldConditionValue: 'shadowEncounter',
-            expectedValue: DEFINED_VALUE,
-          },
-        ],
-      },
       {
         name: 'challengeIds',
         min: MainEdgeModel.CHALLENGE_IDS_MIN_VALUE,

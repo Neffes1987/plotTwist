@@ -69,37 +69,3 @@ export class ConfigModel extends AbstractModel {
     ];
   }
 }
-
-export class ExpectConfigModel extends AbstractModel {
-  constructor(data: IConfigModel) {
-    super(data);
-  }
-
-  getAdditionalProperties(): Record<string, unknown> {
-    return {};
-  }
-
-  getValidationConfig(): IValidatorConfiguration[] {
-    return [
-      {
-        name: 'number',
-        max: 10,
-        min: 1,
-        isNumber: true,
-      },
-      {
-        name: 'id',
-        when: [
-          {
-            expectedValue: '10',
-          },
-          {
-            expectedValue: 'id',
-          },
-        ],
-      },
-      { name: 'name' },
-      { name: 'description' },
-    ];
-  }
-}

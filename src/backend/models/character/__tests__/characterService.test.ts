@@ -1,34 +1,43 @@
 import { MOCKED_CALL, MOCKED_MAIN_EDGE } from '@mocks/mockedChallenge';
-import { MOCKED_MENTOR, MOCKED_MESSENGER, MOCKED_RESULT, MOCKED_SHADOW } from '@mocks/mockedCharacter';
+import { MOCKED_ALLY, MOCKED_ENEMY, MOCKED_GUARD, MOCKED_MENTOR, MOCKED_MESSENGER, MOCKED_RESULT, MOCKED_SHADOW } from '@mocks/mockedCharacter';
 import { MOCKED_LAW } from '@mocks/mockedWorld';
 
 import { UxException } from '../../../base/errors/uxException';
 import { ServiceMediator } from '../../../controller/serviceMediator';
 import { CallModel } from '../../challenge/call/callModel';
-import { MainEdgeModel } from '../../challenge/chellenge/mainEdgeModel';
+import { ChallengeRepository } from '../../challenge/challenge/challengeRepository';
+import { MainEdgeModel } from '../../challenge/challenge/mainEdgeModel';
 import { LawModel } from '../../world/law/lawModel';
+import { AllyModel } from '../character/allyModel';
 import { CharacterRepository } from '../character/characterRepository';
+import { EnemyModel } from '../character/enemyModel';
+import { GuardModel } from '../character/guardModel';
 import { MentorModel } from '../character/mentorModel';
 import { MessengerModel } from '../character/messengerModel';
 import { ShadowModel } from '../character/shadowModel';
 import { ResultModel } from '../result/resultModel';
 
 jest.mock('../character/characterRepository');
+jest.mock('../../challenge/challenge/challengeRepository');
 
 describe('CharacterService', () => {
   const mockedCharacterRepository = new CharacterRepository();
+  const mockedChallengeRepository = new ChallengeRepository();
   const mediator = new ServiceMediator();
   const mentor = new MentorModel(MOCKED_MENTOR);
   const call = new CallModel(MOCKED_CALL);
   const law = new LawModel(MOCKED_LAW);
   const result = new ResultModel(MOCKED_RESULT);
   const messenger = new MessengerModel(MOCKED_MESSENGER);
-  const shadow = new ShadowModel(MOCKED_SHADOW);
-  const mainEdge = new MainEdgeModel(MOCKED_MAIN_EDGE);
 
   Object.defineProperty(mediator.characterService, '_characterRepository', {
     writable: true,
     value: mockedCharacterRepository,
+  });
+
+  Object.defineProperty(mediator.challengeService, '_challengeRepository', {
+    writable: true,
+    value: mockedChallengeRepository,
   });
 
   describe('WHEN "assignCallToMessengers" is called', () => {
@@ -447,7 +456,10 @@ describe('CharacterService', () => {
         }
 
         expect(error).toEqual(
-          mediator.characterService.errorLog.formatWrongFieldsError({ error: 'not_enough_mentors', waterholes: mentor.waterholeIds.toString() }),
+          mediator.characterService.errorLog.formatWrongFieldsError({
+            error: 'not_enough_characters_in_waterholes',
+            waterholes: mentor.waterholeIds.toString(),
+          }),
         );
       });
 
@@ -476,7 +488,10 @@ describe('CharacterService', () => {
         }
 
         expect(error).toEqual(
-          mediator.characterService.errorLog.formatWrongFieldsError({ error: 'not_enough_mentors', waterholes: messenger.waterholeIds.toString() }),
+          mediator.characterService.errorLog.formatWrongFieldsError({
+            error: 'not_enough_characters_in_waterholes',
+            waterholes: messenger.waterholeIds.toString(),
+          }),
         );
       });
 
@@ -489,9 +504,13 @@ describe('CharacterService', () => {
     });
 
     describe('AND character is "shadow"', () => {
+      const shadow = new ShadowModel(MOCKED_SHADOW);
+      const mainEdge = new MainEdgeModel(MOCKED_MAIN_EDGE);
+
       beforeEach(() => {
         (mockedCharacterRepository.remove as jest.Mock).mockResolvedValue(true);
         (mockedCharacterRepository.list as jest.Mock).mockResolvedValue([shadow]);
+        (mockedChallengeRepository.list as jest.Mock).mockResolvedValue([mainEdge]);
         (mockedCharacterRepository.get as jest.Mock).mockResolvedValue(shadow);
       });
 
@@ -504,16 +523,66 @@ describe('CharacterService', () => {
           error = e;
         }
 
-        expect(error).toEqual(mediator.characterService.errorLog.formatWrongFieldsError({ error: 'can`t_remove_shadow', mainEdgeID: mainEdge.id }));
+        expect(error).toEqual(
+          mediator.characterService.errorLog.formatWrongFieldsError({ characterId: shadow.id, error: 'can`t_remove_shadow', challenges: '1' }),
+        );
       });
 
-      it('AND "shadow" is not assigned to edge, MUST remove "shadow"', () => {});
+      it('AND "shadow" is not assigned to edge, MUST remove "shadow"', async () => {
+        (mockedChallengeRepository.list as jest.Mock).mockResolvedValue([]);
+
+        expect(await mediator.characterService.removeCharacter(shadow.id)).toBeTruthy();
+      });
     });
 
     describe('AND character is "guard"', () => {
-      it('AND "guard" is assigned to edge, MUST throw ui error', () => {});
+      const guard = new GuardModel(MOCKED_GUARD);
+      const mainEdge = new MainEdgeModel(MOCKED_MAIN_EDGE);
 
-      it('AND "guard" is not assigned to edge, MUST remove "guard"', () => {});
+      beforeEach(() => {
+        (mockedCharacterRepository.remove as jest.Mock).mockResolvedValue(true);
+        (mockedCharacterRepository.list as jest.Mock).mockResolvedValue([guard]);
+        (mockedChallengeRepository.list as jest.Mock).mockResolvedValue([mainEdge]);
+        (mockedCharacterRepository.get as jest.Mock).mockResolvedValue(guard);
+      });
+
+      it('AND "guard" is assigned to edge, MUST throw ui error', async () => {
+        let error;
+
+        try {
+          await mediator.characterService.removeCharacter(guard.id);
+        } catch (e) {
+          error = e;
+        }
+
+        expect(error).toEqual(
+          mediator.characterService.errorLog.formatWrongFieldsError({ characterId: guard.id, error: 'can`t_remove_guard', challenges: '1' }),
+        );
+      });
+
+      it('AND "guard" is not assigned to edge, MUST remove "guard"', async () => {
+        (mockedChallengeRepository.list as jest.Mock).mockResolvedValue([]);
+
+        expect(await mediator.characterService.removeCharacter(guard.id)).toBeTruthy();
+      });
+    });
+
+    it('AND character is "ally", MUST remove character', async () => {
+      const ally = new AllyModel(MOCKED_ALLY);
+
+      (mockedCharacterRepository.remove as jest.Mock).mockResolvedValue(true);
+      (mockedCharacterRepository.get as jest.Mock).mockResolvedValue(ally);
+
+      expect(await mediator.characterService.removeCharacter(ally.id)).toBeTruthy();
+    });
+
+    it('AND character is "enemy", MUST remove character', async () => {
+      const enemy = new EnemyModel(MOCKED_ENEMY);
+
+      (mockedCharacterRepository.remove as jest.Mock).mockResolvedValue(true);
+      (mockedCharacterRepository.get as jest.Mock).mockResolvedValue(enemy);
+
+      expect(await mediator.characterService.removeCharacter(enemy.id)).toBeTruthy();
     });
   });
 });

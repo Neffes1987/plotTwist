@@ -245,14 +245,32 @@ export class CharacterService extends AbstractService {
     }
 
     if (character.type === 'messenger' || character.type === 'mentor') {
-      const isCanDeleted = await this._checkCharacterInWaterholes(character as MentorModel);
-
-      if (isCanDeleted) {
+      if (await this._checkCharacterInWaterholes(character as MentorModel)) {
         return this._characterRepository.remove(character.id);
       }
     }
 
-    return false;
+    if (character.type === 'shadow') {
+      const challenges = await this.mediator.challengeService.getChallengesList({ shadowId: character.id });
+
+      if (challenges.length > 0) {
+        throw this.errorLog.formatWrongFieldsError({ characterId, error: 'can`t_remove_shadow', challenges: challenges.length.toString() });
+      }
+
+      return this._characterRepository.remove(characterId);
+    }
+
+    if (character.type === 'guard') {
+      const challenges = await this.mediator.challengeService.getChallengesList({ guardId: character.id });
+
+      if (challenges.length > 0) {
+        throw this.errorLog.formatWrongFieldsError({ characterId, error: 'can`t_remove_guard', challenges: challenges.length.toString() });
+      }
+
+      return this._characterRepository.remove(characterId);
+    }
+
+    return this._characterRepository.remove(characterId);
   }
 
   // results
@@ -306,7 +324,7 @@ export class CharacterService extends AbstractService {
     }
 
     if (emptyWaterholesIds.length) {
-      throw this.errorLog.formatWrongFieldsError({ error: 'not_enough_mentors', waterholes: emptyWaterholesIds.toString() });
+      throw this.errorLog.formatWrongFieldsError({ error: 'not_enough_characters_in_waterholes', waterholes: emptyWaterholesIds.toString() });
     }
 
     return true;

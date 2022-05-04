@@ -7,21 +7,12 @@ export interface IAbstractModel {
   description: string;
 }
 
-interface FieldExpectation {
-  expectedValue: unknown;
-  rootFieldConditionValue?: unknown;
-  rootFieldName?: string;
-}
-
 export interface IValidatorConfiguration {
   min?: number;
   max?: number;
   name: string;
   isNumber?: boolean;
-  when?: FieldExpectation[];
 }
-
-export const DEFINED_VALUE = 'NOT_NULL';
 
 export abstract class AbstractModel implements IAbstractModel {
   readonly SHORT_VALUE_MAX_LENGTH = 256;
@@ -49,54 +40,6 @@ export abstract class AbstractModel implements IAbstractModel {
 
   get description(): string {
     return this._description;
-  }
-
-  static _isExpected(name: string, data: IAbstractModel, when?: FieldExpectation[]): boolean {
-    if (!when || when.length === 0) {
-      return true;
-    }
-
-    let expectsResult = false;
-
-    for (const condition of when) {
-      const { expectedValue, rootFieldConditionValue, rootFieldName } = condition;
-      const dataFieldValue = data[name];
-
-      if (rootFieldName && rootFieldConditionValue) {
-        const dataRootFieldActualValue = data[rootFieldName];
-
-        if (dataRootFieldActualValue === rootFieldConditionValue) {
-          /**
-           *  Sometimes property of field depends on another field value,
-           *  this block manages such cases, and will be called only when root field value satisfy condition value
-           * */
-          if (expectedValue === DEFINED_VALUE && dataFieldValue) {
-            // and controlled field has any value
-            expectsResult = true;
-
-            break;
-          }
-
-          if (expectedValue === dataFieldValue) {
-            // and controlled field has particular
-            expectsResult = true;
-
-            break;
-          }
-        } else {
-          expectsResult = true;
-        }
-      } else {
-        if (dataFieldValue === expectedValue) {
-          // when property should has particular value from config without any dependencies
-          expectsResult = true;
-
-          break;
-        }
-      }
-    }
-
-    return expectsResult;
   }
 
   setId(newValue: string): void {
@@ -142,11 +85,7 @@ export abstract class AbstractModel implements IAbstractModel {
       let value = data[config.name];
       let valueSize;
 
-      if (!AbstractModel._isExpected(config.name, data, config.when)) {
-        notSatisfiedProps.expects = 'Props does not satisfy expectations';
-      }
-
-      if (value === undefined && !config.when) {
+      if (value === undefined) {
         emptyProperties.push(config.name);
         continue;
       }

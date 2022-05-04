@@ -2,12 +2,17 @@ import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
 import { CallStatus, ICallModel } from './call/callModel';
-import { IChallengeModel } from './chellenge/challengeModel';
+import { ChallengeModel, IChallengeModel } from './challenge/challengeModel';
+import { ChallengeRepository, ChallengeRepositoryProps } from './challenge/challengeRepository';
 import { IRewardModel } from './reward/rewardModel';
 
 export class ChallengeService extends AbstractService {
+  private readonly _challengeRepository: ChallengeRepository;
+
   constructor(mediator: ServiceMediator) {
     super(mediator);
+
+    this._challengeRepository = new ChallengeRepository();
   }
 
   getRewards(page: number, limit: number, challengeIds: string[]) {
@@ -70,8 +75,8 @@ export class ChallengeService extends AbstractService {
     return null;
   }
 
-  getChallengesList(page: number, limit: number) {
-    return [];
+  async getChallengesList(props: ChallengeRepositoryProps): Promise<ChallengeModel[]> {
+    return this._challengeRepository.list(props);
   }
 
   toggleChallenge(challengeId: string, isPasse: boolean) {
