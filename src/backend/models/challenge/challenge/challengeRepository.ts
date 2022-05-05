@@ -15,6 +15,10 @@ export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
     return super.getList(props);
   }
 
+  async getEdgeByChallengeId(challengeId: string): Promise<Nullable<ChallengeModel>> {
+    return Promise.resolve(null);
+  }
+
   createDbTable(): string {
     return '';
   }

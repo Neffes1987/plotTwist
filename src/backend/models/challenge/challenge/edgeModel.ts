@@ -15,6 +15,12 @@ export class EdgeModel extends ChallengeModel {
 
   constructor(data: IEdgeModel) {
     super(data);
+    this.setChallengeIds(data.challengeIds);
+    this.setGuardId(data.guardId);
+  }
+
+  get challengeIds(): string[] {
+    return this._challengeIds;
   }
 
   setGuardId(newValue: string): void {

@@ -1,89 +1,206 @@
+import { IListQuery } from '../../base/abstractRepository';
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
-import { CallStatus, ICallModel } from './call/callModel';
+import { CallModel, CallStatus, ICallModel } from './call/callModel';
+import { CallRepository } from './call/callRepository';
 import { ChallengeModel, IChallengeModel } from './challenge/challengeModel';
 import { ChallengeRepository, ChallengeRepositoryProps } from './challenge/challengeRepository';
-import { IRewardModel } from './reward/rewardModel';
+import { EdgeModel } from './challenge/edgeModel';
+import { IRewardModel, RewardModel } from './reward/rewardModel';
+import { RewardRepository } from './reward/rewardRepository';
 
 export class ChallengeService extends AbstractService {
   private readonly _challengeRepository: ChallengeRepository;
+  private readonly _callRepository: CallRepository;
+  private readonly _rewardRepository: RewardRepository;
 
   constructor(mediator: ServiceMediator) {
     super(mediator);
 
     this._challengeRepository = new ChallengeRepository();
+    this._callRepository = new CallRepository();
+    this._rewardRepository = new RewardRepository();
   }
 
-  getRewards(page: number, limit: number, challengeIds: string[]) {
-    return [];
+  async getRewards(props: IListQuery): Promise<RewardModel[]> {
+    return this._rewardRepository.list(props);
   }
 
-  getReward(rewardId: string) {
-    return null;
+  async getReward(rewardId: string): Promise<Nullable<RewardModel>> {
+    return this._rewardRepository.get(rewardId);
   }
 
-  createReward(data: IRewardModel) {
-    return '';
+  async createReward(data: IRewardModel): Promise<string> {
+    const call = this._rewardRepository.generateModel(data);
+
+    this._rewardRepository.generateModelId(call);
+
+    return this._rewardRepository.add(call);
   }
 
-  updateReward(data: IRewardModel) {
-    return true;
+  async updateReward(data: IRewardModel): Promise<boolean> {
+    const call = this._rewardRepository.generateModel(data);
+
+    return this._rewardRepository.replace(call);
   }
 
-  removeReward(rewardId: string) {
-    return true;
+  async removeReward(rewardId: string): Promise<boolean> {
+    const reward = await this.getReward(rewardId);
+
+    if (!reward) {
+      return true;
+    }
+
+    const challenge = await this.getChallenge(reward.challengeId);
+
+    if (challenge) {
+      throw this.errorLog.formatUnexpectedError('reward_assigned_to_challenge');
+    }
+
+    return this._rewardRepository.remove(rewardId);
   }
 
   // cals
-
-  getCallsList(page: number, limit: number, challengeIds: string[]) {
-    return [];
+  async getCallsList(props: IListQuery): Promise<CallModel[]> {
+    return this._callRepository.list(props);
   }
 
-  getCall(callId: string) {
-    return null;
+  async getCall(callId: string): Promise<Nullable<CallModel>> {
+    return this._callRepository.get(callId);
   }
 
-  removeCall(callId: string) {
-    return true;
+  async removeCall(callId: string): Promise<boolean> {
+    const call = await this.getCall(callId);
+
+    if (!call) {
+      return true;
+    }
+
+    const challenge = await this.getChallenge(call.challengeId);
+
+    if (challenge) {
+      throw this.errorLog.formatUnexpectedError('challenge_assigned_to_this_call');
+    }
+
+    return this._callRepository.remove(callId);
   }
 
-  createCall(data: ICallModel) {
-    return '';
+  async createCall(data: ICallModel): Promise<string> {
+    const call = this._callRepository.generateModel(data);
+
+    this._callRepository.generateModelId(call);
+
+    return this._callRepository.add(call);
   }
 
-  updateCall(data: ICallModel) {
-    return true;
+  async updateCall(data: ICallModel): Promise<boolean> {
+    const call = this._callRepository.generateModel(data);
+
+    return this._callRepository.replace(call);
   }
 
-  activateCall(callId: string, status: CallStatus) {
+  async activateCall(callId: string, status: CallStatus): Promise<boolean> {
+    const call = await this.getCall(callId);
+
+    if (!call) {
+      throw this.errorLog.formatUnexpectedError('unable_to_find_call_by_id');
+    }
+
+    call.setStatus(status);
+
+    await this._callRepository.replace(call);
+
+    if (call.status === 'active') {
+      await this.changeChallengeWeight(call.challengeId);
+    }
+
     return true;
   }
 
   // challenge
 
-  createChallenge(data: IChallengeModel) {
-    return '';
+  async createChallenge(data: IChallengeModel): Promise<string> {
+    const model = this._challengeRepository.generateModel(data);
+
+    this._challengeRepository.generateModelId(model);
+
+    return this._challengeRepository.add(model);
   }
 
-  updateChallenge(data: IChallengeModel) {
-    return true;
+  async updateChallenge(data: IChallengeModel): Promise<boolean> {
+    const model = this._challengeRepository.generateModel(data);
+
+    return this._challengeRepository.replace(model);
   }
 
-  getChallenge(challengeId: string) {
-    return null;
+  async getChallenge(challengeId: string): Promise<Nullable<ChallengeModel>> {
+    return this._challengeRepository.get(challengeId);
   }
 
   async getChallengesList(props: ChallengeRepositoryProps): Promise<ChallengeModel[]> {
     return this._challengeRepository.list(props);
   }
 
-  toggleChallenge(challengeId: string, isPasse: boolean) {
+  async toggleEdgeStatus(challengeId: string, isPassed: boolean): Promise<boolean> {
+    const edge = await this._challengeRepository.get(challengeId);
+
+    if (!edge) {
+      throw this.errorLog.formatUnexpectedError('provided_id_is_not_for_challenge');
+    }
+
+    (edge as EdgeModel).setIsActive(isPassed);
+
+    await this._challengeRepository.replace(edge);
+
+    if (edge.type === 'edge' || edge.type === 'mainEdge') {
+      const worlds = await this.mediator.worldService.getWorldsList({ edgeId: edge.id });
+
+      await this.mediator.worldService.activateWorld(worlds[0].id, isPassed ? 'finished' : 'release');
+    }
+
     return true;
   }
 
-  removeChallenge(challengeId: string) {
+  async changeChallengeWeight(challengeId: string, weight?: number): Promise<boolean> {
+    const challenge = await this._challengeRepository.get(challengeId);
+
+    if (!challenge) {
+      throw this.errorLog.formatUnexpectedError('challenge_not_found');
+    }
+
+    challenge.setWeight(weight ?? challenge.weight + 1);
+
+    return this._challengeRepository.replace(challenge);
+  }
+
+  async removeChallenge(challengeId: string): Promise<boolean> {
+    const challenge = await this.getChallenge(challengeId);
+
+    if (!challenge) {
+      return true;
+    }
+
+    if (challenge.type === 'mainEdge') {
+      throw this.errorLog.formatUnexpectedError('main_edge_can_not_be_deleted');
+    }
+
+    if (challenge.type === 'edge') {
+      throw this.errorLog.formatUnexpectedError('edge_can_not_be_deleted');
+    }
+
+    const edge = await this._challengeRepository.getEdgeByChallengeId(challenge.id);
+
+    if (!edge) {
+      return this._challengeRepository.remove(challenge.id);
+    }
+
+    const challengesIds = (edge as EdgeModel).challengeIds;
+
+    if (challengesIds.length - 1 < EdgeModel.CHALLENGE_IDS_MIN_VALUE) {
+      throw this.errorLog.formatUnexpectedError('not_enough_challenges');
+    }
+
     return true;
   }
 }

@@ -1,11 +1,13 @@
 import { IAbstractModel } from '../../base/abstractModel';
+import { IListQuery } from '../../base/abstractRepository';
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
 import { CharacterModel, ICharacterModel } from './character/characterModel';
-import { CharacterRepository } from './character/characterRepository';
+import { CharacterRepository, ICharacterListQuery } from './character/characterRepository';
 import { MentorModel } from './character/mentorModel';
 import { MessengerModel } from './character/messengerModel';
+import { ResultModel } from './result/resultModel';
 import { ResultRepository } from './result/resultRepository';
 
 export class CharacterService extends AbstractService {
@@ -155,8 +157,8 @@ export class CharacterService extends AbstractService {
     return this._characterRepository.updateMentorsLaws(result);
   }
 
-  async getCharactersList(plotId: string): Promise<CharacterModel[]> {
-    return this._characterRepository.list({ plotId });
+  async getCharactersList(props: ICharacterListQuery): Promise<CharacterModel[]> {
+    return this._characterRepository.list(props);
   }
 
   async getCharacter(characterId: string): Promise<Nullable<CharacterModel>> {
@@ -274,24 +276,30 @@ export class CharacterService extends AbstractService {
   }
 
   // results
-  addResult(data: IAbstractModel) {
-    return '';
+  async addResult(data: IAbstractModel): Promise<string> {
+    const model = this._resultRepository.generateModel(data);
+
+    this._resultRepository.generateModelId(model);
+
+    return this._resultRepository.add(model);
   }
 
-  removeResult(resultId: string) {
-    return true;
+  async removeResult(resultId: string): Promise<boolean> {
+    return this._resultRepository.remove(resultId);
   }
 
-  updateResult(data: IAbstractModel) {
-    return true;
+  async updateResult(data: IAbstractModel): Promise<boolean> {
+    const model = this._resultRepository.generateModel(data);
+
+    return this._resultRepository.replace(model);
   }
 
-  getResult(resultId: string) {
-    return null;
+  async getResult(resultId: string): Promise<Nullable<ResultModel>> {
+    return this._resultRepository.get(resultId);
   }
 
-  getResults(page: number, limit: number, queryList: string) {
-    return [];
+  async getResults(props: IListQuery): Promise<ResultModel[]> {
+    return this._resultRepository.list(props);
   }
 
   async _checkCharacterInWaterholes(character: MentorModel | MessengerModel): Promise<boolean> {

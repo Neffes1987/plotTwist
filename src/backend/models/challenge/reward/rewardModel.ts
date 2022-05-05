@@ -12,6 +12,10 @@ export class RewardModel extends AbstractModel {
     this.setChallengeId(data.challengeId);
   }
 
+  get challengeId(): string {
+    return this._challengeId;
+  }
+
   setChallengeId(newValue: string): void {
     this._challengeId = newValue;
   }

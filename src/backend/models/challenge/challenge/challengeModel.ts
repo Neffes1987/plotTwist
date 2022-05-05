@@ -10,6 +10,7 @@ export interface IChallengeModel extends IAbstractModel {
   brokenLawIds: string[];
   characterIds: string[];
   type: ChallengeType;
+  isActive: boolean;
 }
 
 export class ChallengeModel extends AbstractModel {
@@ -22,6 +23,7 @@ export class ChallengeModel extends AbstractModel {
   private _weight = 0;
   private readonly _type: ChallengeType = 'challenge';
   private _callIds: string[] = [];
+  private _isActive = false;
   private _brokenLawIds: string[] = [];
   private _characterIds: string[] = [];
 
@@ -33,7 +35,24 @@ export class ChallengeModel extends AbstractModel {
     this.setWeight(data.weight);
     this.setCallIds(data.callIds);
     this.setCharacterIds(data.characterIds);
+    this.setIsActive(data.isActive);
     this._type = data.type;
+  }
+
+  get type(): ChallengeType {
+    return this._type;
+  }
+
+  get isActive(): boolean {
+    return this._isActive;
+  }
+
+  get weight(): number {
+    return this._weight;
+  }
+
+  setIsActive(newValue: boolean): void {
+    this._isActive = newValue;
   }
 
   setPlotGoal(newValue: string): void {
@@ -69,6 +88,7 @@ export class ChallengeModel extends AbstractModel {
       rewardId: this._rewardId,
       weight: this._weight,
       type: this._type,
+      isActive: this._isActive,
     };
   }
 

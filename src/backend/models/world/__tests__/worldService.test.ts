@@ -46,13 +46,13 @@ describe('WorldService', () => {
       });
 
       it('MUST call "worldRepository.list"', async () => {
-        await mediator.worldService.getWorldsList(world.plotId);
+        await mediator.worldService.getWorldsList({ plotId: world.plotId });
 
-        expect(mockedWorldRepository.list).toHaveBeenCalledWith(world.plotId);
+        expect(mockedWorldRepository.list).toHaveBeenCalledWith({ plotId: world.plotId });
       });
 
       it('MUST returns list of worlds for plot', async () => {
-        expect(await mediator.worldService.getWorldsList(world.plotId)).toEqual([world]);
+        expect(await mediator.worldService.getWorldsList({ plotId: world.plotId })).toEqual([world]);
       });
     });
 
@@ -61,7 +61,9 @@ describe('WorldService', () => {
         await mediator.worldService.removeWorlds(world.plotId);
       });
 
-      it('MUST call "worldRepository.remove"', async () => {});
+      it('MUST call "worldRepository.removeAllByPlotId"', () => {
+        expect(mockedWorldRepository.removeAllByPlotId).toHaveBeenCalledWith(world.plotId);
+      });
     });
 
     describe('WHEN "getWorld" is called', () => {
@@ -140,33 +142,47 @@ describe('WorldService', () => {
       it('MUST call "worldRepository.list"', async () => {
         await mediator.worldService.activateWorld(world.id, 'release');
 
-        expect(mockedWorldRepository.list).toHaveBeenCalledWith(world.plotId);
+        expect(mockedWorldRepository.list).toHaveBeenCalledWith({ plotId: world.plotId });
       });
 
-      it('AND all worlds are released, MUST sends command to change plot status to active', async () => {
+      it('AND all worlds are released, MUST sends command to change plot status to "released"', async () => {
         (mockedWorldRepository.list as jest.Mock).mockReturnValue([world, releasedWorld, releasedWorld, releasedWorld, releasedWorld]);
 
         const deactivatedPlot = new PlotModel(MOCKED_PLOT);
         const activatedPlot = new PlotModel(MOCKED_PLOT);
 
-        deactivatedPlot.setIsActive(false);
-        activatedPlot.setIsActive(true);
+        deactivatedPlot.setStatus('draft');
+        activatedPlot.setStatus('released');
 
         await mediator.worldService.activateWorld(world.id, 'release');
 
         expect(mockedPlotRepository.replace).toHaveBeenCalledWith(activatedPlot);
       });
 
-      it('AND any of worlds are not released, MUST sends command to change plot status to deactivate', async () => {
+      it('AND any of worlds are not released, MUST sends command to change plot status to "draft"', async () => {
         const deactivatedWorld = new PlainWorldModel(MOCKED_WORLD);
         const deactivatedPlot = new PlotModel(MOCKED_PLOT);
 
         deactivatedWorld.setStatus('draft');
         (mockedWorldRepository.list as jest.Mock).mockReturnValue([world, deactivatedWorld, deactivatedWorld, deactivatedWorld, deactivatedWorld]);
 
-        deactivatedPlot.setIsActive(false);
+        deactivatedPlot.setStatus('draft');
 
         await mediator.worldService.activateWorld(deactivatedPlot.id, 'release');
+
+        expect(mockedPlotRepository.replace).toHaveBeenCalledWith(deactivatedPlot);
+      });
+
+      it('AND all worlds are finished, MUST sends command to change plot status to "finished"', async () => {
+        const deactivatedWorld = new PlainWorldModel(MOCKED_WORLD);
+        const deactivatedPlot = new PlotModel(MOCKED_PLOT);
+
+        deactivatedWorld.setStatus('finished');
+        (mockedWorldRepository.list as jest.Mock).mockReturnValue([world, deactivatedWorld, deactivatedWorld, deactivatedWorld, deactivatedWorld]);
+
+        deactivatedPlot.setStatus('finished');
+
+        await mediator.worldService.activateWorld(deactivatedPlot.id, 'finished');
 
         expect(mockedPlotRepository.replace).toHaveBeenCalledWith(deactivatedPlot);
       });
@@ -256,13 +272,15 @@ describe('WorldService', () => {
 
       it('AND laws quantity is less then threshold, MUST show ui error', async () => {
         (mockedLawRepository.list as jest.Mock).mockReturnValue([law, law]);
+        let error;
 
         try {
           await mediator.worldService.removeLaw(law.id);
         } catch (e) {
-          // eslint-disable-next-line jest/valid-expect
-          expect(new UxException('empty_fields', { lawId: 'not_enough_laws_in_world' }).toString());
+          error = e;
         }
+
+        expect(error).toEqual(new UxException('empty_fields', { lawId: 'not_enough_laws_in_world' }));
       });
     });
   });

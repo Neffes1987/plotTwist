@@ -9,7 +9,8 @@ import { IReturnWithPotionWorldModel, ReturnWithPotionWorldModel } from './retur
 import { ICommonWorld, WorldModel } from './worldModel';
 
 export interface IWorldListQuery extends IListQuery {
-  plotId: string;
+  plotId?: string;
+  edgeId?: string;
 }
 
 export class WorldRepository extends AbstractRepository<WorldModel> {
@@ -17,10 +18,8 @@ export class WorldRepository extends AbstractRepository<WorldModel> {
     return Promise.resolve('');
   }
 
-  list(plotId: string): Promise<WorldModel[]> {
-    return super.getList<IWorldListQuery>({
-      plotId,
-    });
+  list(props: IWorldListQuery): Promise<WorldModel[]> {
+    return super.getList<IWorldListQuery>(props);
   }
 
   removeAllByPlotId(plotId: string): Promise<boolean> {

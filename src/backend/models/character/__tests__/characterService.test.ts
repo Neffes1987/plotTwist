@@ -16,8 +16,10 @@ import { MentorModel } from '../character/mentorModel';
 import { MessengerModel } from '../character/messengerModel';
 import { ShadowModel } from '../character/shadowModel';
 import { ResultModel } from '../result/resultModel';
+import { ResultRepository } from '../result/resultRepository';
 
 jest.mock('../character/characterRepository');
+jest.mock('../result/resultRepository');
 jest.mock('../../challenge/challenge/challengeRepository');
 
 describe('CharacterService', () => {
@@ -300,7 +302,7 @@ describe('CharacterService', () => {
     });
 
     it('MUST call "CharacterRepository.list"', async () => {
-      await mediator.characterService.getCharactersList(mentor.plotId);
+      await mediator.characterService.getCharactersList({ plotId: mentor.plotId });
 
       expect(mockedCharacterRepository.list).toHaveBeenCalledWith({ plotId: mentor.plotId });
     });
@@ -588,39 +590,99 @@ describe('CharacterService', () => {
 });
 
 describe('result', () => {
+  const mediator = new ServiceMediator();
+  const result = new ResultModel(MOCKED_RESULT);
+  const mockedResultRepository = new ResultRepository();
+
+  Object.defineProperty(mediator.characterService, '_resultRepository', {
+    writable: true,
+    value: mockedResultRepository,
+  });
+
+  beforeEach(() => {
+    (mockedResultRepository.generateModel as jest.Mock).mockReturnValue(result);
+    (mockedResultRepository.get as jest.Mock).mockReturnValue(result);
+    (mockedResultRepository.list as jest.Mock).mockReturnValue([result]);
+    (mockedResultRepository.add as jest.Mock).mockReturnValue(result.id);
+    (mockedResultRepository.replace as jest.Mock).mockReturnValue(true);
+    (mockedResultRepository.remove as jest.Mock).mockReturnValue(true);
+  });
+
   describe('WHEN "addResult" is called', () => {
-    it('MUST generate model from input data', () => {});
+    it('MUST generate model from input data', async () => {
+      await mediator.characterService.addResult(MOCKED_RESULT);
 
-    it('MUST generate model id', () => {});
+      expect(mockedResultRepository.generateModel).toHaveBeenCalledWith(MOCKED_RESULT);
+    });
 
-    it('MUST add result to db', () => {});
+    it('MUST generate model id', async () => {
+      await mediator.characterService.addResult(MOCKED_RESULT);
 
-    it('MUST return result id', () => {});
+      expect(mockedResultRepository.generateModelId).toHaveBeenCalledWith(result);
+    });
+
+    it('MUST add result to db', async () => {
+      await mediator.characterService.addResult(MOCKED_RESULT);
+
+      expect(mockedResultRepository.add).toHaveBeenCalledWith(result);
+    });
+
+    it('MUST return result id', async () => {
+      expect(await mediator.characterService.addResult(MOCKED_RESULT)).toEqual(result.id);
+    });
   });
 
   describe('WHEN "removeResult" is called', () => {
-    it('MUST remove result from repository', () => {});
+    it('MUST remove result from repository', async () => {
+      await mediator.characterService.removeResult(result.id);
 
-    it('MUST return boolean value', () => {});
+      expect(mockedResultRepository.remove).toHaveBeenCalledWith(result.id);
+    });
+
+    it('MUST return boolean value', async () => {
+      expect(await mediator.characterService.removeResult(result.id)).toBeTruthy();
+    });
   });
 
   describe('WHEN "updateResult" is called', () => {
-    it('MUST generate model from input data', () => {});
+    it('MUST generate model from input data', async () => {
+      await mediator.characterService.updateResult(MOCKED_RESULT);
 
-    it('MUST update result to db', () => {});
+      expect(mockedResultRepository.generateModel).toHaveBeenCalledWith(MOCKED_RESULT);
+    });
 
-    it('MUST return boolean value', () => {});
+    it('MUST update result to db', async () => {
+      await mediator.characterService.updateResult(MOCKED_RESULT);
+
+      expect(mockedResultRepository.replace).toHaveBeenCalledWith(result);
+    });
+
+    it('MUST return boolean value', async () => {
+      expect(await mediator.characterService.updateResult(MOCKED_RESULT)).toBeTruthy();
+    });
   });
 
   describe('WHEN "getResult" is called', () => {
-    it('MUST get data from repository by id', () => {});
+    it('MUST get data from repository by id', async () => {
+      await mediator.characterService.getResult(result.id);
 
-    it('MUST return result data', () => {});
+      expect(mockedResultRepository.get).toHaveBeenCalledWith(result.id);
+    });
+
+    it('MUST return result data', async () => {
+      expect(await mediator.characterService.getResult(result.id)).toEqual(result);
+    });
   });
 
   describe('WHEN "getResults" is called', () => {
-    it('MUST get data from repository by id', () => {});
+    it('MUST get data from repository by id', async () => {
+      await mediator.characterService.getResults({});
 
-    it('MUST return results list', () => {});
+      expect(mockedResultRepository.list).toHaveBeenCalledWith({});
+    });
+
+    it('MUST return results list', async () => {
+      expect(await mediator.characterService.getResults({})).toEqual([result]);
+    });
   });
 });

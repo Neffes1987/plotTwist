@@ -1,6 +1,7 @@
 import { ICallModel } from '@backend/models/challenge/call/callModel';
-import { IEdgeModel } from '@backend/models/challenge/chellenge/edgeModel';
-import { IMainEdgeModel } from '@backend/models/challenge/chellenge/mainEdgeModel';
+import { IChallengeModel } from '@backend/models/challenge/challenge/challengeModel';
+import { IEdgeModel } from '@backend/models/challenge/challenge/edgeModel';
+import { IMainEdgeModel } from '@backend/models/challenge/challenge/mainEdgeModel';
 import { IRewardModel } from '@backend/models/challenge/reward/rewardModel';
 
 import { MOCKED_SHADOW } from './mockedCharacter';
@@ -22,7 +23,21 @@ export const MOCKED_CALL: ICallModel = {
   type: 'gossip',
 };
 
-export const MOCKED_CHALLENGE: IEdgeModel = {
+export const MOCKED_CHALLENGE: IChallengeModel = {
+  callIds: ['callId_1', 'callId_2'],
+  characterIds: ['characterId_1', 'characterId_2'],
+  brokenLawIds: ['brokenLawId_1', 'brokenLawId_2'],
+  description: '',
+  id: '',
+  name: '',
+  plotGoal: '',
+  rewardId: '',
+  type: 'challenge',
+  weight: 0,
+  isActive: true,
+};
+
+export const MOCKED_EDGE: IEdgeModel = {
   id: 'id',
   name: 'name',
   description: 'description',
@@ -35,6 +50,7 @@ export const MOCKED_CHALLENGE: IEdgeModel = {
   guardId: '1',
   challengeIds: ['1', '2'],
   type: 'edge',
+  isActive: false,
 };
 
 export const MOCKED_MAIN_EDGE: IMainEdgeModel = {
@@ -51,7 +67,8 @@ export const MOCKED_MAIN_EDGE: IMainEdgeModel = {
   plotGoal: 'plotGoal',
   rewardId: 'rewardId',
   shadowEncounterType: 'deathOfVillain',
-  shadowId: MOCKED_SHADOW.id,
+  guardId: MOCKED_SHADOW.id,
   type: 'mainEdge',
   weight: 0,
+  isActive: false,
 };

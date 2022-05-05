@@ -25,10 +25,10 @@ export interface ICallModel extends IAbstractModel {
 export class CallModel extends AbstractModel {
   static readonly PARTY_MOTIVATION = 2048;
 
-  _partyMotivation = '';
-  _challengeId = '';
-  _status?: CallStatus;
-  _type?: CallType;
+  private _partyMotivation = '';
+  private _challengeId = '';
+  private _status: CallStatus = 'created';
+  private _type: CallType = 'gossip';
 
   constructor(data: ICallModel) {
     super(data);
@@ -36,6 +36,14 @@ export class CallModel extends AbstractModel {
     this.setStatus(data.status ?? 'created');
     this.setType(data.type ?? 'gossip');
     this.setPartyMotivation(data.partyMotivation);
+  }
+
+  get status(): CallStatus {
+    return this._status;
+  }
+
+  get challengeId(): string {
+    return this._challengeId;
   }
 
   setChallengeId(newValue: string): void {

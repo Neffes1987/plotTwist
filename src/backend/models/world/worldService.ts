@@ -1,10 +1,11 @@
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
+import { PlotStatus } from '../plot/plot/plotModel';
 
 import { ILawModel, LawModel } from './law/lawModel';
 import { LawRepository } from './law/lawRepository';
 import { ICommonWorld, WorldModel, WorldStatus } from './world/worldModel';
-import { WorldRepository } from './world/worldRepository';
+import { IWorldListQuery, WorldRepository } from './world/worldRepository';
 
 export class WorldService extends AbstractService {
   _worldRepository: WorldRepository;
@@ -17,8 +18,8 @@ export class WorldService extends AbstractService {
     this._lawRepository = new LawRepository();
   }
 
-  async getWorldsList(plotId: string): Promise<WorldModel[]> {
-    return this._worldRepository.list(plotId);
+  async getWorldsList(props: IWorldListQuery): Promise<WorldModel[]> {
+    return this._worldRepository.list(props);
   }
 
   async removeWorlds(plotId: string): Promise<boolean> {
@@ -51,26 +52,34 @@ export class WorldService extends AbstractService {
     changedWorld.setStatus(status);
     await this._worldRepository.replace(changedWorld);
 
-    const plotWorlds = await this.getWorldsList(changedWorld.plotId);
-    let isPlotActive = true;
+    const plotWorlds = await this.getWorldsList({ plotId: changedWorld.plotId });
+    let plotStatus: PlotStatus;
+    const worldStatuses = {
+      draft: 0,
+      release: 0,
+      finished: 0,
+    };
 
     if (plotWorlds.length === 5) {
       for (const world of plotWorlds) {
-        if (world.status === 'draft') {
-          isPlotActive = false;
+        worldStatuses[world.status] += 1;
+      }
 
-          break;
-        }
+      if (worldStatuses.draft > 0) {
+        plotStatus = 'draft';
+      } else if (worldStatuses.finished === 5) {
+        plotStatus = 'finished';
+      } else {
+        plotStatus = 'released';
       }
     } else {
-      isPlotActive = false;
+      plotStatus = 'draft';
     }
 
-    return this.mediator.plotService.changePlotStatus(changedWorld.plotId, isPlotActive);
+    return this.mediator.plotService.changePlotStatus(changedWorld.plotId, plotStatus);
   }
 
   // laws
-
   async getLawsList(worldId: string): Promise<LawModel[]> {
     return this._lawRepository.list(worldId);
   }
@@ -100,7 +109,7 @@ export class WorldService extends AbstractService {
 
     const list = await this.getLawsList(law.worldId);
 
-    if (list.length - 1 < WorldModel.LAWS_MIN_LENGT) {
+    if (list.length - 1 < 2) {
       throw this.errorLog.formatWrongFieldsError({
         lawId: 'not_enough_laws_in_world',
       });

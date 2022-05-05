@@ -2,7 +2,7 @@ import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../..
 
 export type WorldType = 'plainWorld' | 'privateWorld' | 'hiddenCave' | 'holiday' | 'returnWithPotion';
 
-export type WorldStatus = 'draft' | 'release';
+export type WorldStatus = 'draft' | 'release' | 'finished';
 
 export interface ICommonWorld extends IAbstractModel {
   story: string;

@@ -3,11 +3,8 @@ import { AbstractRepository, IListQuery } from '../../../base/abstractRepository
 import { CallModel, ICallModel } from './callModel';
 
 export class CallRepository extends AbstractRepository<CallModel> {
-  async list(page: number, limit: number): Promise<CallModel[]> {
-    return super.getList({
-      page,
-      limit,
-    });
+  async list(props: IListQuery): Promise<CallModel[]> {
+    return super.getList(props);
   }
 
   createDbTable(): string {

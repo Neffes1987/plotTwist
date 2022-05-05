@@ -1,24 +1,26 @@
 import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
 
+export type PlotStatus = 'draft' | 'released' | 'finished';
+
 export interface IPlotModel extends IAbstractModel {
   worldsListIds: string[];
-  isActive: boolean;
+  status: PlotStatus;
 }
 
 export class PlotModel extends AbstractModel {
-  private isActive = false;
+  private _status: PlotStatus = 'draft';
 
   constructor(data: IPlotModel) {
     super(data);
-    this.setIsActive(data.isActive);
+    this.setStatus(data.status);
   }
 
-  get status(): boolean {
-    return this.isActive;
+  get status(): PlotStatus {
+    return this._status;
   }
 
-  setIsActive(newValue: boolean): void {
-    this.isActive = newValue;
+  setStatus(newValue: PlotStatus): void {
+    this._status = newValue;
   }
 
   getValidationConfig(): IValidatorConfiguration[] {
@@ -27,7 +29,7 @@ export class PlotModel extends AbstractModel {
 
   getAdditionalProperties(): Record<string, unknown> {
     return {
-      isActive: this.isActive,
+      status: this._status,
     };
   }
 }

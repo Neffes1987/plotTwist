@@ -33,10 +33,7 @@ export class RewardRepository extends AbstractRepository<RewardModel> {
     throw new Error('Method not implemented.');
   }
 
-  async list(page: number, limit: number): Promise<RewardModel[]> {
-    return super.getList({
-      page,
-      limit,
-    });
+  async list(props: IListQuery): Promise<RewardModel[]> {
+    return super.getList(props);
   }
 }

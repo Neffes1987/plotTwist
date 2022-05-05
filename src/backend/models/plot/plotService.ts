@@ -1,7 +1,7 @@
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
-import { IPlotModel, PlotModel } from './plot/plotModel';
+import { IPlotModel, PlotModel, PlotStatus } from './plot/plotModel';
 import { PlotRepository } from './plot/plotRepository';
 
 export class PlotService extends AbstractService {
@@ -39,14 +39,14 @@ export class PlotService extends AbstractService {
     return this._plotRepository.remove(plotId);
   }
 
-  async changePlotStatus(plotId: string, isActive: boolean): Promise<boolean> {
+  async changePlotStatus(plotId: string, status: PlotStatus): Promise<boolean> {
     const plot = await this.getPlot(plotId);
 
     if (!plot) {
       throw this.errorLog.formatWrongFieldsError({ wrongId: plotId });
     }
 
-    plot.setIsActive(isActive);
+    plot.setStatus(status);
 
     await this._plotRepository.replace(plot);
 

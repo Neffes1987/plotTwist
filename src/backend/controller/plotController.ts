@@ -1,12 +1,14 @@
 import { IAbstractModel } from '../base/abstractModel';
 import { IListQuery } from '../base/abstractRepository';
 import { CallModel, CallStatus, ICallModel } from '../models/challenge/call/callModel';
-import { IChallengeModel } from '../models/challenge/chellenge/challengeModel';
-import { IRewardModel } from '../models/challenge/reward/rewardModel';
-import { ICharacterModel } from '../models/character/character/characterModel';
+import { ChallengeModel, IChallengeModel } from '../models/challenge/challenge/challengeModel';
+import { IRewardModel, RewardModel } from '../models/challenge/reward/rewardModel';
+import { CharacterModel, ICharacterModel } from '../models/character/character/characterModel';
+import { ICharacterListQuery } from '../models/character/character/characterRepository';
+import { ResultModel } from '../models/character/result/resultModel';
 import { IPlotModel, PlotModel } from '../models/plot/plot/plotModel';
-import { IWaterholeModel } from '../models/waterhole/waterhole/waterholeModel';
-import { ILawModel } from '../models/world/law/lawModel';
+import { IWaterholeModel, WaterholeModel } from '../models/waterhole/waterhole/waterholeModel';
+import { ILawModel, LawModel } from '../models/world/law/lawModel';
 import { ICommonWorld, WorldModel, WorldStatus } from '../models/world/world/worldModel';
 
 import { ServiceMediator } from './serviceMediator';
@@ -20,199 +22,199 @@ export class PlotController {
     return this._mediator;
   }
 
-  getPlotsList(data: IListQuery): Promise<PlotModel[]> {
+  async getPlotsList(data: IListQuery): Promise<PlotModel[]> {
     return this.mediator.plotService.getPlotsList(data.page ?? PlotController.PAGE, data.limit ?? PlotController.LIMIT);
   }
 
-  getPlot(plotId: string): Promise<PlotModel> {
+  async getPlot(plotId: string): Promise<PlotModel> {
     return this.mediator.plotService.getPlot(plotId);
   }
 
-  createPlot(data: IPlotModel): Promise<string> {
+  async createPlot(data: IPlotModel): Promise<string> {
     return this.mediator.plotService.createPlot(data);
   }
 
-  updatePlot(data: IPlotModel): Promise<boolean> {
+  async updatePlot(data: IPlotModel): Promise<boolean> {
     return this.mediator.plotService.updatePlot(data);
   }
 
-  removePlot(plotId: string): Promise<boolean> {
+  async removePlot(plotId: string): Promise<boolean> {
     return this.mediator.plotService.removePlot(plotId);
   }
 
-  getWorld(worldId: string): Promise<Nullable<WorldModel>> {
+  async getWorld(worldId: string): Promise<Nullable<WorldModel>> {
     return this.mediator.worldService.getWorld(worldId);
   }
 
-  createWorld(data: ICommonWorld) {
+  async createWorld(data: ICommonWorld): Promise<string> {
     return this.mediator.worldService.createWorld(data);
   }
 
-  updateWorld(data: ICommonWorld) {
+  async updateWorld(data: ICommonWorld): Promise<boolean> {
     return this.mediator.worldService.updateWorld(data);
   }
 
-  activateWorld(worldId: string, worldState: WorldStatus): Promise<boolean> {
+  async activateWorld(worldId: string, worldState: WorldStatus): Promise<boolean> {
     return this.mediator.worldService.activateWorld(worldId, worldState);
   }
 
-  getRewards(page: number, limit: number, challengeIds: string[]) {
-    return this.mediator.challengeService.getRewards(page, limit, challengeIds);
+  async getRewards(props: IListQuery): Promise<RewardModel[]> {
+    return this.mediator.challengeService.getRewards(props);
   }
 
-  getReward(rewardId: string) {
+  async getReward(rewardId: string): Promise<Nullable<RewardModel>> {
     return this.mediator.challengeService.getReward(rewardId);
   }
 
-  createReward(data: IRewardModel) {
+  async createReward(data: IRewardModel): Promise<string> {
     return this.mediator.challengeService.createReward(data);
   }
 
-  updateReward(data: IRewardModel) {
+  async updateReward(data: IRewardModel): Promise<boolean> {
     return this.mediator.challengeService.updateReward(data);
   }
 
-  removeReward(rewardId: string) {
+  async removeReward(rewardId: string): Promise<boolean> {
     return this.mediator.challengeService.removeReward(rewardId);
   }
 
-  getLawsList(worldId: string) {
+  async getLawsList(worldId: string): Promise<LawModel[]> {
     return this.mediator.worldService.getLawsList(worldId);
   }
 
-  getLaw(lawId: string) {
+  async getLaw(lawId: string): Promise<Nullable<LawModel>> {
     return this.mediator.worldService.getLaw(lawId);
   }
 
-  createLaw(data: ILawModel) {
+  async createLaw(data: ILawModel): Promise<string> {
     return this.mediator.worldService.createLaw(data);
   }
 
-  updateLaw(data: ILawModel): Promise<boolean> {
+  async updateLaw(data: ILawModel): Promise<boolean> {
     return this.mediator.worldService.updateLaw(data);
   }
 
-  removeLaw(lawId: string): Promise<boolean> {
+  async removeLaw(lawId: string): Promise<boolean> {
     return this.mediator.worldService.removeLaw(lawId);
   }
 
-  getCallsList(page: number, limit: number, challengeIds: string[]): CallModel[] {
-    return this.mediator.challengeService.getCallsList(page, limit, challengeIds);
+  async getCallsList(props: IListQuery): Promise<CallModel[]> {
+    return this.mediator.challengeService.getCallsList(props);
   }
 
-  getCall(callId: string) {
+  async getCall(callId: string): Promise<Nullable<CallModel>> {
     return this.mediator.challengeService.getCall(callId);
   }
 
-  createCall(data: ICallModel) {
+  async createCall(data: ICallModel): Promise<string> {
     return this.mediator.challengeService.createCall(data);
   }
 
-  updateCall(data: ICallModel) {
+  async updateCall(data: ICallModel): Promise<boolean> {
     return this.mediator.challengeService.updateCall(data);
   }
 
-  activateCall(callId: string, callStatus: CallStatus) {
+  async activateCall(callId: string, callStatus: CallStatus): Promise<boolean> {
     return this.mediator.challengeService.activateCall(callId, callStatus);
   }
 
-  removeCall(callId: string): boolean {
+  async removeCall(callId: string): Promise<boolean> {
     return this.mediator.challengeService.removeCall(callId);
   }
 
-  assignCallToMessenger(callId: string, characterId: string): boolean {
-    return this.mediator.characterService.assignCallToMessenger(callId, characterId);
+  async assignCallToMessenger(callId: string, characterIds: string[]): Promise<boolean> {
+    return this.mediator.characterService.assignCallToMessenger(callId, characterIds);
   }
 
-  assignLawToMentor(lawId: string, characterId: string): boolean {
-    return this.mediator.characterService.assignLawToMentor(lawId, characterId);
+  async assignLawToMentor(lawId: string, characterIds: string[]): Promise<boolean> {
+    return this.mediator.characterService.assignLawToMentors(lawId, characterIds);
   }
 
-  getCharactersList(page: number, limit: number, queries: string) {
-    return this.mediator.characterService.getCharactersList(page, limit, queries);
+  async getCharactersList(props: ICharacterListQuery): Promise<CharacterModel[]> {
+    return this.mediator.characterService.getCharactersList(props);
   }
 
-  getCharacter(characterId: string) {
+  async getCharacter(characterId: string): Promise<Nullable<CharacterModel>> {
     return this.mediator.characterService.getCharacter(characterId);
   }
 
-  assignResultForCharacters(resultId: string, characterIds: string[]): boolean {
+  async assignResultForCharacters(resultId: string, characterIds: string[]): Promise<boolean> {
     return this.mediator.characterService.assignResultForCharacters(resultId, characterIds);
   }
 
-  createCharacter(data: ICharacterModel) {
+  async createCharacter(data: ICharacterModel): Promise<string> {
     return this.mediator.characterService.createCharacter(data);
   }
 
-  updateCharacter(data: ICharacterModel): boolean {
+  async updateCharacter(data: ICharacterModel): Promise<boolean> {
     return this.mediator.characterService.updateCharacter(data);
   }
 
-  removeCharacter(characterId: string): boolean {
+  async removeCharacter(characterId: string): Promise<boolean> {
     return this.mediator.characterService.removeCharacter(characterId);
   }
 
-  addResult(data: IAbstractModel) {
-    this.mediator.characterService.addResult(data);
+  async addResult(data: IAbstractModel): Promise<string> {
+    return this.mediator.characterService.addResult(data);
   }
 
-  removeResult(resultId: string): boolean {
+  async removeResult(resultId: string): Promise<boolean> {
     return this.mediator.characterService.removeResult(resultId);
   }
 
-  updateResult(data: IAbstractModel): boolean {
+  async updateResult(data: IAbstractModel): Promise<boolean> {
     return this.mediator.characterService.updateResult(data);
   }
 
-  getResult(resultId: string) {
+  async getResult(resultId: string): Promise<Nullable<ResultModel>> {
     return this.mediator.characterService.getResult(resultId);
   }
 
-  getResults(page: number, limit: number, queries: string) {
-    return this.mediator.characterService.getResults(page, limit, queries);
+  async getResults(props: IListQuery): Promise<ResultModel[]> {
+    return this.mediator.characterService.getResults(props);
   }
 
-  createChallenge(data: IChallengeModel) {
+  async createChallenge(data: IChallengeModel): Promise<string> {
     return this.mediator.challengeService.createChallenge(data);
   }
 
-  updateChallenge(data: IChallengeModel): boolean {
+  async updateChallenge(data: IChallengeModel): Promise<boolean> {
     return this.mediator.challengeService.updateChallenge(data);
   }
 
-  getChallenge(challengeId: string) {
+  async getChallenge(challengeId: string): Promise<Nullable<ChallengeModel>> {
     return this.mediator.challengeService.getChallenge(challengeId);
   }
 
-  getChallengesList(page: number, limit: number) {
-    return this.mediator.challengeService.getChallengesList(page, limit);
+  async getChallengesList(props: IListQuery): Promise<ChallengeModel[]> {
+    return this.mediator.challengeService.getChallengesList(props);
   }
 
-  toggleChallenge(challengeId: string, isPassed: boolean): boolean {
-    return this.mediator.challengeService.toggleChallenge(challengeId, isPassed);
+  async toggleChallenge(challengeId: string, isPassed: boolean): Promise<boolean> {
+    return this.mediator.challengeService.toggleEdgeStatus(challengeId, isPassed);
   }
 
-  removeChallenge(challengeId: string): boolean {
+  async removeChallenge(challengeId: string): Promise<boolean> {
     return this.mediator.challengeService.removeChallenge(challengeId);
   }
 
-  getWaterholesList(worldId: string) {
+  async getWaterholesList(worldId: string): Promise<WaterholeModel[]> {
     return this.mediator.waterholeService.getWaterholesList(worldId);
   }
 
-  getWaterhole(waterholeId: string) {
+  async getWaterhole(waterholeId: string): Promise<Nullable<WaterholeModel>> {
     return this.mediator.waterholeService.getWaterhole(waterholeId);
   }
 
-  createWaterhole(data: IWaterholeModel) {
+  async createWaterhole(data: IWaterholeModel): Promise<string> {
     return this.mediator.waterholeService.createWaterhole(data);
   }
 
-  updateWaterhole(data: IWaterholeModel): Promise<boolean> {
+  async updateWaterhole(data: IWaterholeModel): Promise<boolean> {
     return this.mediator.waterholeService.updateWaterhole(data);
   }
 
-  removeWaterhole(waterholeId: string): Promise<boolean> {
+  async removeWaterhole(waterholeId: string): Promise<boolean> {
     return this.mediator.waterholeService.removeWaterhole(waterholeId);
   }
 }

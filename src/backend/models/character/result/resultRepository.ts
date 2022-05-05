@@ -4,11 +4,8 @@ import { AbstractRepository, IListQuery } from '../../../base/abstractRepository
 import { ResultModel } from './resultModel';
 
 export class ResultRepository extends AbstractRepository<ResultModel> {
-  async list(page: number, limit: number): Promise<ResultModel[]> {
-    return super.getList({
-      page,
-      limit,
-    });
+  async list(props: IListQuery): Promise<ResultModel[]> {
+    return super.getList(props);
   }
 
   createDbTable(): string {
