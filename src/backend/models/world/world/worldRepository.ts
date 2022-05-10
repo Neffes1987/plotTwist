@@ -14,6 +14,10 @@ export interface IWorldListQuery extends IListQuery {
 }
 
 export class WorldRepository extends AbstractRepository<WorldModel> {
+  constructor() {
+    super('world');
+  }
+
   dbCreate(model: WorldModel): Promise<string> {
     return Promise.resolve('');
   }
@@ -24,10 +28,6 @@ export class WorldRepository extends AbstractRepository<WorldModel> {
 
   removeAllByPlotId(plotId: string): Promise<boolean> {
     return Promise.resolve(true);
-  }
-
-  getIdsByPlot(plotId: string): Promise<string[]> {
-    return Promise.resolve([]);
   }
 
   dbDelete(id: string): Promise<boolean> {

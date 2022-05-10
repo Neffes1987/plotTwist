@@ -1,4 +1,5 @@
 import { AbstractModel, IAbstractModel } from './abstractModel';
+import dbClient, { DbClient } from './dbClient';
 import { ErrorLog } from './errors/errorLog';
 
 export interface IListQuery {
@@ -7,9 +8,23 @@ export interface IListQuery {
 }
 
 export abstract class AbstractRepository<Model extends AbstractModel> {
-  private readonly _tableName = '';
-  private readonly _items = new Map();
-  private readonly _errorLog = new ErrorLog();
+  private readonly _tableName;
+  private readonly _items;
+  private readonly _errorLog;
+  private readonly _dbClient;
+
+  constructor(tableName: string) {
+    this._tableName = tableName;
+    this._errorLog = new ErrorLog();
+    this._items = new Map();
+    this._dbClient = dbClient;
+
+    this.createDbTable();
+  }
+
+  get db(): DbClient {
+    return this._dbClient;
+  }
 
   get tableName(): string {
     return this._tableName;
