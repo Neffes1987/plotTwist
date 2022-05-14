@@ -8,7 +8,7 @@ export class ResultRepository extends AbstractRepository<ResultModel> {
     return super.getList(props);
   }
 
-  createDbTable(): string {
+  getDbTableColumns(): string {
     return '';
   }
 

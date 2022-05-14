@@ -23,7 +23,7 @@ export class CharacterRepository extends AbstractRepository<CharacterModel> {
     return super.getList<ICharacterListQuery>(query);
   }
 
-  createDbTable(): string {
+  getDbTableColumns(): string {
     return '';
   }
 

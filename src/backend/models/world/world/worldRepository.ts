@@ -1,10 +1,10 @@
-import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
+import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
 import { UxException } from '../../../base/errors/uxException';
 
 import { HiddenCaveWorldModel, IHiddenCaveWorldModel } from './hiddenCaveWorldModel';
 import { HolidayWorldModel, IHolidayWorldModel } from './holidayWorldModel';
 import { IPlainWorldWorld, PlainWorldModel } from './plainWorldModel';
-import { IPrivateWorld, PrivateWorld } from './privateWorldModel';
+import { IPrivateWorld, PrivateWorldModel } from './privateWorldModel';
 import { IReturnWithPotionWorldModel, ReturnWithPotionWorldModel } from './returnWithPotionModel';
 import { ICommonWorld, WorldModel } from './worldModel';
 
@@ -30,8 +30,15 @@ export class WorldRepository extends AbstractRepository<WorldModel> {
     return Promise.resolve(true);
   }
 
-  dbDelete(id: string): Promise<boolean> {
-    return Promise.resolve(true);
+  async dbDelete(id: string): Promise<boolean> {
+    try {
+      await this.db.execute(`DELETE FROM ${this.tableName} WHERE worldId='${id}'`);
+    } catch (e) {
+      this.errorLog.add(e);
+      throw new UxException('can_not_delete_world_by_id');
+    }
+
+    return true;
   }
 
   dbFind(id: string): Promise<Nullable<WorldModel>> {
@@ -47,7 +54,7 @@ export class WorldRepository extends AbstractRepository<WorldModel> {
       case 'plainWorld':
         return new PlainWorldModel(data as IPlainWorldWorld);
       case 'privateWorld':
-        return new PrivateWorld(data as IPrivateWorld);
+        return new PrivateWorldModel(data as IPrivateWorld);
       case 'hiddenCave':
         return new HiddenCaveWorldModel(data as IHiddenCaveWorldModel);
       case 'holiday':
@@ -64,7 +71,18 @@ export class WorldRepository extends AbstractRepository<WorldModel> {
     return Promise.resolve([]);
   }
 
-  createDbTable(): string {
-    return '';
+  getDbTableColumns(): Record<string, ColumnsConfigType> {
+    return {
+      id: 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL',
+      worldId: 'TEXT',
+      story: 'TEXT',
+      reference: 'TEXT',
+      timeline: 'TEXT',
+      failPrice: 'TEXT',
+      status: 'TEXT',
+      edgeId: 'TEXT',
+      plotId: 'TEXT',
+      worldType: 'TEXT',
+    };
   }
 }

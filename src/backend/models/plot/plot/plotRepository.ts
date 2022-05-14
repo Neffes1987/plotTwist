@@ -10,7 +10,7 @@ export class PlotRepository extends AbstractRepository<PlotModel> {
     });
   }
 
-  createDbTable(): string {
+  getDbTableColumns(): string {
     return '';
   }
 

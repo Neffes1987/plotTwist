@@ -6,7 +6,7 @@ export interface IPrivateWorld extends ICommonWorld {
   contrast: string;
 }
 
-export class PrivateWorld extends WorldModel {
+export class PrivateWorldModel extends WorldModel {
   private _contrast = '';
 
   constructor(data: IPrivateWorld) {

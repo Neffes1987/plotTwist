@@ -7,8 +7,8 @@ export type FinalType = 'cycle' | 'achievePerfect' | 'openEnd';
 export type PotionType = 'wisdom' | 'love' | 'responsible' | 'tragedy' | 'badExperience' | 'wastedTime';
 
 export interface IReturnWithPotionWorldModel extends ICommonWorld {
-  finalType?: FinalType;
-  potionType?: PotionType;
+  finalType: FinalType;
+  potionType: PotionType;
   plotTwist: string;
 }
 

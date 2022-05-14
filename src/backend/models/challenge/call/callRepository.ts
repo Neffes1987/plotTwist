@@ -7,7 +7,7 @@ export class CallRepository extends AbstractRepository<CallModel> {
     return super.getList(props);
   }
 
-  createDbTable(): string {
+  getDbTableColumns(): string {
     return '';
   }
 

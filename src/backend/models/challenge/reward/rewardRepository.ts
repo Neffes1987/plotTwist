@@ -5,7 +5,7 @@ import { AbstractRepository, IListQuery } from '../../../base/abstractRepository
 import { RewardModel } from './rewardModel';
 
 export class RewardRepository extends AbstractRepository<RewardModel> {
-  createDbTable(): string {
+  getDbTableColumns(): string {
     throw new Error('Method not implemented.');
   }
 

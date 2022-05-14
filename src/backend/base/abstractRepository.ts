@@ -7,6 +7,8 @@ export interface IListQuery {
   limit?: number;
 }
 
+export type ColumnsConfigType = 'TEXT' | 'INTEGER' | 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL';
+
 export abstract class AbstractRepository<Model extends AbstractModel> {
   private readonly _tableName;
   private readonly _items;
@@ -19,7 +21,16 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
     this._items = new Map();
     this._dbClient = dbClient;
 
-    this.createDbTable();
+    const config = this.getDbTableColumns();
+    const columnsAttr: string[] = [];
+
+    Object.keys(config).forEach((columnName: string) => {
+      const columnSettings = config[columnName];
+
+      columnsAttr.push(`${columnName} ${columnSettings}`);
+    });
+
+    this.db.execute(`CREATE TABLE IF NOT EXISTS "${this.tableName}" (${columnsAttr.toString()})`);
   }
 
   get db(): DbClient {
@@ -91,7 +102,7 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
     return success;
   }
 
-  abstract createDbTable(): string;
+  abstract getDbTableColumns(): Record<string, ColumnsConfigType>;
 
   abstract generateModel(data: IAbstractModel): Model;
 

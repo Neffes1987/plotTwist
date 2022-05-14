@@ -6,22 +6,6 @@ export class ErrorLog {
   static wrongFieldsValue = 'empty_fields';
   static unexpectedError = 'unexpected_error';
 
-  static validate(data: Record<string, unknown>, props: string[]): void {
-    const emptyFieldsList: string[] = [];
-
-    for (const propertyName of props) {
-      if (data[propertyName] == null) {
-        emptyFieldsList.push(propertyName);
-      }
-    }
-
-    if (emptyFieldsList.length) {
-      throw new UxException(ErrorLog.validationError, {
-        emptyFields: emptyFieldsList.toString(),
-      });
-    }
-  }
-
   add(error: Error): void {
     console.error(error);
   }

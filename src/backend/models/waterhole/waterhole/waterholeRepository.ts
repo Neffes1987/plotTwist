@@ -13,7 +13,7 @@ export class WaterholeRepository extends AbstractRepository<WaterholeModel> {
     });
   }
 
-  createDbTable(): string {
+  getDbTableColumns(): string {
     return '';
   }
 

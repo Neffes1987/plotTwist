@@ -7,7 +7,7 @@ export interface ILawListQuery extends IListQuery {
 }
 
 export class LawRepository extends AbstractRepository<LawModel> {
-  createDbTable(): string {
+  getDbTableColumns(): string {
     return '';
   }
 

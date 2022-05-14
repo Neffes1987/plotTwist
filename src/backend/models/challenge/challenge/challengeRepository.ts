@@ -19,7 +19,7 @@ export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
     return Promise.resolve(null);
   }
 
-  createDbTable(): string {
+  getDbTableColumns(): string {
     return '';
   }
 
