@@ -14,6 +14,10 @@ export class PrivateWorldModel extends WorldModel {
     this._contrast = data.contrast;
   }
 
+  get contrast(): string {
+    return this._contrast;
+  }
+
   setContrast(newValue: string): void {
     this._contrast = newValue;
   }

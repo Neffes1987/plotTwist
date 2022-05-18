@@ -1,4 +1,4 @@
-import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
+import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
 
 import { ILawModel, LawModel } from './lawModel';
 
@@ -7,28 +7,8 @@ export interface ILawListQuery extends IListQuery {
 }
 
 export class LawRepository extends AbstractRepository<LawModel> {
-  getDbTableColumns(): string {
-    return '';
-  }
-
-  dbCreate(model: LawModel): Promise<string> {
-    return Promise.resolve('');
-  }
-
-  dbDelete(id: string): Promise<boolean> {
-    return Promise.resolve(false);
-  }
-
-  dbFind(id: string): Promise<Nullable<LawModel>> {
-    return Promise.resolve(null);
-  }
-
-  dbFindAll(query: ILawListQuery): Promise<LawModel[]> {
-    return Promise.resolve([]);
-  }
-
-  dbUpdate(model: LawModel): Promise<boolean> {
-    return Promise.resolve(false);
+  constructor() {
+    super('law');
   }
 
   generateModel(data: ILawModel): LawModel {
@@ -39,5 +19,14 @@ export class LawRepository extends AbstractRepository<LawModel> {
     return super.getList<ILawListQuery>({
       worldId,
     });
+  }
+
+  getDbTableColumns(): Record<string, ColumnsConfigType> {
+    return {
+      id: 'TEXT',
+      name: 'TEXT',
+      description: 'TEXT',
+      worldId: 'TEXT',
+    };
   }
 }

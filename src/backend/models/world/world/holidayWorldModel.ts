@@ -29,6 +29,22 @@ export class HolidayWorldModel extends WorldModel {
     this._chase = data.chase;
   }
 
+  get shadowRevenge(): string {
+    return this._shadowRevenge;
+  }
+
+  get holidayType(): HolidayType {
+    return this._holidayType;
+  }
+
+  get holidaySubType(): HolidaySubType | undefined {
+    return this._holidaySubType;
+  }
+
+  get chase(): ChaseType | undefined {
+    return this._chase;
+  }
+
   setChase(newValue: ChaseType): void {
     this._chase = newValue;
   }

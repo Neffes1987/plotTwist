@@ -101,24 +101,24 @@ describe('PlotService', () => {
     });
 
     it('MUST call "plotRepository.get"', async () => {
-      await mediator.plotService.changePlotStatus(plot.id, true);
+      await mediator.plotService.changePlotStatus(plot.id, 'draft');
     });
 
     it('AND repository returns plot data, MUST change plot status', async () => {
-      await mediator.plotService.changePlotStatus(plot.id, true);
-      expect(plot.status).toEqual(true);
+      await mediator.plotService.changePlotStatus(plot.id, 'draft');
+      expect(plot.status).toEqual('draft');
     });
 
     it('AND repository returns null, MUST throw ui error', async () => {
       try {
-        await mediator.plotService.changePlotStatus(plot.id, true);
+        await mediator.plotService.changePlotStatus(plot.id, 'draft');
       } catch (e) {
         expect(e).toEqual(new UxException('empty_fields', { plotId: '1' }));
       }
     });
 
     it('MUST call "plotRepository.replace"', async () => {
-      await mediator.plotService.changePlotStatus(plot.id, true);
+      await mediator.plotService.changePlotStatus(plot.id, 'draft');
     });
   });
 });

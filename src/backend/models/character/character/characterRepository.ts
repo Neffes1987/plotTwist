@@ -1,4 +1,4 @@
-import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
+import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
 
 import { AllyModel, IAllyModel } from './allyModel';
 import { CharacterModel, ICharacterModel } from './characterModel';
@@ -19,32 +19,12 @@ export interface UpdateCharactersPropsType {
 }
 
 export class CharacterRepository extends AbstractRepository<CharacterModel> {
+  constructor() {
+    super('character');
+  }
+
   async list(query: ICharacterListQuery): Promise<CharacterModel[]> {
     return super.getList<ICharacterListQuery>(query);
-  }
-
-  getDbTableColumns(): string {
-    return '';
-  }
-
-  dbCreate(model: CharacterModel): Promise<string> {
-    return Promise.resolve('');
-  }
-
-  dbDelete(id: string): Promise<boolean> {
-    return Promise.resolve(false);
-  }
-
-  dbFind(id: string): Promise<Nullable<CharacterModel>> {
-    return Promise.resolve(null);
-  }
-
-  dbFindAll(query: ICharacterListQuery): Promise<CharacterModel[]> {
-    return Promise.resolve([]);
-  }
-
-  dbUpdate(model: CharacterModel): Promise<boolean> {
-    return Promise.resolve(false);
   }
 
   generateModel(data: ICharacterModel): CharacterModel {
@@ -74,5 +54,9 @@ export class CharacterRepository extends AbstractRepository<CharacterModel> {
 
   async updateCharactersResults(props: UpdateCharactersPropsType): Promise<boolean> {
     return Promise.resolve(true);
+  }
+
+  getDbTableColumns(): Record<string, ColumnsConfigType> {
+    return {};
   }
 }

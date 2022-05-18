@@ -19,12 +19,12 @@ export class DbClient {
     return true;
   }
 
-  iterate<T>(results: [ResultSet]): Set<T> {
-    const items: Set<T> = new Set<T>();
+  iterate<T>(results: [ResultSet]): T[] {
+    const items: T[] = [];
 
-    results.forEach((result: ResultSet) => {
+    results?.forEach((result: ResultSet) => {
       for (let index = 0; index < result.rows.length; index++) {
-        items.add(result.rows.item(index));
+        items.push(result.rows.item(index));
       }
     });
 

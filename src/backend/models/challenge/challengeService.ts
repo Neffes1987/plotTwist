@@ -1,4 +1,5 @@
 import { IListQuery } from '../../base/abstractRepository';
+import { UnexpectedErrorCode } from '../../base/errors/errorLog';
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
@@ -55,7 +56,7 @@ export class ChallengeService extends AbstractService {
     const challenge = await this.getChallenge(reward.challengeId);
 
     if (challenge) {
-      throw this.errorLog.formatUnexpectedError('reward_assigned_to_challenge');
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.rewardAssignedToChallenge);
     }
 
     return this._rewardRepository.remove(rewardId);
@@ -80,7 +81,7 @@ export class ChallengeService extends AbstractService {
     const challenge = await this.getChallenge(call.challengeId);
 
     if (challenge) {
-      throw this.errorLog.formatUnexpectedError('challenge_assigned_to_this_call');
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.challengeAssignedToThisCall);
     }
 
     return this._callRepository.remove(callId);
@@ -104,7 +105,7 @@ export class ChallengeService extends AbstractService {
     const call = await this.getCall(callId);
 
     if (!call) {
-      throw this.errorLog.formatUnexpectedError('unable_to_find_call_by_id');
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.unableToFindCallById);
     }
 
     call.setStatus(status);
@@ -146,7 +147,7 @@ export class ChallengeService extends AbstractService {
     const edge = await this._challengeRepository.get(challengeId);
 
     if (!edge) {
-      throw this.errorLog.formatUnexpectedError('provided_id_is_not_for_challenge');
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.providedIdNotAChallenge);
     }
 
     (edge as EdgeModel).setIsActive(isPassed);
@@ -166,7 +167,7 @@ export class ChallengeService extends AbstractService {
     const challenge = await this._challengeRepository.get(challengeId);
 
     if (!challenge) {
-      throw this.errorLog.formatUnexpectedError('challenge_not_found');
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.challengeNotFound);
     }
 
     challenge.setWeight(weight ?? challenge.weight + 1);
@@ -182,11 +183,11 @@ export class ChallengeService extends AbstractService {
     }
 
     if (challenge.type === 'mainEdge') {
-      throw this.errorLog.formatUnexpectedError('main_edge_can_not_be_deleted');
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.mainEdgeCanNotBeDeleted);
     }
 
     if (challenge.type === 'edge') {
-      throw this.errorLog.formatUnexpectedError('edge_can_not_be_deleted');
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.edgeCanNotBeDeleted);
     }
 
     const edge = await this._challengeRepository.getEdgeByChallengeId(challenge.id);
@@ -198,7 +199,7 @@ export class ChallengeService extends AbstractService {
     const challengesIds = (edge as EdgeModel).challengeIds;
 
     if (challengesIds.length - 1 < EdgeModel.CHALLENGE_IDS_MIN_VALUE) {
-      throw this.errorLog.formatUnexpectedError('not_enough_challenges');
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.notEnoughChallenges);
     }
 
     return true;

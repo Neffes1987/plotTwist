@@ -25,6 +25,18 @@ export class ReturnWithPotionWorldModel extends WorldModel {
     this.setPlotTwist(data.plotTwist);
   }
 
+  get finalType(): FinalType | undefined {
+    return this._finalType;
+  }
+
+  get plotTwist(): string {
+    return this._plotTwist;
+  }
+
+  get potionType(): PotionType | undefined {
+    return this._potionType;
+  }
+
   setFinalType(newValue?: FinalType): void {
     this._finalType = newValue;
   }

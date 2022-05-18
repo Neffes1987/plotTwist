@@ -5,7 +5,7 @@ export const MOCKED_PLOT: IPlotModel = {
   name: 'name',
   description: 'description',
   worldsListIds: ['id'],
-  status: false,
+  status: 'draft',
 };
 
 export const ACTIVATED_MOCKED_PLOT: IPlotModel = {
@@ -13,5 +13,5 @@ export const ACTIVATED_MOCKED_PLOT: IPlotModel = {
   name: 'activated',
   description: 'description',
   worldsListIds: ['id'],
-  status: true,
+  status: 'draft',
 };

@@ -21,6 +21,18 @@ export class HiddenCaveWorldModel extends WorldModel {
     this.setPartyPlan(data.partyPlan);
   }
 
+  get mainEdgeInformation(): string {
+    return this._mainEdgeInformation;
+  }
+
+  get shadowIntroduction(): string {
+    return this._shadowIntroduction;
+  }
+
+  get partyPlan(): string {
+    return this._partyPlan;
+  }
+
   setPartyPlan(newValue: string): void {
     this._partyPlan = newValue;
   }

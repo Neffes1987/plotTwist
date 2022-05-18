@@ -46,7 +46,7 @@ describe('DbClient', () => {
 
       itemMock.mockReturnValue(testItem);
 
-      expect(dbClient.iterate([result])).toEqual(new Set([testItem]));
+      expect(dbClient.iterate([result])).toEqual([testItem]);
     });
   });
 

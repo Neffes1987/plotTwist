@@ -1,9 +1,11 @@
 import { MOCKED_RESULT_SET } from '@mocks/mockedResultSet';
-import { MOCKED_HIDDEN_CAVE_WORLD, MOCKED_HOLIDAY_WORLD, MOCKED_PRIVATE_WORLD, MOCKED_RETURN_WORLD, MOCKED_WORLD } from '@mocks/mockedWorld';
+import { MOCKED_HIDDEN_CAVE_WORLD, MOCKED_HOLIDAY_WORLD, MOCKED_LAW, MOCKED_PRIVATE_WORLD, MOCKED_RETURN_WORLD, MOCKED_WORLD } from '@mocks/mockedWorld';
 
+import { IAbstractModel } from '../../../../base/abstractModel';
 import DbClient from '../../../../base/dbClient';
 import { ErrorLog } from '../../../../base/errors/errorLog';
 import { UxException } from '../../../../base/errors/uxException';
+import { LawModel } from '../../law/lawModel';
 import { HiddenCaveWorldModel } from '../hiddenCaveWorldModel';
 import { HolidayWorldModel } from '../holidayWorldModel';
 import { PlainWorldModel } from '../plainWorldModel';
@@ -16,6 +18,7 @@ describe('WorldRepository', () => {
   const errorLogMock = new ErrorLog();
   const worldRepository = new WorldRepository();
   const addErrorMock = jest.spyOn(errorLogMock, 'add');
+  const world = new PlainWorldModel(MOCKED_WORLD);
 
   Object.defineProperty(worldRepository, '_errorLog', {
     writable: true,
@@ -27,17 +30,11 @@ describe('WorldRepository', () => {
     addErrorMock.mockReturnValue();
   });
 
-  describe('WHEN "dbCreate" is called', () => {});
-
-  describe('WHEN "list" is called', () => {});
-
-  describe('WHEN "removeAllByPlotId" is called', () => {});
-
-  describe('WHEN "dbDelete" is called', () => {
+  describe('WHEN "removeAllByPlotId" is called', () => {
     it('MUST send query to db', async () => {
-      await worldRepository.dbDelete('id');
+      await worldRepository.removeAllByPlotId(world.plotId);
 
-      expect(executeMock).toHaveBeenCalledWith(`DELETE FROM ${worldRepository.tableName} WHERE worldId='id'`);
+      expect(executeMock).toHaveBeenCalledWith(worldRepository.generateDeleteQuery(`plotId='${world.plotId}'`));
     });
 
     describe('AND db returns error', () => {
@@ -49,17 +46,17 @@ describe('WorldRepository', () => {
         let error;
 
         try {
-          await worldRepository.dbDelete('id');
+          await worldRepository.removeAllByPlotId(world.plotId);
         } catch (e) {
           error = e;
         }
 
-        expect(error).toEqual(new UxException('can_not_delete_world_by_id'));
+        expect(error).toEqual(new UxException('can_not_delete_worlds_by_plot_id'));
       });
 
       it('MUST log internal error', async () => {
         try {
-          await worldRepository.dbDelete('id');
+          await worldRepository.removeAllByPlotId(world.plotId);
         } catch (e) {
           // no need for test
         }
@@ -69,13 +66,9 @@ describe('WorldRepository', () => {
     });
 
     it('MUST returns true', async () => {
-      expect(await worldRepository.dbDelete('id')).toBeTruthy();
+      expect(await worldRepository.removeAllByPlotId(world.plotId)).toBeTruthy();
     });
   });
-
-  describe('WHEN "dbFind" is called', () => {});
-
-  describe('WHEN "dbUpdate" is called', () => {});
 
   describe('WHEN "generateModel" is called', () => {
     it('AND provided data is for "Plain world", must return "PlainWorldModel"', () => {
@@ -115,11 +108,63 @@ describe('WorldRepository', () => {
     });
   });
 
-  describe('WHEN "dbFindAll" is called', () => {});
-
   it('WHEN "getDbTableColumns" is called, MUST send query to db', () => {
-    expect(executeMock).toHaveBeenCalledWith(
-      'CREATE TABLE IF NOT EXISTS "world" (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,worldId TEXT,story TEXT,reference TEXT,timeline TEXT,failPrice TEXT,status TEXT,edgeId TEXT,plotId TEXT,worldType TEXT)',
-    );
+    const columns: string[] = ['primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'];
+    const config = worldRepository.getDbTableColumns();
+
+    Object.keys(config).forEach((columnName: string) => {
+      const columnSettings = config[columnName];
+
+      columns.push(`${columnName} ${columnSettings}`);
+    });
+
+    expect(executeMock).toHaveBeenCalledWith(`CREATE TABLE IF NOT EXISTS "world" (${columns.toString()})`);
+  });
+
+  describe('WHEN "generateRecordByColumns" is called', () => {
+    it('AND provided type is not detected, MUST throw ui error', () => {
+      let error;
+
+      try {
+        // @ts-ignore
+        worldRepository.generateRecordByColumns(new LawModel(MOCKED_LAW));
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error).toEqual(new UxException('can_not_recognize_world_type'));
+    });
+
+    it.each([
+      ['plainWorld', MOCKED_WORLD, new PlainWorldModel(MOCKED_WORLD)],
+      ['privateWorld', MOCKED_PRIVATE_WORLD, new PrivateWorldModel(MOCKED_PRIVATE_WORLD)],
+      ['hiddenCave', MOCKED_HIDDEN_CAVE_WORLD, new HiddenCaveWorldModel(MOCKED_HIDDEN_CAVE_WORLD)],
+      ['holiday', MOCKED_HOLIDAY_WORLD, new HolidayWorldModel(MOCKED_HOLIDAY_WORLD)],
+      ['returnWithPotion', MOCKED_RETURN_WORLD, new ReturnWithPotionWorldModel(MOCKED_RETURN_WORLD)],
+    ])('AND provided data is for %p, MUST fill columns for provided type', (_, expected, model) => {
+      const expectedAnswer = {};
+
+      Object.keys(worldRepository.getDbTableColumns()).forEach((columnName: string) => {
+        expectedAnswer[columnName] = expected[columnName] ?? 'NULL';
+      });
+
+      expect(worldRepository.generateRecordByColumns(model)).toEqual(expectedAnswer);
+    });
+  });
+
+  it('WHEN "list" is called, MUST return worlds list', async () => {
+    executeMock.mockResolvedValue([
+      {
+        insertId: 0,
+        rows: {
+          item: (): IAbstractModel => world,
+          raw: jest.fn(),
+          length: 1,
+        },
+        rowsAffected: 0,
+      },
+    ]);
+
+    expect(await worldRepository.list({ plotId: world.plotId })).toEqual([world]);
   });
 });

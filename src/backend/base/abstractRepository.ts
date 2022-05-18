@@ -1,10 +1,16 @@
+import { v4 as uuidv4 } from 'uuid';
+
+import { ICommonWorld } from '../models/world/world/worldModel';
+
 import { AbstractModel, IAbstractModel } from './abstractModel';
 import dbClient, { DbClient } from './dbClient';
-import { ErrorLog } from './errors/errorLog';
+import { ErrorLog, UnexpectedErrorCode } from './errors/errorLog';
+import { UxException } from './errors/uxException';
 
 export interface IListQuery {
   page?: number;
   limit?: number;
+  order?: 'ASC' | 'DESC';
 }
 
 export type ColumnsConfigType = 'TEXT' | 'INTEGER' | 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL';
@@ -15,14 +21,14 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
   private readonly _errorLog;
   private readonly _dbClient;
 
-  constructor(tableName: string) {
+  protected constructor(tableName: string) {
     this._tableName = tableName;
     this._errorLog = new ErrorLog();
     this._items = new Map();
     this._dbClient = dbClient;
 
     const config = this.getDbTableColumns();
-    const columnsAttr: string[] = [];
+    const columnsAttr: string[] = ['primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'];
 
     Object.keys(config).forEach((columnName: string) => {
       const columnSettings = config[columnName];
@@ -45,22 +51,26 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
     return this._errorLog;
   }
 
+  get cacheCount(): number {
+    return this._items.size;
+  }
+
   generateModelId(model: AbstractModel): void {
     if (!model.id) {
-      model.setId('someID'); // TODO: implement
+      model.setId(uuidv4());
     }
   }
 
   async get(id: string): Promise<Nullable<Model>> {
     const model = this._items.get(id);
 
-    if (model !== null) {
+    if (model) {
       return model;
     }
 
     const result = await this.dbFind(id);
 
-    if (result === null) {
+    if (!result) {
       return null;
     }
 
@@ -70,7 +80,7 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
   }
 
   async getList<T extends IListQuery>(query: T): Promise<Model[]> {
-    const results = await this.dbFindAll(query);
+    const results = await this.doListQuery(query);
 
     for (const result of results) {
       this._items.set(result.id, result);
@@ -102,17 +112,139 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
     return success;
   }
 
+  generateDeleteQuery(where: string): string {
+    return `DELETE
+            FROM ${this.tableName}
+            WHERE ${where}`;
+  }
+
+  generateSelectQuery(where: string, page: IListQuery['page'] = 0, limit: IListQuery['limit'] = 10, order: IListQuery['order'] = 'DESC'): string {
+    const offset = page * limit;
+
+    return `SELECT *
+            FROM ${this.tableName}
+            WHERE ${where}
+            LIMIT ${limit} OFFSET ${offset}
+            ORDER BY ${order}`;
+  }
+
+  generateCreateQuery(record: Record<string, string | number>): string {
+    const columns: (string | number)[] = [];
+    const values: (string | number)[] = [];
+
+    Object.keys(record).forEach((columnName: string) => {
+      values.push(`'${record[columnName] ?? 'NULL'}'`);
+      columns.push(columnName);
+    });
+
+    return `INSERT INTO ${this.tableName} (${columns.toString()})
+            VALUES (${values.toString()})`;
+  }
+
+  generateUpdateQuery(record: Record<string, string | number>, where: string): string {
+    const values: (string | number)[] = [];
+
+    Object.keys(record).forEach((columnName: string) => {
+      values.push(`${columnName}='${record[columnName] ?? 'NULL'}'`);
+    });
+
+    return `UPDATE ${this.tableName}
+            SET ${values.toString()}
+            WHERE ${where})`;
+  }
+
+  async dbFind(id: string): Promise<Nullable<Model>> {
+    try {
+      const result = await this.db.execute(this.generateSelectQuery(`id='${id}'`, 0, 1));
+
+      const resultItems = this.db.iterate<ICommonWorld>(result);
+
+      if (resultItems.length === 0) {
+        return null;
+      }
+
+      return this.generateModel(resultItems[0]) ?? null;
+    } catch (e) {
+      this.errorLog.add(e);
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.canNotFindItemById);
+    }
+  }
+
+  async dbDelete(id: string): Promise<boolean> {
+    try {
+      await this.db.execute(this.generateDeleteQuery(`id='${id}'`));
+    } catch (e) {
+      this.errorLog.add(e);
+      throw new UxException('can_not_delete_item_by_id');
+    }
+
+    return true;
+  }
+
+  async dbUpdate(model: Model): Promise<boolean> {
+    try {
+      await this.db.execute(this.generateUpdateQuery(this.generateRecordByColumns(model), `id=${model.id}`));
+    } catch (e) {
+      this.errorLog.add(e);
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.canNotUpdateItemByProvidedData);
+    }
+
+    return true;
+  }
+
+  async dbCreate(model: Model): Promise<boolean> {
+    try {
+      await this.db.execute(this.generateCreateQuery(this.generateRecordByColumns(model)));
+    } catch (e) {
+      this.errorLog.add(e);
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.canNotCreateItemByProvidedData);
+    }
+
+    return true;
+  }
+
+  async doListQuery(query: IListQuery): Promise<Model[]> {
+    const { page, limit, order, ...rest } = query;
+    let where = '';
+
+    Object.keys(rest).forEach((propertyName: string) => {
+      if (!rest[propertyName]) {
+        return;
+      }
+
+      if (where.length > 0) {
+        where += ' AND ';
+      }
+
+      where += `${propertyName}='${rest[propertyName]}'`;
+    });
+
+    try {
+      const result = await this.db.execute(this.generateSelectQuery(where, page, limit, order));
+      const resultItems = this.db.iterate<IAbstractModel>(result);
+
+      return resultItems.map((data: IAbstractModel) => this.generateModel(data));
+    } catch (e) {
+      this.errorLog.add(e);
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.canNotGetListByQuery);
+    }
+  }
+
+  generateRecordByColumns(model: Model): Record<string, string | number> {
+    const result = {};
+
+    const modelColumnsRange: string[] = Object.keys(this.getDbTableColumns());
+
+    Object.keys(this.getDbTableColumns()).forEach((columnName: string) => {
+      if (modelColumnsRange.includes(columnName)) {
+        result[columnName] = model[columnName] ?? 'NULL';
+      }
+    });
+
+    return result;
+  }
+
   abstract getDbTableColumns(): Record<string, ColumnsConfigType>;
 
   abstract generateModel(data: IAbstractModel): Model;
-
-  abstract dbFind(id: string): Promise<Nullable<Model>>;
-
-  abstract dbFindAll(query: IListQuery): Promise<Model[]>;
-
-  abstract dbDelete(id: string): Promise<boolean>;
-
-  abstract dbCreate(model: Model): Promise<string>;
-
-  abstract dbUpdate(model: Model): Promise<boolean>;
 }

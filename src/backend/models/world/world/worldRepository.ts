@@ -1,4 +1,5 @@
 import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import { UnexpectedErrorCode } from '../../../base/errors/errorLog';
 import { UxException } from '../../../base/errors/uxException';
 
 import { HiddenCaveWorldModel, IHiddenCaveWorldModel } from './hiddenCaveWorldModel';
@@ -6,7 +7,7 @@ import { HolidayWorldModel, IHolidayWorldModel } from './holidayWorldModel';
 import { IPlainWorldWorld, PlainWorldModel } from './plainWorldModel';
 import { IPrivateWorld, PrivateWorldModel } from './privateWorldModel';
 import { IReturnWithPotionWorldModel, ReturnWithPotionWorldModel } from './returnWithPotionModel';
-import { ICommonWorld, WorldModel } from './worldModel';
+import { ICommonWorld, WorldModel, WorldType } from './worldModel';
 
 export interface IWorldListQuery extends IListQuery {
   plotId?: string;
@@ -14,39 +15,63 @@ export interface IWorldListQuery extends IListQuery {
 }
 
 export class WorldRepository extends AbstractRepository<WorldModel> {
+  static readonly _columns: Record<WorldType | 'general', Record<string, ColumnsConfigType>> = {
+    general: {
+      id: 'TEXT',
+      description: 'TEXT',
+      name: 'TEXT',
+      story: 'TEXT',
+      reference: 'TEXT',
+      timeline: 'TEXT',
+      failPrice: 'TEXT',
+      status: 'TEXT',
+      edgeId: 'TEXT',
+      plotId: 'TEXT',
+      worldType: 'TEXT',
+    },
+    plainWorld: {
+      introduction: 'TEXT',
+      charactersProblems: 'TEXT',
+      worldProblems: 'TEXT',
+    },
+    privateWorld: {
+      contrast: 'TEXT',
+    },
+    returnWithPotion: {
+      finalType: 'TEXT',
+      potionType: 'TEXT',
+      plotTwist: 'TEXT',
+    },
+    holiday: {
+      shadowRevenge: 'TEXT',
+      holidayType: 'TEXT',
+      HolidaySubType: 'TEXT',
+      chaseType: 'TEXT',
+    },
+    hiddenCave: {
+      mainEdgeInformation: 'TEXT',
+      shadowIntroduction: 'TEXT',
+      partyPlan: 'TEXT',
+    },
+  };
+
   constructor() {
     super('world');
-  }
-
-  dbCreate(model: WorldModel): Promise<string> {
-    return Promise.resolve('');
   }
 
   list(props: IWorldListQuery): Promise<WorldModel[]> {
     return super.getList<IWorldListQuery>(props);
   }
 
-  removeAllByPlotId(plotId: string): Promise<boolean> {
-    return Promise.resolve(true);
-  }
-
-  async dbDelete(id: string): Promise<boolean> {
+  async removeAllByPlotId(plotId: string): Promise<boolean> {
     try {
-      await this.db.execute(`DELETE FROM ${this.tableName} WHERE worldId='${id}'`);
+      await this.db.execute(this.generateDeleteQuery(`plotId='${plotId}'`));
     } catch (e) {
       this.errorLog.add(e);
-      throw new UxException('can_not_delete_world_by_id');
+      throw new UxException('can_not_delete_worlds_by_plot_id');
     }
 
     return true;
-  }
-
-  dbFind(id: string): Promise<Nullable<WorldModel>> {
-    return Promise.resolve(null);
-  }
-
-  dbUpdate(model: WorldModel): Promise<boolean> {
-    return Promise.resolve(true);
   }
 
   generateModel(data: ICommonWorld): WorldModel {
@@ -67,22 +92,34 @@ export class WorldRepository extends AbstractRepository<WorldModel> {
     }
   }
 
-  dbFindAll(query: IWorldListQuery): Promise<WorldModel[]> {
-    return Promise.resolve([]);
-  }
-
   getDbTableColumns(): Record<string, ColumnsConfigType> {
     return {
-      id: 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL',
-      worldId: 'TEXT',
-      story: 'TEXT',
-      reference: 'TEXT',
-      timeline: 'TEXT',
-      failPrice: 'TEXT',
-      status: 'TEXT',
-      edgeId: 'TEXT',
-      plotId: 'TEXT',
-      worldType: 'TEXT',
+      ...WorldRepository._columns.general,
+      ...WorldRepository._columns.plainWorld,
+      ...WorldRepository._columns.privateWorld,
+      ...WorldRepository._columns.holiday,
+      ...WorldRepository._columns.hiddenCave,
+      ...WorldRepository._columns.returnWithPotion,
     };
+  }
+
+  generateRecordByColumns(model: WorldModel): Record<string, number | string> {
+    if (!model.worldType || !WorldRepository._columns[model.worldType]) {
+      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.canNotRecognizeWorldType);
+    }
+
+    const result = {};
+
+    const worldColumnsRange: string[] = Object.keys({ ...WorldRepository._columns[model.worldType], ...WorldRepository._columns.general });
+
+    Object.keys(this.getDbTableColumns()).forEach((columnName: string) => {
+      if (worldColumnsRange.includes(columnName)) {
+        result[columnName] = model[columnName] ?? 'NULL';
+      } else {
+        result[columnName] = 'NULL';
+      }
+    });
+
+    return result;
   }
 }

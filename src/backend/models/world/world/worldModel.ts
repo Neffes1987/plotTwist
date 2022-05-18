@@ -6,7 +6,7 @@ export type WorldStatus = 'draft' | 'release' | 'finished';
 
 export interface ICommonWorld extends IAbstractModel {
   story: string;
-  references: string;
+  reference: string;
   timeline: string;
   failPrice: string;
   status: WorldStatus;
@@ -19,7 +19,7 @@ export abstract class WorldModel extends AbstractModel {
   worldType: Nullable<WorldType> = null;
   _story = '';
   _plotId = '';
-  _references = '';
+  _reference = '';
   _timeline = '';
   _failPrice = '';
   _edgeId = '';
@@ -30,7 +30,7 @@ export abstract class WorldModel extends AbstractModel {
     this.worldType = type;
     this.setStory(data.story);
     this._plotId = data.plotId;
-    this._references = data.references;
+    this._reference = data.reference;
     this._timeline = data.timeline;
     this._failPrice = data.failPrice;
     this._edgeId = data.edgeId;
@@ -53,8 +53,8 @@ export abstract class WorldModel extends AbstractModel {
     return this._status;
   }
 
-  get references(): string {
-    return this._references;
+  get reference(): string {
+    return this._reference;
   }
 
   get timeline(): string {
@@ -74,7 +74,7 @@ export abstract class WorldModel extends AbstractModel {
   }
 
   setReference(newValue: string): void {
-    this._references = newValue;
+    this._reference = newValue;
   }
 
   setTimeline(newValue: string): void {
@@ -88,7 +88,7 @@ export abstract class WorldModel extends AbstractModel {
   getAdditionalProperties(): Record<string, unknown> {
     return {
       story: this._story,
-      references: this._references,
+      reference: this._reference,
       timeline: this._timeline,
       failPrice: this._failPrice,
       status: this._status,
@@ -100,7 +100,7 @@ export abstract class WorldModel extends AbstractModel {
   getValidationConfig(): IValidatorConfiguration[] {
     return [
       { name: 'story', max: this.BIG_VALUE_MAX_LENGTH },
-      { name: 'references', max: this.BIG_VALUE_MAX_LENGTH },
+      { name: 'reference', max: this.BIG_VALUE_MAX_LENGTH },
       { name: 'timeline', max: this.MIDDLE_VALUE_MAX_LENGTH },
       { name: 'failPrice', max: this.BIG_VALUE_MAX_LENGTH },
       { name: 'edgeId' },

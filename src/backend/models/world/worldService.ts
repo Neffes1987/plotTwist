@@ -33,8 +33,6 @@ export class WorldService extends AbstractService {
   async createWorld(worldData: ICommonWorld): Promise<string> {
     const world = this._worldRepository.generateModel(worldData);
 
-    this._worldRepository.generateModelId(world);
-
     return this._worldRepository.add(world);
   }
 
@@ -90,8 +88,6 @@ export class WorldService extends AbstractService {
 
   async createLaw(lawData: ILawModel): Promise<string> {
     const model = this._lawRepository.generateModel(lawData);
-
-    this._lawRepository.generateModelId(model);
 
     return this._lawRepository.add(model);
   }

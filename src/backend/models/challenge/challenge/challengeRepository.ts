@@ -1,4 +1,4 @@
-import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
+import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
 
 import { ChallengeModel, IChallengeModel } from './challengeModel';
 import { EdgeModel, IEdgeModel } from './edgeModel';
@@ -11,36 +11,16 @@ export interface ChallengeRepositoryProps extends IListQuery {
 }
 
 export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
+  constructor() {
+    super('challenge');
+  }
+
   async list(props: ChallengeRepositoryProps): Promise<ChallengeModel[]> {
     return super.getList(props);
   }
 
   async getEdgeByChallengeId(challengeId: string): Promise<Nullable<ChallengeModel>> {
     return Promise.resolve(null);
-  }
-
-  getDbTableColumns(): string {
-    return '';
-  }
-
-  dbCreate(model: ChallengeModel): Promise<string> {
-    return Promise.resolve('');
-  }
-
-  dbDelete(id: string): Promise<boolean> {
-    return Promise.resolve(false);
-  }
-
-  dbFind(id: string): Promise<Nullable<ChallengeModel>> {
-    return Promise.resolve(null);
-  }
-
-  dbFindAll(query: ChallengeRepositoryProps): Promise<ChallengeModel[]> {
-    return Promise.resolve([]);
-  }
-
-  dbUpdate(model: ChallengeModel): Promise<boolean> {
-    return Promise.resolve(false);
   }
 
   generateModel(data: IChallengeModel): ChallengeModel {
@@ -54,5 +34,9 @@ export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
       default:
         throw this.errorLog.formatEmptyFieldsError(['type']);
     }
+  }
+
+  getDbTableColumns(): Record<string, ColumnsConfigType> {
+    return {};
   }
 }

@@ -13,7 +13,7 @@ const MOCKED_COMMON_WORLD: ICommonWorld = {
   failPrice: '',
   edgeId: 'edgeId',
   plotId: 'plotId',
-  references: '',
+  reference: '',
   story: '',
   timeline: '',
   status: 'draft',
@@ -23,15 +23,15 @@ const MOCKED_COMMON_WORLD: ICommonWorld = {
 export const MOCKED_WORLD: IPlainWorldWorld = {
   ...MOCKED_COMMON_WORLD,
   introduction: 'introduction',
-  charactersProblems: ['charactersProblems', 'charactersProblems', 'charactersProblems'],
-  worldProblems: ['worldProblems', 'worldProblems', 'worldProblems'],
+  charactersProblems: ['charactersProblems', 'charactersProblems', 'charactersProblems'].toString(),
+  worldProblems: ['worldProblems', 'worldProblems', 'worldProblems'].toString(),
 };
 
 export const MOCKED_RELEASED_WORLD: IPlainWorldWorld = {
   ...MOCKED_COMMON_WORLD,
   introduction: 'introduction',
-  charactersProblems: ['charactersProblems', 'charactersProblems', 'charactersProblems'],
-  worldProblems: ['worldProblems', 'worldProblems', 'worldProblems'],
+  charactersProblems: ['charactersProblems', 'charactersProblems', 'charactersProblems'].toString(),
+  worldProblems: ['worldProblems', 'worldProblems', 'worldProblems'].toString(),
   status: 'release',
 };
 

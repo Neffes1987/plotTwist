@@ -4,16 +4,16 @@ import { ICommonWorld, WorldModel } from './worldModel';
 
 export interface IPlainWorldWorld extends ICommonWorld {
   introduction: string;
-  charactersProblems: string[];
-  worldProblems: string[];
+  charactersProblems: string;
+  worldProblems: string;
 }
 
 export class PlainWorldModel extends WorldModel {
   static readonly WORLD_PROBLEMS_MIN_LENGTH = 2;
 
-  _introduction = '';
-  _charactersProblems: string[] = []; // not required
-  _worldProblems: string[] = [];
+  private _introduction = '';
+  private _charactersProblems = ''; // not required
+  private _worldProblems = '';
 
   constructor(data: IPlainWorldWorld) {
     super('plainWorld', data);
@@ -23,15 +23,27 @@ export class PlainWorldModel extends WorldModel {
     this.setCharactersProblems(data.charactersProblems);
   }
 
+  get introduction(): string {
+    return this._introduction;
+  }
+
+  get worldProblems(): string {
+    return this._worldProblems;
+  }
+
+  get charactersProblems(): string {
+    return this._charactersProblems;
+  }
+
   setIntroduction(newValue: string): void {
     this._introduction = newValue;
   }
 
-  setCharactersProblems(newValue: string[]): void {
+  setCharactersProblems(newValue: string): void {
     this._charactersProblems = newValue;
   }
 
-  setWorldProblems(newValue: string[]): void {
+  setWorldProblems(newValue: string): void {
     this._worldProblems = newValue;
   }
 

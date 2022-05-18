@@ -1,38 +1,22 @@
 import { IAbstractModel } from '../../../base/abstractModel';
-import { AbstractRepository, IListQuery } from '../../../base/abstractRepository';
+import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
 
 import { ResultModel } from './resultModel';
 
 export class ResultRepository extends AbstractRepository<ResultModel> {
+  constructor() {
+    super('result');
+  }
+
   async list(props: IListQuery): Promise<ResultModel[]> {
     return super.getList(props);
   }
 
-  getDbTableColumns(): string {
-    return '';
-  }
-
-  dbCreate(model: ResultModel): Promise<string> {
-    return Promise.resolve('');
-  }
-
-  dbDelete(id: string): Promise<boolean> {
-    return Promise.resolve(false);
-  }
-
-  dbFind(id: string): Promise<Nullable<ResultModel>> {
-    return Promise.resolve(null);
-  }
-
-  dbFindAll(query: IListQuery): Promise<ResultModel[]> {
-    return Promise.resolve([]);
-  }
-
-  dbUpdate(model: ResultModel): Promise<boolean> {
-    return Promise.resolve(false);
-  }
-
   generateModel(data: IAbstractModel): ResultModel {
     return new ResultModel(data);
+  }
+
+  getDbTableColumns(): Record<string, ColumnsConfigType> {
+    return {};
   }
 }
