@@ -121,11 +121,7 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
   generateSelectQuery(where: string, page: IListQuery['page'] = 0, limit: IListQuery['limit'] = 10, order: IListQuery['order'] = 'DESC'): string {
     const offset = page * limit;
 
-    return `SELECT *
-            FROM ${this.tableName}
-            WHERE ${where}
-            LIMIT ${limit} OFFSET ${offset}
-            ORDER BY ${order}`;
+    return `SELECT * FROM ${this.tableName} ${where.length ? `WHERE ${where}` : ''} LIMIT ${limit} OFFSET ${offset} ORDER BY ${order}`;
   }
 
   generateCreateQuery(record: Record<string, string | number>): string {

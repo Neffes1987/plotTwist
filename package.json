@@ -8,6 +8,7 @@
     "start": "react-native start",
     "code-fix": "prettier --write \"**/*.ts(x)?\"",
     "test": "jest",
+    "test:cov": "jest --coverage",
     "lint": "eslint .",
     "typescript": "tsc --project \"./tsconfig.json\" --noEmit"
   },

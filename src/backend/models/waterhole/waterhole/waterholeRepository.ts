@@ -22,6 +22,11 @@ export class WaterholeRepository extends AbstractRepository<WaterholeModel> {
   }
 
   getDbTableColumns(): Record<string, ColumnsConfigType> {
-    return {};
+    return {
+      id: 'TEXT',
+      name: 'TEXT',
+      description: 'TEXT',
+      worldId: 'TEXT',
+    };
   }
 }

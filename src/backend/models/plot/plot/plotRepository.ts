@@ -19,6 +19,11 @@ export class PlotRepository extends AbstractRepository<PlotModel> {
   }
 
   getDbTableColumns(): Record<string, ColumnsConfigType> {
-    return {};
+    return {
+      id: 'TEXT',
+      name: 'TEXT',
+      description: 'TEXT',
+      status: 'TEXT',
+    };
   }
 }

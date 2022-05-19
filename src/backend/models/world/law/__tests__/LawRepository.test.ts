@@ -1,28 +1,16 @@
-import { MOCKED_RESULT_SET } from '@mocks/mockedResultSet';
 import { MOCKED_LAW } from '@mocks/mockedWorld';
 
 import { IAbstractModel } from '../../../../base/abstractModel';
 import DbClient from '../../../../base/dbClient';
-import { ErrorLog } from '../../../../base/errors/errorLog';
 import { LawModel } from '../lawModel';
 import { LawRepository } from '../lawRepository';
 
 describe('WHEN "LawRepository" is provided', () => {
   const executeMock = jest.spyOn(DbClient, 'execute');
-  const errorLogMock = new ErrorLog();
   const lawRepository = new LawRepository();
-  const addErrorMock = jest.spyOn(errorLogMock, 'add');
   const law = new LawModel(MOCKED_LAW);
 
   beforeEach(() => {
-    Object.defineProperty(lawRepository, '_errorLog', {
-      writable: true,
-      value: errorLogMock,
-    });
-
-    executeMock.mockResolvedValue([MOCKED_RESULT_SET]);
-    addErrorMock.mockReturnValue();
-
     executeMock.mockResolvedValue([
       {
         insertId: 0,

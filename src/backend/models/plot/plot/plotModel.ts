@@ -3,7 +3,6 @@ import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../..
 export type PlotStatus = 'draft' | 'released' | 'finished';
 
 export interface IPlotModel extends IAbstractModel {
-  worldsListIds: string[];
   status: PlotStatus;
 }
 
