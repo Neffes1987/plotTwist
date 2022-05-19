@@ -20,7 +20,19 @@ export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
   }
 
   async getEdgeByChallengeId(challengeId: string): Promise<Nullable<ChallengeModel>> {
-    return Promise.resolve(null);
+    const result = await this.db.execute(this.generateSelectQuery(`type IN ('edge', 'mainEdge') AND challengeIds LIKE '%${challengeId}%'`, 0, 1));
+
+    if (!result) {
+      return null;
+    }
+
+    const edgeData = this.db.iterate<IChallengeModel>(result);
+
+    if (!edgeData?.length) {
+      return null;
+    }
+
+    return this.generateModel(this.formatDataByColumnsType(edgeData[0]));
   }
 
   generateModel(data: IChallengeModel): ChallengeModel {
@@ -37,6 +49,24 @@ export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
   }
 
   getDbTableColumns(): Record<string, ColumnsConfigType> {
-    return {};
+    return {
+      id: 'TEXT',
+      name: 'TEXT',
+      description: 'TEXT',
+      callIds: 'ARRAY',
+      characterIds: 'ARRAY',
+      brokenLawIds: 'ARRAY',
+      plotGoal: 'TEXT',
+      rewardId: 'TEXT',
+      weight: 'TEXT',
+      type: 'TEXT',
+      isActive: 'BOOLEAN',
+      guardId: 'TEXT',
+      challengeIds: 'ARRAY',
+      edgeImpact: 'TEXT',
+      mainEdgeType: 'TEXT',
+      shadowEncounterType: 'TEXT',
+      heartCrisis: 'TEXT',
+    };
   }
 }

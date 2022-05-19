@@ -57,7 +57,7 @@ export class MessengerModel extends CharacterModel {
       ...super.getAdditionalProperties(),
       callIds: this._callIds,
       motivation: this._motivation,
-      waterholeIds: this._waterholeIds,
+      waterholesIds: this._waterholeIds,
     };
   }
 }

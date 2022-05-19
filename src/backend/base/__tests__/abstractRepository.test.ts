@@ -96,6 +96,15 @@ describe('AbstractRepository', () => {
     uuidV4Mock.mockReturnValue('test-id');
   });
 
+  it('WHEN "AbstractRepository" created, MUST create table', () => {
+    // eslint-disable-next-line no-new
+    new TestRepository();
+
+    expect(executeMock).toHaveBeenCalledWith(
+      'CREATE TABLE IF NOT EXISTS "test" (primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,id TEXT,name TEXT,description TEXT)',
+    );
+  });
+
   describe('WHEN "dbFind" is called', () => {
     it('MUST send query to db with "id"', async () => {
       await testRepository.dbFind(testModel.id);
@@ -180,7 +189,7 @@ describe('AbstractRepository', () => {
     it('MUST send query to db', async () => {
       await testRepository.dbUpdate(testModel);
 
-      expect(executeMock).toHaveBeenCalledWith(testRepository.generateUpdateQuery(testRepository.generateRecordByColumns(testModel), `id=${testModel.id}`));
+      expect(executeMock).toHaveBeenCalledWith(testRepository.generateUpdateQuery(testRepository.generateRecordByColumns(testModel), `id='${testModel.id}'`));
     });
 
     describe('AND db returns error', () => {

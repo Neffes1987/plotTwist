@@ -13,7 +13,7 @@ export interface IListQuery {
   order?: 'ASC' | 'DESC';
 }
 
-export type ColumnsConfigType = 'TEXT' | 'INTEGER' | 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL';
+export type ColumnsConfigType = 'TEXT' | 'ARRAY' | 'BOOLEAN' | 'INTEGER' | 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL';
 
 export abstract class AbstractRepository<Model extends AbstractModel> {
   private readonly _tableName;
@@ -31,7 +31,12 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
     const columnsAttr: string[] = ['primaryKey INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'];
 
     Object.keys(config).forEach((columnName: string) => {
-      const columnSettings = config[columnName];
+      let columnSettings = config[columnName];
+
+      if (['ARRAY', 'BOOLEAN'].includes(columnSettings)) {
+        // SQL lite does not support array and boolean data type
+        columnSettings = 'TEXT';
+      }
 
       columnsAttr.push(`${columnName} ${columnSettings}`);
     });
@@ -159,7 +164,7 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
         return null;
       }
 
-      return this.generateModel(resultItems[0]) ?? null;
+      return this.generateModel(this.formatDataByColumnsType(resultItems[0])) ?? null;
     } catch (e) {
       this.errorLog.add(e);
       throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.canNotFindItemById);
@@ -179,7 +184,7 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
 
   async dbUpdate(model: Model): Promise<boolean> {
     try {
-      await this.db.execute(this.generateUpdateQuery(this.generateRecordByColumns(model), `id=${model.id}`));
+      await this.db.execute(this.generateUpdateQuery(this.generateRecordByColumns(model), `id='${model.id}'`));
     } catch (e) {
       this.errorLog.add(e);
       throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.canNotUpdateItemByProvidedData);
@@ -219,7 +224,7 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
       const result = await this.db.execute(this.generateSelectQuery(where, page, limit, order));
       const resultItems = this.db.iterate<IAbstractModel>(result);
 
-      return resultItems.map((data: IAbstractModel) => this.generateModel(data));
+      return resultItems.map((data: IAbstractModel) => this.generateModel(this.formatDataByColumnsType(data)));
     } catch (e) {
       this.errorLog.add(e);
       throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.canNotGetListByQuery);
@@ -228,13 +233,64 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
 
   generateRecordByColumns(model: Model): Record<string, string | number> {
     const result = {};
+    const serializedModel = model.serialize();
+    const columns = this.getDbTableColumns();
 
-    const modelColumnsRange: string[] = Object.keys(this.getDbTableColumns());
+    Object.keys(columns).forEach((columnName: string) => {
+      const value = serializedModel[columnName];
+      const columnType = columns[columnName];
 
-    Object.keys(this.getDbTableColumns()).forEach((columnName: string) => {
-      if (modelColumnsRange.includes(columnName)) {
-        result[columnName] = model[columnName] ?? 'NULL';
+      if (columnType === 'ARRAY') {
+        result[columnName] = value?.toString() ?? '';
+
+        return;
       }
+
+      if (columnType === 'BOOLEAN') {
+        result[columnName] = value?.toString() ?? 'false';
+
+        return;
+      }
+
+      result[columnName] = serializedModel[columnName] ?? 'NULL';
+    });
+
+    return result;
+  }
+
+  formatDataByColumnsType<T extends IAbstractModel>(record: T): T {
+    const result = {} as T;
+    const columns = this.getDbTableColumns();
+
+    Object.keys(columns).forEach((columnName: string) => {
+      const columnValue = record[columnName];
+      const columnType = columns[columnName];
+
+      if (columnType === 'ARRAY') {
+        result[columnName] = columnValue ? `${columnValue}`.split(',') : [];
+
+        return;
+      }
+
+      if (columnType === 'BOOLEAN') {
+        result[columnName] = `${columnValue || 'false'}` !== 'false';
+
+        return;
+      }
+
+      if (columnType === 'TEXT' && columnValue === 'NULL') {
+        result[columnName] = undefined;
+
+        return;
+      }
+
+      if (columnType === 'INTEGER' && columnValue === 'NULL') {
+        result[columnName] = undefined;
+
+        return;
+      }
+
+      result[columnName] = columnValue;
     });
 
     return result;

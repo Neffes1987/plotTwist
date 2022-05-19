@@ -16,18 +16,18 @@ export interface ICommonWorld extends IAbstractModel {
 }
 
 export abstract class WorldModel extends AbstractModel {
-  worldType: Nullable<WorldType> = null;
-  _story = '';
-  _plotId = '';
-  _reference = '';
-  _timeline = '';
-  _failPrice = '';
-  _edgeId = '';
-  _status: WorldStatus = 'draft';
+  private readonly _worldType: Nullable<WorldType>;
+  private _story = '';
+  private readonly _plotId;
+  private _reference = '';
+  private _timeline = '';
+  private _failPrice = '';
+  private readonly _edgeId;
+  private _status: WorldStatus = 'draft';
 
   protected constructor(type: WorldType, data: ICommonWorld) {
     super(data);
-    this.worldType = type;
+    this._worldType = type;
     this.setStory(data.story);
     this._plotId = data.plotId;
     this._reference = data.reference;
@@ -94,6 +94,7 @@ export abstract class WorldModel extends AbstractModel {
       status: this._status,
       edgeId: this._edgeId,
       plotId: this._plotId,
+      worldType: this._worldType,
     };
   }
 

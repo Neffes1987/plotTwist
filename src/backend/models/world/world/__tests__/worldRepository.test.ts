@@ -1,11 +1,9 @@
 import { MOCKED_RESULT_SET } from '@mocks/mockedResultSet';
-import { MOCKED_HIDDEN_CAVE_WORLD, MOCKED_HOLIDAY_WORLD, MOCKED_LAW, MOCKED_PRIVATE_WORLD, MOCKED_RETURN_WORLD, MOCKED_WORLD } from '@mocks/mockedWorld';
+import { MOCKED_HIDDEN_CAVE_WORLD, MOCKED_HOLIDAY_WORLD, MOCKED_PRIVATE_WORLD, MOCKED_RETURN_WORLD, MOCKED_WORLD } from '@mocks/mockedWorld';
 
-import { IAbstractModel } from '../../../../base/abstractModel';
 import DbClient from '../../../../base/dbClient';
 import { ErrorLog } from '../../../../base/errors/errorLog';
 import { UxException } from '../../../../base/errors/uxException';
-import { LawModel } from '../../law/lawModel';
 import { HiddenCaveWorldModel } from '../hiddenCaveWorldModel';
 import { HolidayWorldModel } from '../holidayWorldModel';
 import { PlainWorldModel } from '../plainWorldModel';
@@ -122,19 +120,6 @@ describe('WorldRepository', () => {
   });
 
   describe('WHEN "generateRecordByColumns" is called', () => {
-    it('AND provided type is not detected, MUST throw ui error', () => {
-      let error;
-
-      try {
-        // @ts-ignore
-        worldRepository.generateRecordByColumns(new LawModel(MOCKED_LAW));
-      } catch (e) {
-        error = e;
-      }
-
-      expect(error).toEqual(new UxException('can_not_recognize_world_type'));
-    });
-
     it.each([
       ['plainWorld', MOCKED_WORLD, new PlainWorldModel(MOCKED_WORLD)],
       ['privateWorld', MOCKED_PRIVATE_WORLD, new PrivateWorldModel(MOCKED_PRIVATE_WORLD)],
@@ -157,7 +142,7 @@ describe('WorldRepository', () => {
       {
         insertId: 0,
         rows: {
-          item: (): IAbstractModel => world,
+          item: (): Record<string, string | number> => worldRepository.generateRecordByColumns(world),
           raw: jest.fn(),
           length: 1,
         },

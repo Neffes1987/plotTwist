@@ -17,6 +17,10 @@ export class ResultRepository extends AbstractRepository<ResultModel> {
   }
 
   getDbTableColumns(): Record<string, ColumnsConfigType> {
-    return {};
+    return {
+      id: 'TEXT',
+      name: 'TEXT',
+      description: 'TEXT',
+    };
   }
 }

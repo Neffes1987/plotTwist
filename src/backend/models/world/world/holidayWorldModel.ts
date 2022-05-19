@@ -67,7 +67,7 @@ export class HolidayWorldModel extends WorldModel {
       shadowRevenge: this._shadowRevenge,
       holidayType: this._holidayType,
       HolidaySubType: this._holidaySubType,
-      chaseType: this._chase,
+      chase: this._chase,
     };
   }
 

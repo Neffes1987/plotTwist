@@ -28,7 +28,7 @@ export const MOCKED_CHALLENGE: IChallengeModel = {
   characterIds: ['characterId_1', 'characterId_2'],
   brokenLawIds: ['brokenLawId_1', 'brokenLawId_2'],
   description: '',
-  id: '',
+  id: 'test',
   name: '',
   plotGoal: '',
   rewardId: '',
@@ -48,7 +48,7 @@ export const MOCKED_EDGE: IEdgeModel = {
   rewardId: 'rewardId',
   weight: 1,
   guardId: '1',
-  challengeIds: ['1', '2'],
+  challengeIds: ['1', '2', '3'],
   type: 'edge',
   isActive: false,
 };

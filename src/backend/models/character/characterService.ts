@@ -4,7 +4,7 @@ import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
 import { CharacterModel, ICharacterModel } from './character/characterModel';
-import { CharacterRepository, ICharacterListQuery } from './character/characterRepository';
+import { CharacterRepository, ICharacterListQuery, UpdateCharactersPropsType } from './character/characterRepository';
 import { MentorModel } from './character/mentorModel';
 import { MessengerModel } from './character/messengerModel';
 import { ResultModel } from './result/resultModel';
@@ -28,9 +28,11 @@ export class CharacterService extends AbstractService {
       throw this.errorLog.formatWrongFieldsError({ error: 'Could not get messengers by provided ids' });
     }
 
-    const result = {
-      add: {},
+    const result: UpdateCharactersPropsType = {
+      characters: [],
     };
+
+    result.add = {};
 
     for (const character of messengers) {
       if (character.type !== 'messenger') {
@@ -41,14 +43,15 @@ export class CharacterService extends AbstractService {
         continue;
       }
 
-      if (!result.add[callId]) {
-        result.add[callId] = [];
+      if (!result.add[character.id]) {
+        result.add[character.id] = [];
       }
 
-      result.add[callId].push(character.id);
+      result.add[character.id].push(callId);
+      result.characters.push(character);
     }
 
-    if (!result.add[callId] || result.add[callId].length === 0) {
+    if (!Object.keys(result.add).length) {
       return true;
     }
 
@@ -62,9 +65,11 @@ export class CharacterService extends AbstractService {
       throw this.errorLog.formatWrongFieldsError({ error: 'Could not get messengers by provided ids' });
     }
 
-    const result = {
-      remove: {},
+    const result: UpdateCharactersPropsType = {
+      characters: [],
     };
+
+    result.remove = {};
 
     for (const character of messengers) {
       if (character.type !== 'messenger') {
@@ -75,14 +80,15 @@ export class CharacterService extends AbstractService {
         continue;
       }
 
-      if (!result.remove[callId]) {
-        result.remove[callId] = [];
+      if (!result.remove[character.id]) {
+        result.remove[character.id] = [];
       }
 
-      result.remove[callId].push(character.id);
+      result.remove[character.id].push(callId);
+      result.characters.push(character);
     }
 
-    if (!result.remove[callId] || result.remove[callId].length === 0) {
+    if (!Object.keys(result.remove).length) {
       return true;
     }
 
@@ -96,9 +102,11 @@ export class CharacterService extends AbstractService {
       throw this.errorLog.formatWrongFieldsError({ error: 'Could not get mentors by provided ids' });
     }
 
-    const result = {
-      add: {},
+    const result: UpdateCharactersPropsType = {
+      characters: [],
     };
+
+    result.add = {};
 
     for (const character of mentors) {
       if (character.type !== 'mentor') {
@@ -109,11 +117,12 @@ export class CharacterService extends AbstractService {
         continue;
       }
 
-      if (!result.add[lawId]) {
-        result.add[lawId] = [];
+      if (!result.add[character.id]) {
+        result.add[character.id] = [];
       }
 
-      result.add[lawId].push(character.id);
+      result.add[character.id].push(lawId);
+      result.characters.push(character);
     }
 
     if (!result.add[lawId] || result.add[lawId].length === 0) {
@@ -130,9 +139,11 @@ export class CharacterService extends AbstractService {
       throw this.errorLog.formatWrongFieldsError({ error: 'Could not get mentors by provided ids' });
     }
 
-    const result = {
-      remove: {},
+    const result: UpdateCharactersPropsType = {
+      characters: [],
     };
+
+    result.remove = {};
 
     for (const character of mentors) {
       if (character.type !== 'mentor') {
@@ -143,11 +154,12 @@ export class CharacterService extends AbstractService {
         continue;
       }
 
-      if (!result.remove[lawId]) {
-        result.remove[lawId] = [];
+      if (!result.remove[character.id]) {
+        result.remove[character.id] = [];
       }
 
-      result.remove[lawId].push(character.id);
+      result.remove[character.id].push(lawId);
+      result.characters.push(character);
     }
 
     if (!result.remove[lawId] || result.remove[lawId].length === 0) {
@@ -172,23 +184,26 @@ export class CharacterService extends AbstractService {
       throw this.errorLog.formatWrongFieldsError({ error: 'Could not get any characters by provided ids' });
     }
 
-    const result = {
-      add: {},
+    const result: UpdateCharactersPropsType = {
+      characters: [],
     };
+
+    result.add = {};
 
     for (const character of characters) {
       if (character.resultIds.includes(resultId)) {
         continue;
       }
 
-      if (!result.add[resultId]) {
-        result.add[resultId] = [];
+      if (!result.add[character.id]) {
+        result.add[character.id] = [];
       }
 
-      result.add[resultId].push(character.id);
+      result.add[character.id].push(resultId);
+      result.characters.push(character);
     }
 
-    if (!result.add[resultId] || result.add[resultId].length === 0) {
+    if (!Object.keys(result.add)) {
       return true;
     }
 
@@ -202,23 +217,26 @@ export class CharacterService extends AbstractService {
       throw this.errorLog.formatWrongFieldsError({ error: 'Could not get any characters by provided ids' });
     }
 
-    const result = {
-      remove: {},
+    const result: UpdateCharactersPropsType = {
+      characters: [],
     };
+
+    result.remove = {};
 
     for (const character of characters) {
       if (!character.resultIds.includes(resultId)) {
         continue;
       }
 
-      if (!result.remove[resultId]) {
-        result.remove[resultId] = [];
+      if (!result.remove[character.id]) {
+        result.remove[character.id] = [];
       }
 
-      result.remove[resultId].push(character.id);
+      result.remove[character.id].push(resultId);
+      result.characters.push(character);
     }
 
-    if (!result.remove[resultId] || result.remove[resultId].length === 0) {
+    if (!Object.keys(result.remove).length) {
       return true;
     }
 

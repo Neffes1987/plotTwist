@@ -12,10 +12,10 @@ export interface IAllyModel extends ICharacterModel {
 }
 
 export class AllyModel extends CharacterModel {
-  _isAllyForParty = false;
-  _allyForHero = '';
-  _callForAlly = '';
-  _allyType?: AllyType;
+  private _isAllyForParty = false;
+  private _allyForHero = '';
+  private _callForAlly = '';
+  private _allyType?: AllyType;
 
   constructor(data: IAllyModel) {
     super(data);

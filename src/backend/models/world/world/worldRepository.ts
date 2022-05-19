@@ -1,5 +1,4 @@
 import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
-import { UnexpectedErrorCode } from '../../../base/errors/errorLog';
 import { UxException } from '../../../base/errors/uxException';
 
 import { HiddenCaveWorldModel, IHiddenCaveWorldModel } from './hiddenCaveWorldModel';
@@ -101,25 +100,5 @@ export class WorldRepository extends AbstractRepository<WorldModel> {
       ...WorldRepository._columns.hiddenCave,
       ...WorldRepository._columns.returnWithPotion,
     };
-  }
-
-  generateRecordByColumns(model: WorldModel): Record<string, number | string> {
-    if (!model.worldType || !WorldRepository._columns[model.worldType]) {
-      throw this.errorLog.formatUnexpectedError(UnexpectedErrorCode.canNotRecognizeWorldType);
-    }
-
-    const result = {};
-
-    const worldColumnsRange: string[] = Object.keys({ ...WorldRepository._columns[model.worldType], ...WorldRepository._columns.general });
-
-    Object.keys(this.getDbTableColumns()).forEach((columnName: string) => {
-      if (worldColumnsRange.includes(columnName)) {
-        result[columnName] = model[columnName] ?? 'NULL';
-      } else {
-        result[columnName] = 'NULL';
-      }
-    });
-
-    return result;
   }
 }

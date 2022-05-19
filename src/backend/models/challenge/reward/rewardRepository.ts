@@ -1,16 +1,14 @@
-import { IAbstractModel } from '@backend/base/abstractModel';
-
 import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
 
-import { RewardModel } from './rewardModel';
+import { IRewardModel, RewardModel } from './rewardModel';
 
 export class RewardRepository extends AbstractRepository<RewardModel> {
   constructor() {
     super('reward');
   }
 
-  generateModel(data: IAbstractModel): RewardModel {
-    throw new Error('Method not implemented.');
+  generateModel(data: IRewardModel): RewardModel {
+    return new RewardModel(data);
   }
 
   async list(props: IListQuery): Promise<RewardModel[]> {
@@ -18,6 +16,11 @@ export class RewardRepository extends AbstractRepository<RewardModel> {
   }
 
   getDbTableColumns(): Record<string, ColumnsConfigType> {
-    return {};
+    return {
+      id: 'TEXT',
+      name: 'TEXT',
+      description: 'TEXT',
+      challengeId: 'TEXT',
+    };
   }
 }

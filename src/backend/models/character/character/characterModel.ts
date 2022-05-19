@@ -47,6 +47,7 @@ export abstract class CharacterModel extends AbstractModel {
     this._plotId = data.plotId;
     this.setStrongest(data.strongest);
     this.setWeakness(data.weakness);
+    this.setResultIds(data.resultIds);
   }
 
   get plotId(): string {

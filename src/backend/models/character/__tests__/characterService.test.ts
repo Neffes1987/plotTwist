@@ -91,7 +91,7 @@ describe('CharacterService', () => {
       it('AND character is not assigned, MUST assign "messenger" to "call"', async () => {
         await mediator.characterService.assignCallToMessenger(call.id, [messenger.id]);
 
-        expect(mockedCharacterRepository.updateMessengersCalls).toHaveBeenCalledWith({ add: { [call.id]: [messenger.id] } });
+        expect(mockedCharacterRepository.updateMessengersCalls).toHaveBeenCalledWith({ add: { [messenger.id]: [call.id] }, characters: [messenger] });
       });
     });
   });
@@ -157,7 +157,7 @@ describe('CharacterService', () => {
 
         await mediator.characterService.unassignCallFromMessengers(call.id, [messenger.id]);
 
-        expect(mockedCharacterRepository.updateMessengersCalls).toHaveBeenCalledWith({ remove: { [call.id]: [messenger.id] } });
+        expect(mockedCharacterRepository.updateMessengersCalls).toHaveBeenCalledWith({ remove: { [messenger.id]: [call.id] }, characters: [messenger] });
       });
     });
   });
@@ -224,7 +224,7 @@ describe('CharacterService', () => {
 
         await mediator.characterService.assignLawToMentors(law.id, [mentor.id]);
 
-        expect(mockedCharacterRepository.updateMentorsLaws).toHaveBeenCalledWith({ add: { [law.id]: [mentor.id] } });
+        expect(mockedCharacterRepository.updateMentorsLaws).toHaveBeenCalledWith({ add: { [law.id]: [mentor.id] }, characters: [mentor] });
       });
     });
   });
@@ -291,7 +291,7 @@ describe('CharacterService', () => {
 
         await mediator.characterService.unassignLawToMentors(law.id, [mentor.id]);
 
-        expect(mockedCharacterRepository.updateMentorsLaws).toHaveBeenCalledWith({ remove: { [law.id]: [mentor.id] } });
+        expect(mockedCharacterRepository.updateMentorsLaws).toHaveBeenCalledWith({ remove: { [law.id]: [mentor.id] }, characters: [mentor] });
       });
     });
   });
@@ -353,7 +353,7 @@ describe('CharacterService', () => {
 
       await mediator.characterService.assignResultForCharacters(result.id, [mentor.id]);
 
-      expect(mockedCharacterRepository.updateCharactersResults).toHaveBeenCalledWith({ add: { [result.id]: [mentor.id] } });
+      expect(mockedCharacterRepository.updateCharactersResults).toHaveBeenCalledWith({ add: { [mentor.id]: [result.id] }, characters: [mentor] });
     });
   });
 
@@ -382,6 +382,7 @@ describe('CharacterService', () => {
     });
 
     it('MUST assign results for each of characters', async () => {
+      (mockedCharacterRepository.updateCharactersResults as jest.Mock).mockReset();
       const mentor = new MentorModel(MOCKED_MENTOR);
 
       mentor.setResultIds([result.id]);
@@ -389,7 +390,7 @@ describe('CharacterService', () => {
 
       await mediator.characterService.unassignResultForCharacters(result.id, [mentor.id]);
 
-      expect(mockedCharacterRepository.updateCharactersResults).toHaveBeenCalledWith({ remove: { [result.id]: [mentor.id] } });
+      expect(mockedCharacterRepository.updateCharactersResults).toHaveBeenCalledWith({ characters: [mentor], remove: { [mentor.id]: [result.id] } });
     });
   });
 

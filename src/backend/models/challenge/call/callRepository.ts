@@ -16,6 +16,14 @@ export class CallRepository extends AbstractRepository<CallModel> {
   }
 
   getDbTableColumns(): Record<string, ColumnsConfigType> {
-    return {};
+    return {
+      id: 'TEXT',
+      name: 'TEXT',
+      description: 'TEXT',
+      partyMotivation: 'TEXT',
+      challengeId: 'TEXT',
+      status: 'TEXT',
+      type: 'TEXT',
+    };
   }
 }

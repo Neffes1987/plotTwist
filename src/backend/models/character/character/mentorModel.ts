@@ -69,8 +69,8 @@ export class MentorModel extends CharacterModel {
       mentorType: this._mentorType,
       knowledgeType: this._knowledgeType,
       rewardId: this._rewardId,
-      waterholeIds: this._waterholeIds,
-      lawsIds: this._lawsIds,
+      waterholesIds: this._waterholeIds,
+      lawIds: this._lawsIds,
     };
   }
 }

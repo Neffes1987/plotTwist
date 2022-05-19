@@ -30,7 +30,7 @@ export const MOCKED_MENTOR: IMentorModel = {
 };
 
 export const MOCKED_MESSENGER: IMessengerModel = {
-  callIds: ['callId', 'callId'],
+  callIds: ['callId', 'callId1'],
   motivation: 'motivation',
   plotId: 'plotId',
   waterholesIds: ['waterholesId'],
@@ -135,7 +135,7 @@ export const MOCKED_ENEMY: IEnemyModel = {
 };
 
 export const MOCKED_RESULT: IAbstractModel = {
-  id: '1',
+  id: 'resultId',
   description: 'description',
   name: '',
 };
