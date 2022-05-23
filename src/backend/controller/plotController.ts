@@ -13,7 +13,7 @@ import { ICommonWorld, WorldModel, WorldStatus } from '../models/world/world/wor
 
 import { ServiceMediator } from './serviceMediator';
 
-export class PlotController {
+class PlotController {
   static readonly PAGE = 1;
   static readonly LIMIT = 20;
   readonly _mediator = new ServiceMediator();
@@ -218,3 +218,5 @@ export class PlotController {
     return this.mediator.waterholeService.removeWaterhole(waterholeId);
   }
 }
+
+export const plotController = new PlotController();

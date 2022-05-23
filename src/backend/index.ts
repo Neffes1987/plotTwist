@@ -1,1 +1,1 @@
-export { PlotController } from './controller/plotController';
+export { plotController } from './controller/plotController';
