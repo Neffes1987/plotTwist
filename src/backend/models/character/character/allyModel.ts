@@ -1,15 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { AllyType, IAllyModel } from '@backend';
 
-import { CharacterModel, ICharacterModel } from './characterModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export type AllyType = 'bosomFriend' | 'highWorldAlly' | 'animal' | 'undeadAlly' | 'agileServant';
-
-export interface IAllyModel extends ICharacterModel {
-  isAllyForParty: boolean;
-  allyForHero: string;
-  callForAlly: string;
-  allyType: AllyType;
-}
+import { CharacterModel } from './characterModel';
 
 export class AllyModel extends CharacterModel {
   private _isAllyForParty = false;

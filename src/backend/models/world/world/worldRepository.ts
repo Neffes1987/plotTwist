@@ -1,17 +1,24 @@
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import {
+  ICommonWorld,
+  IHiddenCaveWorldModel,
+  IHolidayWorldModel,
+  IPlainWorldWorld,
+  IPrivateWorld,
+  IReturnWithPotionWorldModel,
+  IWorldListQuery,
+  WorldType,
+} from '@backend';
+
+import { AbstractRepository } from '../../../base/abstractRepository';
 import { UxException } from '../../../base/errors/uxException';
+import { ColumnsConfigType } from '../../../base/interface';
 
-import { HiddenCaveWorldModel, IHiddenCaveWorldModel } from './hiddenCaveWorldModel';
-import { HolidayWorldModel, IHolidayWorldModel } from './holidayWorldModel';
-import { IPlainWorldWorld, PlainWorldModel } from './plainWorldModel';
-import { IPrivateWorld, PrivateWorldModel } from './privateWorldModel';
-import { IReturnWithPotionWorldModel, ReturnWithPotionWorldModel } from './returnWithPotionModel';
-import { ICommonWorld, WorldModel, WorldType } from './worldModel';
-
-export interface IWorldListQuery extends IListQuery {
-  plotId?: string;
-  edgeId?: string;
-}
+import { HiddenCaveWorldModel } from './hiddenCaveWorldModel';
+import { HolidayWorldModel } from './holidayWorldModel';
+import { PlainWorldModel } from './plainWorldModel';
+import { PrivateWorldModel } from './privateWorldModel';
+import { ReturnWithPotionWorldModel } from './returnWithPotionModel';
+import { WorldModel } from './worldModel';
 
 export class WorldRepository extends AbstractRepository<WorldModel> {
   static readonly _columns: Record<WorldType | 'general', Record<string, ColumnsConfigType>> = {

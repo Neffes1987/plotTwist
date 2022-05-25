@@ -1,0 +1,63 @@
+{
+  "ru": {
+    "translation": {
+      "test": "test-message",
+      "worldWidget": {
+        "npc": {
+          "caption": "Персонажи",
+          "ally": "Союзники",
+          "enemy": "Враги",
+          "guard": "Стражи",
+          "messenger": "Вестники",
+          "mentor": "Наставники",
+          "shadow": "Главный злодей"
+        },
+        "worldInfo": {
+          "caption": "О мире",
+          "brokenLaws": "Нарушено законов",
+          "activeCalls": "Активных посланий",
+          "waterholes" : "Водопои",
+          "aboutWorld": "Подробнее"
+        },
+        "edgeInfo": {
+          "caption": "О пороге",
+          "aboutEdge": "Подробнее",
+          "rewards": "Награды за задания",
+          "activeChallenges": "Активные задания",
+          "passedChallenges": "Пройденные задания",
+          "failedChallenges": "Проваленные задания"
+        },
+        "plainWorld": {
+          "caption": "Обыденный мир",
+          "faq": {
+            "caption": "Об обыденном мире..."
+          }
+        },
+        "privateWorld": {
+          "caption": "Таинственный мир",
+          "faq": {
+            "caption": "О тайном мире..."
+          }
+        },
+        "hiddenCave": {
+          "caption": "Скрытая пещера",
+          "faq": {
+            "caption": "О скрытой пещере..."
+          }
+        },
+        "holiday": {
+          "caption": "Торжество",
+          "faq": {
+            "caption": "О торжестве..."
+          }
+        },
+        "returnWithPotion": {
+          "caption": "Возвращение с элексиром",
+          "faq": {
+            "caption": "О возвращении с элексиром..."
+          }
+        }
+      }
+    }
+  }
+}

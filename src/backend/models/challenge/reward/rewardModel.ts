@@ -1,8 +1,7 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
+import { IRewardModel } from '@backend';
 
-export interface IRewardModel extends IAbstractModel {
-  challengeId: string;
-}
+import { AbstractModel } from '../../../base/abstractModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
 export class RewardModel extends AbstractModel {
   private _challengeId = '';

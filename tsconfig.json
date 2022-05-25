@@ -5,7 +5,7 @@
     "jsx": "react-native",
     "baseUrl": ".",
     "paths": {
-      "@backend/*": ["./src/backend/*"],
+      "@backend": ["./src/backend"],
       "@mocks/*": ["./src/mocks/*"]
     },
     "isolatedModules": true,

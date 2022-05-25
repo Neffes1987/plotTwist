@@ -1,12 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { IMessengerModel } from '@backend';
 
-import { CharacterModel, ICharacterModel } from './characterModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export interface IMessengerModel extends ICharacterModel {
-  motivation: string;
-  callIds: string[];
-  waterholesIds: string[];
-}
+import { CharacterModel } from './characterModel';
 
 export class MessengerModel extends CharacterModel {
   private _motivation = '';

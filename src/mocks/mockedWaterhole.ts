@@ -1,4 +1,4 @@
-import { IWaterholeModel } from '@backend/models/waterhole/waterhole/waterholeModel';
+import { IWaterholeModel } from '@backend';
 
 export const MOCKED_WATERHOLE: IWaterholeModel = {
   id: 'id',

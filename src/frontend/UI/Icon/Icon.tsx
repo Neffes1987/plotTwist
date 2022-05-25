@@ -17,6 +17,7 @@ export const Icon = (props: IconProps): Nullable<ReactElement> => {
   const { type, color = 'accentDarkBlue', rotate = 0, size = 14 } = props;
 
   const iconProps = {
+    testID: type,
     name: type,
     fill: color ? UI_COLORS[color] : undefined,
     style: {

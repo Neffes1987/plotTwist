@@ -1,19 +1,7 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
+import { ICommonWorld, WorldStatus, WorldType } from '@backend';
 
-export type WorldType = 'plainWorld' | 'privateWorld' | 'hiddenCave' | 'holiday' | 'returnWithPotion';
-
-export type WorldStatus = 'draft' | 'release' | 'finished';
-
-export interface ICommonWorld extends IAbstractModel {
-  story: string;
-  reference: string;
-  timeline: string;
-  failPrice: string;
-  status: WorldStatus;
-  edgeId: string;
-  plotId: string;
-  worldType: Nullable<WorldType>;
-}
+import { AbstractModel } from '../../../base/abstractModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
 export abstract class WorldModel extends AbstractModel {
   private readonly _worldType: Nullable<WorldType>;

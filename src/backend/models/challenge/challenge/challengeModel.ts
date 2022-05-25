@@ -1,17 +1,7 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
+import { ChallengeType, IChallengeModel } from '@backend';
 
-export type ChallengeType = 'challenge' | 'edge' | 'mainEdge';
-
-export interface IChallengeModel extends IAbstractModel {
-  plotGoal: string;
-  rewardId: string;
-  weight: number;
-  callIds: string[];
-  brokenLawIds: string[];
-  characterIds: string[];
-  type: ChallengeType;
-  isActive: boolean;
-}
+import { AbstractModel } from '../../../base/abstractModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
 export class ChallengeModel extends AbstractModel {
   static readonly CALLS_MIN_VALUE = 2;

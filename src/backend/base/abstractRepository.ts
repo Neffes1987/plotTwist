@@ -1,19 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { ICommonWorld } from '../models/world/world/worldModel';
-
-import { AbstractModel, IAbstractModel } from './abstractModel';
+import { AbstractModel } from './abstractModel';
 import dbClient, { DbClient } from './dbClient';
 import { ErrorLog, UnexpectedErrorCode } from './errors/errorLog';
 import { UxException } from './errors/uxException';
-
-export interface IListQuery {
-  page?: number;
-  limit?: number;
-  order?: 'ASC' | 'DESC';
-}
-
-export type ColumnsConfigType = 'TEXT' | 'ARRAY' | 'BOOLEAN' | 'INTEGER' | 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL';
+import { ColumnsConfigType, IAbstractModel, IListQuery } from './interface';
 
 export abstract class AbstractRepository<Model extends AbstractModel> {
   private readonly _tableName;
@@ -158,7 +149,7 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
     try {
       const result = await this.db.execute(this.generateSelectQuery(`id='${id}'`, 0, 1));
 
-      const resultItems = this.db.iterate<ICommonWorld>(result);
+      const resultItems = this.db.iterate<Model>(result);
 
       if (resultItems.length === 0) {
         return null;

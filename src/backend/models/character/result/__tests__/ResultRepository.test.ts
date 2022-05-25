@@ -1,6 +1,6 @@
+import { IAbstractModel } from '@backend';
 import { MOCKED_RESULT } from '@mocks/mockedCharacter';
 
-import { IAbstractModel } from '../../../../base/abstractModel';
 import DbClient from '../../../../base/dbClient';
 import { ResultModel } from '../resultModel';
 import { ResultRepository } from '../resultRepository';

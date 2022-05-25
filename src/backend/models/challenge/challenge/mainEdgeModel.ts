@@ -1,30 +1,9 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { HeartCrisisType, IMainEdgeModel, MainEdgeType, ShadowEncounterType } from '@backend';
+
 import { UxException } from '../../../base/errors/uxException';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-import { EdgeModel, IEdgeModel } from './edgeModel';
-
-export type MainEdgeType =
-  | 'meetingWithMainFear'
-  | 'fatherConfrontation'
-  | 'youthVersusOldAge'
-  | 'imaginaryHeroDeath'
-  | 'asDeathWitness'
-  | 'causeOfDeath'
-  | 'shadowEncounter'
-  | 'heartCrisis'
-  | 'throughEyesOfPsychopath';
-
-export type ShadowEncounterType = 'demonization' | 'deathOfVillain' | 'villainGetaway' | 'shadowHeroOfHisStory';
-
-export type HeartCrisisType = 'sacredMarriage' | 'equilibrium' | 'loveThatKills';
-
-export interface IMainEdgeModel extends IEdgeModel {
-  edgeImpact: string;
-  challengeIds: string[];
-  mainEdgeType?: MainEdgeType;
-  shadowEncounterType?: ShadowEncounterType;
-  heartCrisis?: HeartCrisisType;
-}
+import { EdgeModel } from './edgeModel';
 
 export class MainEdgeModel extends EdgeModel {
   static readonly CHALLENGE_IDS_MIN_VALUE = 2;

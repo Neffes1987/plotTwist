@@ -1,10 +1,4 @@
-import { IAbstractModel } from '@backend/base/abstractModel';
-import { IAllyModel } from '@backend/models/character/character/allyModel';
-import { IEnemyModel } from '@backend/models/character/character/enemyModel';
-import { IGuardModel } from '@backend/models/character/character/guardModel';
-import { IMentorModel } from '@backend/models/character/character/mentorModel';
-import { IMessengerModel } from '@backend/models/character/character/messengerModel';
-import { IShadowModel } from '@backend/models/character/character/shadowModel';
+import { IAbstractModel, IAllyModel, IEnemyModel, IGuardModel, IMentorModel, IMessengerModel, IShadowModel } from '@backend';
 
 export const MOCKED_MENTOR: IMentorModel = {
   plotId: 'plotId',

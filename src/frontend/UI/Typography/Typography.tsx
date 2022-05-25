@@ -9,5 +9,5 @@ import { TYPOGRAPHY_STYLES } from './constnatns';
 export const Typography = (props: PropsWithChildren<TypographyProps>): ReactElement => {
   const { children, mode = 'default', color } = props;
 
-  return <Text style={{ ...TYPOGRAPHY_STYLES[mode], color: color ? UI_COLORS[color] : undefined }}>{children}</Text>;
+  return <Text style={{ ...TYPOGRAPHY_STYLES[mode], color: color ? UI_COLORS[color] : UI_COLORS.accentDarkBlue }}>{children}</Text>;
 };

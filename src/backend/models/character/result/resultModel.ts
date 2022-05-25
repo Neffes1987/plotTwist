@@ -1,4 +1,5 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
+import { AbstractModel } from '../../../base/abstractModel';
+import { IAbstractModel, IValidatorConfiguration } from '../../../base/interface';
 
 export class ResultModel extends AbstractModel {
   constructor(data: IAbstractModel) {

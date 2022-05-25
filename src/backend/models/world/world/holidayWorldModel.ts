@@ -1,19 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { ChaseType, HolidaySubType, HolidayType, IHolidayWorldModel } from '@backend';
 
-import { ICommonWorld, WorldModel } from './worldModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export type HolidayType = 'inAShelter' | 'treasure' | 'victory' | 'getSword';
-
-export type HolidaySubType = 'potionSteeling' | 'initiative' | 'newVision' | 'extraVision' | 'epiphania' | 'skewVision';
-
-export type ChaseType = 'godSaving' | 'followersChase' | 'shadowRunning';
-
-export interface IHolidayWorldModel extends ICommonWorld {
-  shadowRevenge: string; // not required
-  holidayType: HolidayType;
-  holidaySubType?: HolidaySubType; // not required
-  chase?: ChaseType;
-}
+import { WorldModel } from './worldModel';
 
 export class HolidayWorldModel extends WorldModel {
   private _shadowRevenge = ''; // not required

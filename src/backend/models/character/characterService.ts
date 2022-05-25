@@ -1,10 +1,12 @@
-import { IAbstractModel } from '../../base/abstractModel';
-import { IListQuery } from '../../base/abstractRepository';
+import { IAbstractModel } from '@backend';
+
+import { IListQuery } from '../../base/interface';
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
-import { CharacterModel, ICharacterModel } from './character/characterModel';
-import { CharacterRepository, ICharacterListQuery, UpdateCharactersPropsType } from './character/characterRepository';
+import { CharacterModel } from './character/characterModel';
+import { CharacterRepository } from './character/characterRepository';
+import { ICharacterListQuery, ICharacterModel, UpdateCharactersPropsType } from './character/interface';
 import { MentorModel } from './character/mentorModel';
 import { MessengerModel } from './character/messengerModel';
 import { ResultModel } from './result/resultModel';

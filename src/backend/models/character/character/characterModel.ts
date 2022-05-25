@@ -1,21 +1,7 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
+import { AbstractModel } from '../../../base/abstractModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export type CharacterType = 'mentor' | 'guard' | 'messenger' | 'ally' | 'enemy' | 'shadow';
-
-export interface ICharacterModel extends IAbstractModel {
-  plotId: string;
-  age: string;
-  race: string;
-  gender: string;
-  goal: string;
-  previewId: string;
-  profession: string;
-  group: string;
-  type: CharacterType;
-  strongest: string[];
-  weakness: string[];
-  resultIds: string[];
-}
+import { CharacterType, ICharacterModel } from './interface';
 
 export abstract class CharacterModel extends AbstractModel {
   static readonly ABILITIES_MIN_LENGTH = 2;

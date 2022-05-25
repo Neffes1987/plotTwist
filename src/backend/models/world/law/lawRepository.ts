@@ -1,10 +1,9 @@
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import { ILawListQuery, ILawModel } from '@backend';
 
-import { ILawModel, LawModel } from './lawModel';
+import { AbstractRepository } from '../../../base/abstractRepository';
+import { ColumnsConfigType } from '../../../base/interface';
 
-export interface ILawListQuery extends IListQuery {
-  worldId?: string;
-}
+import { LawModel } from './lawModel';
 
 export class LawRepository extends AbstractRepository<LawModel> {
   constructor() {

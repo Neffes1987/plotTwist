@@ -1,8 +1,7 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
+import { IWaterholeModel } from '@backend';
 
-export interface IWaterholeModel extends IAbstractModel {
-  worldId: string;
-}
+import { AbstractModel } from '../../../base/abstractModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
 export class WaterholeModel extends AbstractModel {
   private readonly _worldId;

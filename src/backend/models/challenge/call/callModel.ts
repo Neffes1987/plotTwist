@@ -1,26 +1,7 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
+import { CallStatus, CallType, ICallModel } from '@backend';
 
-export type CallStatus = 'active' | 'closed' | 'failed' | 'created';
-
-export type CallType =
-  | 'disorientation'
-  | 'gossip'
-  | 'treasureHunt'
-  | 'inferring'
-  | 'lackOfChoice'
-  | 'deprivation'
-  | 'requestOfHelp'
-  | 'temptation'
-  | 'synchronism'
-  | 'pushToAction'
-  | 'heraldOfChange';
-
-export interface ICallModel extends IAbstractModel {
-  partyMotivation: string;
-  challengeId: string;
-  status?: CallStatus;
-  type?: CallType;
-}
+import { AbstractModel } from '../../../base/abstractModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
 export class CallModel extends AbstractModel {
   static readonly PARTY_MOTIVATION = 2048;

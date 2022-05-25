@@ -1,11 +1,16 @@
 import React, { ReactElement, useState } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, useColorScheme, View } from 'react-native';
-import { Colors, Header, LearnMoreLinks } from 'react-native/Libraries/NewAppScreen';
+import { SafeAreaView, ScrollView, useColorScheme, View } from 'react-native';
+import { Colors, LearnMoreLinks } from 'react-native/Libraries/NewAppScreen';
+import 'intl-pluralrules';
 
-import { IconButton } from './UI/Buttons/IconButton';
-import { Drawer } from './UI/Drawer/Drawer';
-import { Flex } from './UI/Flex/Flex';
-import { Typography } from './UI/Typography/Typography';
+import './initI18n/initI18n';
+import { Accordion } from '../../UI/Accordion/Accordion';
+import { IconButton } from '../../UI/Buttons/IconButton';
+import { Drawer } from '../../UI/Drawer/Drawer';
+import { Flex } from '../../UI/Flex/Flex';
+import { Spinner } from '../../UI/Spinner/Spinner';
+import { Typography } from '../../UI/Typography/Typography';
+import { ScreenHeader } from '../../Widgets/ScreenHeader/ScreenHeader';
 
 const App = (): ReactElement => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -13,14 +18,19 @@ const App = (): ReactElement => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
   const [state, setState] = useState(false);
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-
       <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        <Header />
+        <ScreenHeader title="test" onBackClick={console.log} onSettingClick={console.log} />
+
+        <Spinner />
+
+        <Accordion caption="test">
+          <ScreenHeader title="test" onBackClick={console.log} onSettingClick={console.log} />
+        </Accordion>
 
         <Flex justify="space-around" direction="column">
           <IconButton

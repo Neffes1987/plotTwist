@@ -1,16 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { FinalType, IReturnWithPotionWorldModel, PotionType } from '@backend';
 
-import { ICommonWorld, WorldModel } from './worldModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export type FinalType = 'cycle' | 'achievePerfect' | 'openEnd';
-
-export type PotionType = 'wisdom' | 'love' | 'responsible' | 'tragedy' | 'badExperience' | 'wastedTime';
-
-export interface IReturnWithPotionWorldModel extends ICommonWorld {
-  finalType: FinalType;
-  potionType: PotionType;
-  plotTwist: string;
-}
+import { WorldModel } from './worldModel';
 
 export class ReturnWithPotionWorldModel extends WorldModel {
   _finalType?: FinalType;

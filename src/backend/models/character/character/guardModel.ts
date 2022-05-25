@@ -1,11 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { IGuardModel } from '@backend';
 
-import { CharacterModel, ICharacterModel } from './characterModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export interface IGuardModel extends ICharacterModel {
-  becameAlly: string;
-  becameEnemy: string;
-}
+import { CharacterModel } from './characterModel';
 
 export class GuardModel extends CharacterModel {
   private _becameAlly = '';

@@ -1,24 +1,24 @@
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import { AbstractRepository } from '../../../base/abstractRepository';
+import { ColumnsConfigType } from '../../../base/interface';
 
-import { AllyModel, IAllyModel } from './allyModel';
-import { CharacterModel, ICharacterModel } from './characterModel';
-import { EnemyModel, IEnemyModel } from './enemyModel';
-import { GuardModel, IGuardModel } from './guardModel';
-import { IMentorModel, MentorModel } from './mentorModel';
-import { IMessengerModel, MessengerModel } from './messengerModel';
-import { IShadowModel, ShadowModel } from './shadowModel';
-
-export interface ICharacterListQuery extends IListQuery {
-  plotId?: string;
-  characterIds?: string[];
-  waterholeIds?: string[];
-}
-
-export interface UpdateCharactersPropsType {
-  add?: Record<string, string[]>;
-  remove?: Record<string, string[]>;
-  characters: CharacterModel[];
-}
+import { AllyModel } from './allyModel';
+import { CharacterModel } from './characterModel';
+import { EnemyModel } from './enemyModel';
+import { GuardModel } from './guardModel';
+import {
+  IAllyModel,
+  ICharacterListQuery,
+  ICharacterModel,
+  IEnemyModel,
+  IGuardModel,
+  IMentorModel,
+  IMessengerModel,
+  IShadowModel,
+  UpdateCharactersPropsType,
+} from './interface';
+import { MentorModel } from './mentorModel';
+import { MessengerModel } from './messengerModel';
+import { ShadowModel } from './shadowModel';
 
 export class CharacterRepository extends AbstractRepository<CharacterModel> {
   constructor() {

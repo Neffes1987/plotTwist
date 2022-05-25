@@ -1,10 +1,7 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
+import { IPlotModel, PlotStatus } from '@backend';
 
-export type PlotStatus = 'draft' | 'released' | 'finished';
-
-export interface IPlotModel extends IAbstractModel {
-  status: PlotStatus;
-}
+import { AbstractModel } from '../../../base/abstractModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
 export class PlotModel extends AbstractModel {
   private _status: PlotStatus = 'draft';

@@ -1,15 +1,21 @@
-import { IAbstractModel } from '../base/abstractModel';
-import { IListQuery } from '../base/abstractRepository';
-import { CallModel, CallStatus, ICallModel } from '../models/challenge/call/callModel';
-import { ChallengeModel, IChallengeModel } from '../models/challenge/challenge/challengeModel';
-import { IRewardModel, RewardModel } from '../models/challenge/reward/rewardModel';
-import { CharacterModel, ICharacterModel } from '../models/character/character/characterModel';
-import { ICharacterListQuery } from '../models/character/character/characterRepository';
+import { IAbstractModel, IListQuery } from '../base/interface';
+import { CallModel } from '../models/challenge/call/callModel';
+import { CallStatus, ICallModel } from '../models/challenge/call/interface';
+import { ChallengeModel } from '../models/challenge/challenge/challengeModel';
+import { IChallengeModel } from '../models/challenge/challenge/interface';
+import { IRewardModel } from '../models/challenge/reward/interface';
+import { RewardModel } from '../models/challenge/reward/rewardModel';
+import { CharacterModel } from '../models/character/character/characterModel';
+import { ICharacterListQuery, ICharacterModel } from '../models/character/character/interface';
 import { ResultModel } from '../models/character/result/resultModel';
-import { IPlotModel, PlotModel } from '../models/plot/plot/plotModel';
-import { IWaterholeModel, WaterholeModel } from '../models/waterhole/waterhole/waterholeModel';
-import { ILawModel, LawModel } from '../models/world/law/lawModel';
-import { ICommonWorld, WorldModel, WorldStatus } from '../models/world/world/worldModel';
+import { IPlotModel } from '../models/plot/plot/interface';
+import { PlotModel } from '../models/plot/plot/plotModel';
+import { IWaterholeModel } from '../models/waterhole/waterhole/interface';
+import { WaterholeModel } from '../models/waterhole/waterhole/waterholeModel';
+import { ILawModel } from '../models/world/law/interface';
+import { LawModel } from '../models/world/law/lawModel';
+import { ICommonWorld, WorldStatus } from '../models/world/world/interface';
+import { WorldModel } from '../models/world/world/worldModel';
 
 import { ServiceMediator } from './serviceMediator';
 

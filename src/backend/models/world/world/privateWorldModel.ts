@@ -1,10 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { IPrivateWorld } from '@backend';
 
-import { ICommonWorld, WorldModel } from './worldModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export interface IPrivateWorld extends ICommonWorld {
-  contrast: string;
-}
+import { WorldModel } from './worldModel';
 
 export class PrivateWorldModel extends WorldModel {
   private _contrast = '';

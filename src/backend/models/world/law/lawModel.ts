@@ -1,8 +1,7 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../../../base/abstractModel';
+import { ILawModel } from '@backend';
 
-export interface ILawModel extends IAbstractModel {
-  worldId: string;
-}
+import { AbstractModel } from '../../../base/abstractModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
 export class LawModel extends AbstractModel {
   _worldId = '';

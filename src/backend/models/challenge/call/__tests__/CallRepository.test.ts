@@ -1,6 +1,6 @@
+import { IAbstractModel } from '@backend';
 import { MOCKED_CALL } from '@mocks/mockedChallenge';
 
-import { IAbstractModel } from '../../../../base/abstractModel';
 import DbClient from '../../../../base/dbClient';
 import { CallModel } from '../callModel';
 import { CallRepository } from '../callRepository';

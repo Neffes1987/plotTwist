@@ -1,5 +1,5 @@
-import { IAbstractModel } from '../../../base/abstractModel';
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import { AbstractRepository } from '../../../base/abstractRepository';
+import { ColumnsConfigType, IAbstractModel, IListQuery } from '../../../base/interface';
 
 import { ResultModel } from './resultModel';
 

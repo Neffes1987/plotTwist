@@ -1,4 +1,7 @@
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../abstractModel';
+import { IAbstractModel } from '@backend';
+
+import { AbstractModel } from '../abstractModel';
+import { IValidatorConfiguration } from '../interface';
 
 export class EmptyConfigModel extends AbstractModel {
   constructor(data: IAbstractModel) {

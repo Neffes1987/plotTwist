@@ -1,18 +1,6 @@
 import { ErrorLog } from './errors/errorLog';
 import { UxException } from './errors/uxException';
-
-export interface IAbstractModel {
-  id: string;
-  name: string;
-  description: string;
-}
-
-export interface IValidatorConfiguration {
-  min?: number;
-  max?: number;
-  name: string;
-  isNumber?: boolean;
-}
+import { IAbstractModel, IValidatorConfiguration } from './interface';
 
 export abstract class AbstractModel implements IAbstractModel {
   readonly SHORT_VALUE_MAX_LENGTH = 256;

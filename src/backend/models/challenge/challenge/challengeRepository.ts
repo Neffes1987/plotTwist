@@ -1,14 +1,11 @@
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import { ChallengeRepositoryProps, IChallengeModel, IEdgeModel, IMainEdgeModel } from '@backend';
 
-import { ChallengeModel, IChallengeModel } from './challengeModel';
-import { EdgeModel, IEdgeModel } from './edgeModel';
-import { IMainEdgeModel, MainEdgeModel } from './mainEdgeModel';
+import { AbstractRepository } from '../../../base/abstractRepository';
+import { ColumnsConfigType } from '../../../base/interface';
 
-export interface ChallengeRepositoryProps extends IListQuery {
-  challengeIds?: string[];
-  shadowId?: string;
-  guardId?: string;
-}
+import { ChallengeModel } from './challengeModel';
+import { EdgeModel } from './edgeModel';
+import { MainEdgeModel } from './mainEdgeModel';
 
 export class ChallengeRepository extends AbstractRepository<ChallengeModel> {
   constructor() {

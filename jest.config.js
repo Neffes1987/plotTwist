@@ -6,5 +6,6 @@ module.exports = {
     "^@backend(.*)$": "<rootDir>/src/backend/$1",
     "^@mocks(.*)$": "<rootDir>/src/mocks/$1",
     "\\.svg": "<rootDir>/src/mocks/svgMock.js"
-  }
+  },
+  setupFiles: ['./src/setupTests.ts']
 };

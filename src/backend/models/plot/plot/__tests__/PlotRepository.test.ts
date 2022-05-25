@@ -1,6 +1,6 @@
+import { IAbstractModel } from '@backend';
 import { MOCKED_PLOT } from '@mocks/mockedPlot';
 
-import { IAbstractModel } from '../../../../base/abstractModel';
 import DbClient from '../../../../base/dbClient';
 import { PlotModel } from '../plotModel';
 import { PlotRepository } from '../plotRepository';

@@ -1,11 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { IEdgeModel } from '@backend';
 
-import { ChallengeModel, IChallengeModel } from './challengeModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export interface IEdgeModel extends IChallengeModel {
-  guardId: string;
-  challengeIds: string[];
-}
+import { ChallengeModel } from './challengeModel';
 
 export class EdgeModel extends ChallengeModel {
   static readonly CHALLENGE_IDS_MIN_VALUE = 2;

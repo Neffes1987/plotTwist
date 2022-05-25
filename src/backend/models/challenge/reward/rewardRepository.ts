@@ -1,6 +1,9 @@
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import { IRewardModel } from '@backend';
 
-import { IRewardModel, RewardModel } from './rewardModel';
+import { AbstractRepository } from '../../../base/abstractRepository';
+import { ColumnsConfigType, IListQuery } from '../../../base/interface';
+
+import { RewardModel } from './rewardModel';
 
 export class RewardRepository extends AbstractRepository<RewardModel> {
   constructor() {

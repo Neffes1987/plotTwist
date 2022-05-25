@@ -1,7 +1,9 @@
+import { IWaterholeModel } from '@backend';
+
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
-import { IWaterholeModel, WaterholeModel } from './waterhole/waterholeModel';
+import { WaterholeModel } from './waterhole/waterholeModel';
 import { WaterholeRepository } from './waterhole/waterholeRepository';
 
 export class WaterholeService extends AbstractService {

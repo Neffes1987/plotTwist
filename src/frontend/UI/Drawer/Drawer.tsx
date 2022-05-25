@@ -6,7 +6,7 @@ import { Flex } from '../Flex/Flex';
 import { DrawerProps } from '../interface';
 import { Typography } from '../Typography/Typography';
 
-import { DRAWER_CAPTION_MARGIN } from './constants';
+import { DRAWER_CAPTION_MARGIN, DRAWER_OVERLAY } from './constants';
 import { DRAWER_STYLES } from './style';
 
 export const Drawer = (props: PropsWithChildren<DrawerProps>): ReactElement => {
@@ -14,7 +14,7 @@ export const Drawer = (props: PropsWithChildren<DrawerProps>): ReactElement => {
 
   return (
     <Modal onDismiss={onClose} animationType="slide" visible={isOpen} transparent>
-      <Pressable onPress={onClose} testID="drawer-close-section">
+      <Pressable onPress={onClose} testID="drawer-close-section" style={DRAWER_OVERLAY}>
         <Divider verticalGap={20} />
       </Pressable>
 

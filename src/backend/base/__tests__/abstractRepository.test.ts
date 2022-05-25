@@ -1,10 +1,11 @@
 import * as uuid from 'uuid';
 
-import { AbstractModel, IAbstractModel, IValidatorConfiguration } from '../abstractModel';
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../abstractRepository';
+import { AbstractModel } from '../abstractModel';
+import { AbstractRepository } from '../abstractRepository';
 import DbClient from '../dbClient';
 import { ErrorLog } from '../errors/errorLog';
 import { UxException } from '../errors/uxException';
+import { ColumnsConfigType, IAbstractModel, IListQuery, IValidatorConfiguration } from '../interface';
 
 interface ITestModelListQuery extends IListQuery {
   testId: string;

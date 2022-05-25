@@ -1,4 +1,4 @@
-import { IAbstractModel } from '../abstractModel';
+import { IAbstractModel } from '@backend';
 
 import { ConfigModel, EmptyConfigModel, EmptyFieldConfigModel } from './mocks';
 

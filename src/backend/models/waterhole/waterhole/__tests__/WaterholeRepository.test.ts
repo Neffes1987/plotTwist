@@ -1,6 +1,6 @@
+import { IAbstractModel } from '@backend';
 import { MOCKED_WATERHOLE } from '@mocks/mockedWaterhole';
 
-import { IAbstractModel } from '../../../../base/abstractModel';
 import DbClient from '../../../../base/dbClient';
 import { WaterholeModel } from '../waterholeModel';
 import { WaterholeRepository } from '../waterholeRepository';

@@ -1,7 +1,7 @@
 import { MOCKED_LAW } from '@mocks/mockedWorld';
 
-import { IAbstractModel } from '../../../../base/abstractModel';
 import DbClient from '../../../../base/dbClient';
+import { IAbstractModel } from '../../../../base/interface';
 import { LawModel } from '../lawModel';
 import { LawRepository } from '../lawRepository';
 

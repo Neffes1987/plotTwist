@@ -1,12 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { IEnemyModel } from '@backend';
 
-import { CharacterModel, ICharacterModel } from './characterModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export interface IEnemyModel extends ICharacterModel {
-  rewardId: string;
-  motivation: string;
-  possibleToMoveAlly: string;
-}
+import { CharacterModel } from './characterModel';
 
 export class EnemyModel extends CharacterModel {
   _rewardId = '';

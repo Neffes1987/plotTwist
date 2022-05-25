@@ -1,7 +1,9 @@
+import { IPlotModel, PlotStatus } from '@backend';
+
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
-import { IPlotModel, PlotModel, PlotStatus } from './plot/plotModel';
+import { PlotModel } from './plot/plotModel';
 import { PlotRepository } from './plot/plotRepository';
 
 export class PlotService extends AbstractService {

@@ -1,11 +1,12 @@
+import { ICommonWorld, ILawModel, IWorldListQuery, PlotStatus, WorldStatus } from '@backend';
+
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
-import { PlotStatus } from '../plot/plot/plotModel';
 
-import { ILawModel, LawModel } from './law/lawModel';
+import { LawModel } from './law/lawModel';
 import { LawRepository } from './law/lawRepository';
-import { ICommonWorld, WorldModel, WorldStatus } from './world/worldModel';
-import { IWorldListQuery, WorldRepository } from './world/worldRepository';
+import { WorldModel } from './world/worldModel';
+import { WorldRepository } from './world/worldRepository';
 
 export class WorldService extends AbstractService {
   _worldRepository: WorldRepository;

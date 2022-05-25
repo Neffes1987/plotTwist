@@ -1,6 +1,9 @@
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import { IPlotModel } from '@backend';
 
-import { IPlotModel, PlotModel } from './plotModel';
+import { AbstractRepository } from '../../../base/abstractRepository';
+import { ColumnsConfigType, IListQuery } from '../../../base/interface';
+
+import { PlotModel } from './plotModel';
 
 export class PlotRepository extends AbstractRepository<PlotModel> {
   constructor() {

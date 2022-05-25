@@ -1,14 +1,8 @@
-import { ILawModel } from '@backend/models/world/law/lawModel';
-import { IHiddenCaveWorldModel } from '@backend/models/world/world/hiddenCaveWorldModel';
-import { IHolidayWorldModel } from '@backend/models/world/world/holidayWorldModel';
-import { IPlainWorldWorld } from '@backend/models/world/world/plainWorldModel';
-import { IPrivateWorld } from '@backend/models/world/world/privateWorldModel';
-import { IReturnWithPotionWorldModel } from '@backend/models/world/world/returnWithPotionModel';
-import { ICommonWorld } from '@backend/models/world/world/worldModel';
+import { ICommonWorld, IHiddenCaveWorldModel, IHolidayWorldModel, ILawModel, IPlainWorldWorld, IPrivateWorld, IReturnWithPotionWorldModel } from '@backend';
 
 const MOCKED_COMMON_WORLD: ICommonWorld = {
   id: '1',
-  name: 'name',
+  name: 'Hidden cave world',
   description: 'description',
   failPrice: '',
   edgeId: 'edgeId',

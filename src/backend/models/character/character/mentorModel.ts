@@ -1,18 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { IMentorModel, KnowledgeType, MentorType } from '@backend';
 
-import { CharacterModel, ICharacterModel } from './characterModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export type KnowledgeType = 'education' | 'presentationGifts' | 'teacherAdvice' | 'motivation' | 'sproutsInformation';
-
-export type MentorType = 'dark' | 'fallen' | 'permanent' | 'comic' | 'shaman';
-
-export interface IMentorModel extends ICharacterModel {
-  knowledgeType: KnowledgeType;
-  mentorType: MentorType;
-  rewardId: string;
-  waterholesIds: string[];
-  lawIds: string[];
-}
+import { CharacterModel } from './characterModel';
 
 export class MentorModel extends CharacterModel {
   private _knowledgeType?: KnowledgeType;

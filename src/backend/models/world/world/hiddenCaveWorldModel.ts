@@ -1,12 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { IHiddenCaveWorldModel } from '@backend';
 
-import { ICommonWorld, WorldModel } from './worldModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export interface IHiddenCaveWorldModel extends ICommonWorld {
-  mainEdgeInformation: string;
-  shadowIntroduction: string;
-  partyPlan: string;
-}
+import { WorldModel } from './worldModel';
 
 export class HiddenCaveWorldModel extends WorldModel {
   private _mainEdgeInformation = '';

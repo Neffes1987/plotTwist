@@ -1,12 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { IPlainWorldWorld } from '@backend';
 
-import { ICommonWorld, WorldModel } from './worldModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export interface IPlainWorldWorld extends ICommonWorld {
-  introduction: string;
-  charactersProblems: string;
-  worldProblems: string;
-}
+import { WorldModel } from './worldModel';
 
 export class PlainWorldModel extends WorldModel {
   static readonly WORLD_PROBLEMS_MIN_LENGTH = 2;

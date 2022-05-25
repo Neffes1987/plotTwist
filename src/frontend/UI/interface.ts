@@ -1,4 +1,4 @@
-import { FlexStyle, StyleProp, TouchableOpacityProps } from 'react-native';
+import { FlexStyle, PressableProps, StyleProp, TouchableOpacityProps } from 'react-native';
 
 import { UI_COLORS } from './colors';
 
@@ -9,7 +9,12 @@ export interface FlexProps {
   grow?: FlexStyle['flexGrow'];
   shrink?: FlexStyle['flexShrink'];
   wrap?: FlexStyle['flexWrap'];
+  backgroundColor?: ColorType;
+  gapY?: number;
+  gapX?: number;
+  gap?: number;
   styles?: StyleProp<unknown>;
+  onPress?: PressableProps['onPress'];
 }
 
 export type ColorType = keyof typeof UI_COLORS;
@@ -32,7 +37,7 @@ export interface UIButtonProps extends TouchableOpacityProps {
   type?: 'primary' | 'secondary';
 }
 
-export interface RoundButtonProps extends TouchableOpacityProps {
+export interface IconButtonProps extends TouchableOpacityProps {
   size?: number;
   color?: ColorType;
   iconType: IconType;

@@ -1,14 +1,16 @@
-import { IListQuery } from '../../base/abstractRepository';
+import { CallStatus, ChallengeRepositoryProps, ICallModel, IChallengeModel, IRewardModel } from '@backend';
+
 import { UnexpectedErrorCode } from '../../base/errors/errorLog';
+import { IListQuery } from '../../base/interface';
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
 
-import { CallModel, CallStatus, ICallModel } from './call/callModel';
+import { CallModel } from './call/callModel';
 import { CallRepository } from './call/callRepository';
-import { ChallengeModel, IChallengeModel } from './challenge/challengeModel';
-import { ChallengeRepository, ChallengeRepositoryProps } from './challenge/challengeRepository';
+import { ChallengeModel } from './challenge/challengeModel';
+import { ChallengeRepository } from './challenge/challengeRepository';
 import { EdgeModel } from './challenge/edgeModel';
-import { IRewardModel, RewardModel } from './reward/rewardModel';
+import { RewardModel } from './reward/rewardModel';
 import { RewardRepository } from './reward/rewardRepository';
 
 export class ChallengeService extends AbstractService {

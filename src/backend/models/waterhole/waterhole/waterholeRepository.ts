@@ -1,10 +1,9 @@
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import { IWaterholeListQuery, IWaterholeModel } from '@backend';
 
-import { IWaterholeModel, WaterholeModel } from './waterholeModel';
+import { AbstractRepository } from '../../../base/abstractRepository';
+import { ColumnsConfigType } from '../../../base/interface';
 
-export interface IWaterholeListQuery extends IListQuery {
-  worldId?: string;
-}
+import { WaterholeModel } from './waterholeModel';
 
 export class WaterholeRepository extends AbstractRepository<WaterholeModel> {
   constructor() {

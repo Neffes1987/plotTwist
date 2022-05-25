@@ -1,12 +1,8 @@
-import { IValidatorConfiguration } from '../../../base/abstractModel';
+import { IShadowModel } from '@backend';
 
-import { CharacterModel, ICharacterModel } from './characterModel';
+import { IValidatorConfiguration } from '../../../base/interface';
 
-export interface IShadowModel extends ICharacterModel {
-  rewardId: string;
-  motivation: string;
-  visionOnSituation: string;
-}
+import { CharacterModel } from './characterModel';
 
 export class ShadowModel extends CharacterModel {
   private _rewardId = '';

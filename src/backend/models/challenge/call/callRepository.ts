@@ -1,6 +1,9 @@
-import { AbstractRepository, ColumnsConfigType, IListQuery } from '../../../base/abstractRepository';
+import { ICallModel } from '@backend';
 
-import { CallModel, ICallModel } from './callModel';
+import { AbstractRepository } from '../../../base/abstractRepository';
+import { ColumnsConfigType, IListQuery } from '../../../base/interface';
+
+import { CallModel } from './callModel';
 
 export class CallRepository extends AbstractRepository<CallModel> {
   constructor() {

@@ -1,8 +1,4 @@
-import { ICallModel } from '@backend/models/challenge/call/callModel';
-import { IChallengeModel } from '@backend/models/challenge/challenge/challengeModel';
-import { IEdgeModel } from '@backend/models/challenge/challenge/edgeModel';
-import { IMainEdgeModel } from '@backend/models/challenge/challenge/mainEdgeModel';
-import { IRewardModel } from '@backend/models/challenge/reward/rewardModel';
+import { ICallModel, IChallengeModel, IEdgeModel, IMainEdgeModel, IRewardModel } from '@backend';
 
 import { MOCKED_SHADOW } from './mockedCharacter';
 
