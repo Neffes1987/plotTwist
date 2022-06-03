@@ -36,6 +36,8 @@ describe('PlotService', () => {
 
     it('MUST call "plotRepository.get"', async () => {
       await mediator.plotService.getPlot(plot.id);
+
+      expect(mockedPlotRepository.get).toHaveBeenCalledWith(plot.id);
     });
 
     describe('AND "plotRepository.get" returns "PlotModel"', () => {
@@ -58,10 +60,6 @@ describe('PlotService', () => {
       (mockedPlotRepository.add as jest.Mock).mockReturnValue(plot.id);
     });
 
-    it('MUST call "plotRepository.add"', async () => {
-      await mediator.plotService.createPlot(MOCKED_PLOT);
-    });
-
     it('MUST returns "plotId"', async () => {
       expect(await mediator.plotService.createPlot(MOCKED_PLOT)).toEqual(plot.id);
     });
@@ -70,10 +68,6 @@ describe('PlotService', () => {
   describe('WHEN call "updatePlot"', () => {
     beforeEach(() => {
       (mockedPlotRepository.replace as jest.Mock).mockReturnValue(true);
-    });
-
-    it('MUST call "plotRepository.replace"', async () => {
-      await mediator.plotService.updatePlot(MOCKED_PLOT);
     });
 
     it('MUST returns boolean value', async () => {
@@ -88,6 +82,8 @@ describe('PlotService', () => {
 
     it('MUST call "plotRepository.remove"', async () => {
       await mediator.plotService.removePlot(plot.id);
+
+      expect(mockedPlotRepository.remove).toHaveBeenCalledWith(plot.id);
     });
 
     it('MUST returns boolean value', async () => {
@@ -102,6 +98,8 @@ describe('PlotService', () => {
 
     it('MUST call "plotRepository.get"', async () => {
       await mediator.plotService.changePlotStatus(plot.id, 'draft');
+
+      expect(mockedPlotRepository.get).toHaveBeenCalledWith(plot.id);
     });
 
     it('AND repository returns plot data, MUST change plot status', async () => {
@@ -119,6 +117,18 @@ describe('PlotService', () => {
 
     it('MUST call "plotRepository.replace"', async () => {
       await mediator.plotService.changePlotStatus(plot.id, 'draft');
+
+      expect(mockedPlotRepository.replace).toHaveBeenCalledWith(plot);
+    });
+  });
+
+  describe('WHEN "getPlotDTO" is called', () => {
+    beforeEach(() => {
+      (mockedPlotRepository.get as jest.Mock).mockReturnValue(plot);
+    });
+
+    it('MUST return plot data', async () => {
+      expect(await mediator.plotService.getPlotDTO(plot.id)).toEqual(plot.serialize());
     });
   });
 });

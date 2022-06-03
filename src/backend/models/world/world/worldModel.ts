@@ -1,7 +1,9 @@
-import { ICommonWorld, WorldStatus, WorldType } from '@backend';
+import { ICommonWorld, WorldStatus } from '@backend';
 
 import { AbstractModel } from '../../../base/abstractModel';
 import { IValidatorConfiguration } from '../../../base/interface';
+
+import { WorldType } from './interface';
 
 export abstract class WorldModel extends AbstractModel {
   private readonly _worldType: Nullable<WorldType>;
@@ -23,6 +25,10 @@ export abstract class WorldModel extends AbstractModel {
     this._failPrice = data.failPrice;
     this._edgeId = data.edgeId;
     this._status = data.status;
+  }
+
+  get worldType(): WorldType {
+    return this._worldType ?? 'plainWorld';
   }
 
   get edgeId(): string {

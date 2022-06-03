@@ -1,8 +1,10 @@
+import { ICallModel, IChallengeModel, IMainEdgeModel, IRewardModel } from '@backend';
 import { MOCKED_CALL, MOCKED_CHALLENGE, MOCKED_EDGE, MOCKED_MAIN_EDGE, MOCKED_REWARD } from '@mocks/mockedChallenge';
 import { MOCKED_PLOT } from '@mocks/mockedPlot';
 import { MOCKED_WORLD } from '@mocks/mockedWorld';
 
 import { UxException } from '../../../base/errors/uxException';
+import { EdgeInfo } from '../../../controller/interface';
 import { ServiceMediator } from '../../../controller/serviceMediator';
 import { PlotModel } from '../../plot/plot/plotModel';
 import { PlotRepository } from '../../plot/plot/plotRepository';
@@ -264,6 +266,28 @@ describe('challengeService', () => {
 
       it('MUST return challenge id', async () => {
         expect(await mediator.challengeService.createChallenge(MOCKED_MAIN_EDGE)).toEqual(mainEdge.id);
+      });
+    });
+
+    describe('WHEN "getEdgeInfo" is called', () => {
+      it('MUST return edge info', async () => {
+        const call = new CallModel(MOCKED_CALL);
+        const challenge = new ChallengeModel(MOCKED_CHALLENGE);
+        const reward = new RewardModel(MOCKED_REWARD);
+
+        (mockedCallRepository.list as jest.Mock).mockResolvedValue([call]);
+        (mockedChallengeRepository.list as jest.Mock).mockResolvedValue([challenge]);
+        (mockedChallengeRepository.get as jest.Mock).mockResolvedValue(mainEdge);
+        (mockedRewardRepository.list as jest.Mock).mockResolvedValue([reward]);
+
+        const expected: EdgeInfo = {
+          calls: [call.serialize() as ICallModel],
+          challenges: [challenge.serialize() as IChallengeModel],
+          info: mainEdge.serialize() as IMainEdgeModel,
+          rewards: [reward.serialize() as IRewardModel],
+        };
+
+        expect(await mediator.challengeService.getEdgeInfo('test')).toEqual(expected);
       });
     });
   });

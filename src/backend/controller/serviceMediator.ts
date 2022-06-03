@@ -1,4 +1,7 @@
+import { ICharacterModel, PlotInfoResponse } from '@backend';
+
 import { ChallengeService } from '../models/challenge/challengeService';
+import { CharacterModel } from '../models/character/character/characterModel';
 import { CharacterService } from '../models/character/characterService';
 import { PlotService } from '../models/plot/plotService';
 import { WaterholeService } from '../models/waterhole/waterholeService';
@@ -37,5 +40,19 @@ export class ServiceMediator {
 
   get challengeService(): ChallengeService {
     return this._challengeService;
+  }
+
+  async getPlotInfo(plotId: string): Promise<PlotInfoResponse> {
+    const [plot, worlds, characters] = await Promise.all([
+      this.plotService.getPlotDTO(plotId),
+      this.worldService.getWorldsInfo(plotId),
+      this.characterService.getCharactersList({ plotId }),
+    ]);
+
+    return {
+      plot,
+      worlds,
+      characters: characters?.map((character: CharacterModel) => character.serialize() as ICharacterModel),
+    };
   }
 }

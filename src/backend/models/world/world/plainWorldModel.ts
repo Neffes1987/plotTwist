@@ -1,4 +1,4 @@
-import { IPlainWorldWorld } from '@backend';
+import { IPlainWorld } from '@backend';
 
 import { IValidatorConfiguration } from '../../../base/interface';
 
@@ -11,7 +11,7 @@ export class PlainWorldModel extends WorldModel {
   private _charactersProblems = ''; // not required
   private _worldProblems = '';
 
-  constructor(data: IPlainWorldWorld) {
+  constructor(data: IPlainWorld) {
     super('plainWorld', data);
 
     this.setIntroduction(data.introduction);

@@ -6,4 +6,5 @@ export interface ILawModel extends IAbstractModel {
 
 export interface ILawListQuery extends IListQuery {
   worldId?: string;
+  worldIds?: string[];
 }

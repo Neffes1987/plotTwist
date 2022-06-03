@@ -1,4 +1,5 @@
 export type { IAbstractModel } from './base/interface';
+export type { EdgeInfo, PlotInfoResponse, WorldInfo } from './controller/interface';
 export { plotController } from './controller/plotController';
 export type { CallStatus, CallType, ICallModel } from './models/challenge/call/interface';
 export type {
@@ -37,11 +38,10 @@ export type {
   ICommonWorld,
   IHiddenCaveWorldModel,
   IHolidayWorldModel,
-  IPlainWorldWorld,
+  IPlainWorld,
   IPrivateWorld,
   IReturnWithPotionWorldModel,
   IWorldListQuery,
   PotionType,
   WorldStatus,
-  WorldType,
 } from './models/world/world/interface';

@@ -1,7 +1,25 @@
 {
   "ru": {
     "translation": {
-      "test": "test-message",
+      "errors": {
+        "oops": "Что-то пошло не так"
+      },
+      "pages": {
+        "home": {
+          "caption": "Сюжет: #{{name}}",
+          "greetingMessage": "Начните заполнение сюжета с создания обыденного мира",
+          "errors": {
+            "cantGetWorlds": "Не могу загрузить данные по сюжету"
+          },
+          "buttons":{
+            "createFirstWorld": "Добавить обыденный мир",
+            "createNextWorld": "Добавить слудующий мир"
+          }
+        },
+        "plotList": {
+          "caption": "Список сюжетов"
+        }
+      },
       "worldWidget": {
         "npc": {
           "caption": "Персонажи",

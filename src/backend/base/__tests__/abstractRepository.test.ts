@@ -287,6 +287,12 @@ describe('AbstractRepository', () => {
       expect(executeMock).toHaveBeenCalledWith(testRepository.generateSelectQuery(`testId='${testModel.id}'`));
     });
 
+    it('AND "range" provided, MUST send query to db with "range" values', async () => {
+      await testRepository.getList<ITestModelListQuery>({ testId: testModel.id, range: { field: 'testId', values: ['1', '2', '3'] } });
+
+      expect(executeMock).toHaveBeenCalledWith(testRepository.generateSelectQuery(`testId='${testModel.id}' AND testId IN (1,2,3)`));
+    });
+
     describe('AND db returns error', () => {
       beforeEach(() => {
         executeMock.mockRejectedValue(new Error('db_error'));

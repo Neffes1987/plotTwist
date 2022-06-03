@@ -1,4 +1,4 @@
-import { ICommonWorld, IHiddenCaveWorldModel, IHolidayWorldModel, ILawModel, IPlainWorldWorld, IPrivateWorld, IReturnWithPotionWorldModel } from '@backend';
+import { ICommonWorld, IHiddenCaveWorldModel, IHolidayWorldModel, ILawModel, IPlainWorld, IPrivateWorld, IReturnWithPotionWorldModel } from '@backend';
 
 const MOCKED_COMMON_WORLD: ICommonWorld = {
   id: '1',
@@ -14,14 +14,14 @@ const MOCKED_COMMON_WORLD: ICommonWorld = {
   worldType: 'plainWorld',
 };
 
-export const MOCKED_WORLD: IPlainWorldWorld = {
+export const MOCKED_WORLD: IPlainWorld = {
   ...MOCKED_COMMON_WORLD,
   introduction: 'introduction',
   charactersProblems: ['charactersProblems', 'charactersProblems', 'charactersProblems'].toString(),
   worldProblems: ['worldProblems', 'worldProblems', 'worldProblems'].toString(),
 };
 
-export const MOCKED_RELEASED_WORLD: IPlainWorldWorld = {
+export const MOCKED_RELEASED_WORLD: IPlainWorld = {
   ...MOCKED_COMMON_WORLD,
   introduction: 'introduction',
   charactersProblems: ['charactersProblems', 'charactersProblems', 'charactersProblems'].toString(),

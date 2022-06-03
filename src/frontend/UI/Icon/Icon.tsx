@@ -49,7 +49,7 @@ export const Icon = (props: IconProps): Nullable<ReactElement> => {
     case 'tick':
       return <Tick {...iconProps} />;
     case 'logo':
-      return <Image source={require('./assets/logo.png')} />;
+      return <Image testID={type} source={require('./assets/logo.png')} style={{ width: size, height: size }} />;
     default:
       return null;
   }

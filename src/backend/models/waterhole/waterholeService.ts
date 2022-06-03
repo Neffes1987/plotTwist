@@ -1,4 +1,4 @@
-import { IWaterholeModel } from '@backend';
+import { IWaterholeListQuery, IWaterholeModel } from '@backend';
 
 import { AbstractService } from '../../base/service/abstractService';
 import { ServiceMediator } from '../../controller/serviceMediator';
@@ -17,8 +17,8 @@ export class WaterholeService extends AbstractService {
     this._waterholeRepository = new WaterholeRepository();
   }
 
-  async getWaterholesList(worldId: string): Promise<WaterholeModel[]> {
-    return this._waterholeRepository.list(worldId);
+  async getWaterholesList(props: IWaterholeListQuery): Promise<WaterholeModel[]> {
+    return this._waterholeRepository.list(props);
   }
 
   async getWaterhole(waterholeId: string): Promise<Nullable<WaterholeModel>> {
@@ -46,7 +46,9 @@ export class WaterholeService extends AbstractService {
       throw this.errorLog.formatWrongFieldsError({ waterholeId });
     }
 
-    const list = await this._waterholeRepository.list(waterhole.worldId);
+    const list = await this._waterholeRepository.list({
+      worldId: waterhole.worldId,
+    });
 
     if (list.length <= WaterholeService.MIN_WATERHOLES_IN_WORLD) {
       throw this.errorLog.formatWrongFieldsError({ waterholesInList: `less_then_${WaterholeService.MIN_WATERHOLES_IN_WORLD}` });

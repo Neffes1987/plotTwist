@@ -1,10 +1,19 @@
+import { MOCKED_CALL, MOCKED_CHALLENGE, MOCKED_EDGE } from '@mocks/mockedChallenge';
 import { MOCKED_PLOT } from '@mocks/mockedPlot';
+import { MOCKED_WATERHOLE } from '@mocks/mockedWaterhole';
 import { MOCKED_LAW, MOCKED_RELEASED_WORLD, MOCKED_WORLD } from '@mocks/mockedWorld';
 
 import { UxException } from '../../../base/errors/uxException';
 import { ServiceMediator } from '../../../controller/serviceMediator';
+import { CallModel } from '../../challenge/call/callModel';
+import { CallRepository } from '../../challenge/call/callRepository';
+import { ChallengeModel } from '../../challenge/challenge/challengeModel';
+import { ChallengeRepository } from '../../challenge/challenge/challengeRepository';
+import { EdgeModel } from '../../challenge/challenge/edgeModel';
 import { PlotModel } from '../../plot/plot/plotModel';
 import { PlotRepository } from '../../plot/plot/plotRepository';
+import { WaterholeModel } from '../../waterhole/waterhole/waterholeModel';
+import { WaterholeRepository } from '../../waterhole/waterhole/waterholeRepository';
 import { LawModel } from '../law/lawModel';
 import { LawRepository } from '../law/lawRepository';
 import { PlainWorldModel } from '../world/plainWorldModel';
@@ -13,11 +22,17 @@ import { WorldRepository } from '../world/worldRepository';
 jest.mock('../world/worldRepository');
 jest.mock('../law/lawRepository');
 jest.mock('../../plot/plot/plotRepository');
+jest.mock('../../challenge/challenge/challengeRepository');
+jest.mock('../../waterhole/waterhole/waterholeRepository');
+jest.mock('../../challenge/call/callRepository');
 
 describe('WorldService', () => {
   const mockedWorldRepository = new WorldRepository();
   const mockedLawRepository = new LawRepository();
   const mockedPlotRepository = new PlotRepository();
+  const mockedChallengeRepository = new ChallengeRepository();
+  const mockedWaterholeRepository = new WaterholeRepository();
+  const mockedCallRepository = new CallRepository();
 
   const world = new PlainWorldModel(MOCKED_WORLD);
   const plot = new PlotModel(MOCKED_PLOT);
@@ -37,6 +52,21 @@ describe('WorldService', () => {
   Object.defineProperty(mediator.plotService, '_plotRepository', {
     writable: true,
     value: mockedPlotRepository,
+  });
+
+  Object.defineProperty(mediator.challengeService, '_challengeRepository', {
+    writable: true,
+    value: mockedChallengeRepository,
+  });
+
+  Object.defineProperty(mediator.waterholeService, '_waterholeRepository', {
+    writable: true,
+    value: mockedWaterholeRepository,
+  });
+
+  Object.defineProperty(mediator.challengeService, '_callRepository', {
+    writable: true,
+    value: mockedCallRepository,
   });
 
   describe('world', () => {
@@ -187,6 +217,37 @@ describe('WorldService', () => {
         expect(mockedPlotRepository.replace).toHaveBeenCalledWith(deactivatedPlot);
       });
     });
+
+    describe('WHEN "getWorldsInfo" is called', () => {
+      it('MUST return list of worlds for particular plot', async () => {
+        const law = new LawModel(MOCKED_LAW);
+        const edge = new EdgeModel(MOCKED_EDGE);
+        const challenge = new ChallengeModel(MOCKED_CHALLENGE);
+        const waterhole = new WaterholeModel(MOCKED_WATERHOLE);
+        const call = new CallModel(MOCKED_CALL);
+
+        (mockedWorldRepository.list as jest.Mock).mockReturnValue([world]);
+        (mockedLawRepository.list as jest.Mock).mockReturnValue([law]);
+        (mockedChallengeRepository.get as jest.Mock).mockResolvedValue(edge);
+        (mockedChallengeRepository.list as jest.Mock).mockResolvedValue([challenge]);
+        (mockedWaterholeRepository.list as jest.Mock).mockResolvedValue([waterhole]);
+        (mockedCallRepository.list as jest.Mock).mockResolvedValue([call]);
+
+        expect(await mediator.worldService.getWorldsInfo(plot.id)).toEqual([
+          {
+            world: world.serialize(),
+            laws: [law.serialize()],
+            edge: {
+              info: edge.serialize(),
+              calls: [call.serialize()],
+              challenges: [challenge.serialize()],
+              rewards: [],
+            },
+            waterholes: [waterhole.serialize()],
+          },
+        ]);
+      });
+    });
   });
 
   describe('law', () => {
@@ -198,13 +259,13 @@ describe('WorldService', () => {
       });
 
       it('MUST call "lawRepository.list"', async () => {
-        await mediator.worldService.getLawsList(world.id);
+        await mediator.worldService.getLawsList({ worldId: world.id });
 
-        expect(mockedLawRepository.list).toHaveBeenCalledWith(world.id);
+        expect(mockedLawRepository.list).toHaveBeenCalledWith({ worldId: world.id });
       });
 
       it('MUST returns list of laws for plot', async () => {
-        expect(await mediator.worldService.getLawsList(world.id)).toEqual([law]);
+        expect(await mediator.worldService.getLawsList({ worldId: world.id })).toEqual([law]);
       });
     });
 

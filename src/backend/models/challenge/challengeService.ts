@@ -1,4 +1,4 @@
-import { CallStatus, ChallengeRepositoryProps, ICallModel, IChallengeModel, IRewardModel } from '@backend';
+import { CallStatus, ChallengeRepositoryProps, EdgeInfo, ICallModel, IChallengeModel, IEdgeModel, IRewardModel } from '@backend';
 
 import { UnexpectedErrorCode } from '../../base/errors/errorLog';
 import { IListQuery } from '../../base/interface';
@@ -205,5 +205,52 @@ export class ChallengeService extends AbstractService {
     }
 
     return true;
+  }
+
+  async getEdgeInfo(edgeId: string): Promise<EdgeInfo> {
+    const result: EdgeInfo = {
+      calls: [],
+      challenges: [],
+      info: null,
+      rewards: [],
+    };
+
+    const edge = await this.getChallenge(edgeId);
+
+    if (!edge) {
+      return result;
+    }
+
+    result.info = edge.serialize() as IEdgeModel;
+
+    const challenges = await this.getChallengesList({ challengeIds: result.info.challengeIds });
+    const callIds: string[] = [...edge.callIds];
+    const rewardIds: string[] = [edge.rewardId];
+
+    challenges?.forEach((challenge: ChallengeModel) => {
+      result.challenges.push(challenge.serialize() as IChallengeModel);
+      callIds.push(...challenge.callIds);
+      rewardIds.push(challenge.rewardId);
+    });
+
+    const calls = await this.getCallsList({
+      range: {
+        field: 'id',
+        values: callIds,
+      },
+    });
+
+    result.calls = calls?.map((call: CallModel) => call.serialize() as ICallModel) ?? [];
+
+    const rewards = await this.getRewards({
+      range: {
+        field: 'id',
+        values: rewardIds,
+      },
+    });
+
+    result.rewards = rewards?.map((reward: RewardModel) => reward.serialize() as IRewardModel) ?? [];
+
+    return result;
   }
 }

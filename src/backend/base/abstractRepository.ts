@@ -196,7 +196,7 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
   }
 
   async doListQuery(query: IListQuery): Promise<Model[]> {
-    const { page, limit, order, ...rest } = query;
+    const { page, limit, order, range, ...rest } = query;
     let where = '';
 
     Object.keys(rest).forEach((propertyName: string) => {
@@ -210,6 +210,10 @@ export abstract class AbstractRepository<Model extends AbstractModel> {
 
       where += `${propertyName}='${rest[propertyName]}'`;
     });
+
+    if (range) {
+      where += ` AND ${range.field} IN (${range.values.toString()})`;
+    }
 
     try {
       const result = await this.db.execute(this.generateSelectQuery(where, page, limit, order));

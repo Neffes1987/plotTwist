@@ -1,7 +1,9 @@
-import { ICommonWorld, ILawModel, IWorldListQuery, PlotStatus, WorldStatus } from '@backend';
+import { ICommonWorld, ILawListQuery, ILawModel, IWaterholeModel, IWorldListQuery, PlotStatus, WorldStatus } from '@backend';
 
 import { AbstractService } from '../../base/service/abstractService';
+import { WorldInfo } from '../../controller/interface';
 import { ServiceMediator } from '../../controller/serviceMediator';
+import { WaterholeModel } from '../waterhole/waterhole/waterholeModel';
 
 import { LawModel } from './law/lawModel';
 import { LawRepository } from './law/lawRepository';
@@ -17,6 +19,17 @@ export class WorldService extends AbstractService {
 
     this._worldRepository = new WorldRepository();
     this._lawRepository = new LawRepository();
+  }
+
+  async getWorldsInfo(plotId: string): Promise<WorldInfo[]> {
+    const worlds = await this.getWorldsList({ plotId });
+    const worldDTOList: Promise<WorldInfo>[] = [];
+
+    worlds.forEach((world: WorldModel) => {
+      worldDTOList.push(this.collectWorldData(world));
+    });
+
+    return Promise.all(worldDTOList);
   }
 
   async getWorldsList(props: IWorldListQuery): Promise<WorldModel[]> {
@@ -79,8 +92,8 @@ export class WorldService extends AbstractService {
   }
 
   // laws
-  async getLawsList(worldId: string): Promise<LawModel[]> {
-    return this._lawRepository.list(worldId);
+  async getLawsList(props: ILawListQuery): Promise<LawModel[]> {
+    return this._lawRepository.list(props);
   }
 
   async getLaw(lawId: string): Promise<Nullable<LawModel>> {
@@ -104,7 +117,7 @@ export class WorldService extends AbstractService {
       return false;
     }
 
-    const list = await this.getLawsList(law.worldId);
+    const list = await this.getLawsList({ worldId: law.worldId });
 
     if (list.length - 1 < 2) {
       throw this.errorLog.formatWrongFieldsError({
@@ -113,5 +126,20 @@ export class WorldService extends AbstractService {
     }
 
     return this._lawRepository.remove(lawId);
+  }
+
+  private async collectWorldData(world: WorldModel): Promise<WorldInfo> {
+    const [laws, edgeInfo, waterholes] = await Promise.all([
+      this.getLawsList({ worldId: world.id }),
+      this.mediator.challengeService.getEdgeInfo(world.edgeId),
+      this.mediator.waterholeService.getWaterholesList({ worldId: world.id }),
+    ]);
+
+    return {
+      world: world.serialize() as ICommonWorld,
+      laws: laws.map((law: LawModel) => law.serialize() as ILawModel),
+      edge: edgeInfo,
+      waterholes: waterholes.map((waterhole: WaterholeModel) => waterhole.serialize() as IWaterholeModel),
+    };
   }
 }

@@ -1,4 +1,4 @@
-import { ColorType } from '../../UI/interface';
+import { ColorType } from '../../../UI/interface';
 
 export const ICON_SIZE_DPI = 22;
 export const TITLE_GAP_DPI = 4;

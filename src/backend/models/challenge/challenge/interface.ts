@@ -41,7 +41,6 @@ export type HeartCrisisType = 'sacredMarriage' | 'equilibrium' | 'loveThatKills'
 
 export interface IMainEdgeModel extends IEdgeModel {
   edgeImpact: string;
-  challengeIds: string[];
   mainEdgeType?: MainEdgeType;
   shadowEncounterType?: ShadowEncounterType;
   heartCrisis?: HeartCrisisType;

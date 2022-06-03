@@ -11,6 +11,7 @@ export const Divider = (props: DividerProps): ReactElement => {
       style={{
         marginVertical: verticalGap,
         marginHorizontal: horizontalGap,
+        height: 1,
       }}
     />
   );

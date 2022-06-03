@@ -1,5 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CharacterType, IChallengeModel, ICharacterModel } from '@backend';
 
 import { IconButton } from '../../UI/Buttons/IconButton';
 import { Card } from '../../UI/Card/Card';
@@ -14,11 +15,49 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
   const { t } = useTranslation();
   const [isShowWorldFaqPopover, setIsShowWorldFaqPopover] = useState(false);
   const [isShowWorldBody, setIsShowWorldBody] = useState(false);
-  const { worldType, onEditWorld, onOpenWorldProperty, calls, laws, waterholes, characters, edge } = props;
+  const { worldInfo, onEditWorld, onOpenWorldProperty, characters } = props;
+  const { edge, world, laws, waterholes } = worldInfo;
+  const { worldType } = world;
   const { rewards, challenges } = edge;
 
   if (!worldType) {
     return null;
+  }
+
+  function calculateCharacterQuantity(): Record<CharacterType, number> {
+    const result: Record<CharacterType, number> = {
+      ally: 0,
+      enemy: 0,
+      guard: 0,
+      mentor: 0,
+      messenger: 0,
+      shadow: 0,
+    };
+
+    characters?.forEach((character: ICharacterModel) => {
+      result[character.type] += 1;
+    });
+
+    return result;
+  }
+
+  function collectBrokenLaws(): number {
+    const brokenLaws: string[] = [];
+    const uniqueBrokenLaws: Record<string, boolean> = {};
+
+    if (edge?.info?.brokenLawIds.length) {
+      brokenLaws.push(...edge.info.brokenLawIds);
+    }
+
+    edge.challenges.forEach((challenge: IChallengeModel) => {
+      brokenLaws.push(...challenge.brokenLawIds);
+    });
+
+    brokenLaws.forEach((lawId: string) => {
+      uniqueBrokenLaws[lawId] = true;
+    });
+
+    return Object.keys(uniqueBrokenLaws).length;
   }
 
   function onToggleWorldBody(): void {
@@ -31,7 +70,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
         <IconButton color="neutralGreen" iconType="faq" onPress={(): void => setIsShowWorldFaqPopover(true)} />
 
         <Flex justify="center" onPress={onToggleWorldBody}>
-          <Typography>{t(`worldWidget.${worldType}.caption`)}</Typography>
+          <Typography>{t(`worldWidget.${world}.caption`)}</Typography>
         </Flex>
 
         <IconButton color="neutralGreen" iconType="pencil" onPress={(): void => onEditWorld(worldType)} />
@@ -41,14 +80,8 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
         <Flex backgroundColor="accentWhite" direction="column">
           <Flex>
             <Card title={t('worldWidget.npc.caption')}>
-              {characters.map(({ characterType, quantity }) => (
-                <PropertyRow
-                  key={characterType}
-                  onPress={onOpenWorldProperty}
-                  caption={t(`worldWidget.npc.${characterType}`)}
-                  quantity={`${quantity}`}
-                  id={characterType}
-                />
+              {Object.keys(calculateCharacterQuantity()).map((type: string) => (
+                <PropertyRow key={type} onPress={onOpenWorldProperty} caption={t(`worldWidget.npc.${type}`)} quantity={`${charactersTotal[type]}`} id={type} />
               ))}
             </Card>
 
@@ -56,14 +89,14 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
               <PropertyRow
                 onPress={onOpenWorldProperty}
                 caption={t('worldWidget.worldInfo.brokenLaws')}
-                quantity={`${laws.broken}/${laws.total}`}
+                quantity={`${collectBrokenLaws()}/${laws.length}`}
                 id="brokenLaws"
               />
 
               <PropertyRow
                 onPress={onOpenWorldProperty}
                 caption={t('worldWidget.worldInfo.activeCalls')}
-                quantity={`${calls.active}/${calls.total}`}
+                quantity={`${calls.active}/${edge.calls.length}`}
                 id="activeCalls"
               />
 
@@ -78,28 +111,28 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
 
             <PropertyRow
               onPress={onOpenWorldProperty}
-              quantity={`${rewards.collected}/${rewards.total}`}
+              quantity={`${rewards.collected}/${rewards.length}`}
               caption={t('worldWidget.edgeInfo.rewards')}
               id="rewards"
             />
 
             <PropertyRow
               onPress={onOpenWorldProperty}
-              quantity={`${challenges.active}/${challenges.total}`}
+              quantity={`${challenges.active}/${edge.challenges.length}`}
               caption={t('worldWidget.edgeInfo.activeChallenges')}
               id="activeChallenges"
             />
 
             <PropertyRow
               onPress={onOpenWorldProperty}
-              quantity={`${challenges.passed}/${challenges.total}`}
+              quantity={`${challenges.passed}/${edge.challenges.length}`}
               caption={t('worldWidget.edgeInfo.passedChallenges')}
               id="passedChallenges"
             />
 
             <PropertyRow
               onPress={onOpenWorldProperty}
-              quantity={`${challenges.failed}/${challenges.total}`}
+              quantity={`${challenges.failed}/${edge.challenges.length}`}
               caption={t('worldWidget.edgeInfo.failedChallenges')}
               id="failedChallenges"
             />

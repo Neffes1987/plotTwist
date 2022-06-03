@@ -2,6 +2,10 @@ export interface IListQuery {
   page?: number;
   limit?: number;
   order?: 'ASC' | 'DESC';
+  range?: {
+    field: string;
+    values: string[];
+  };
 }
 
 export type ColumnsConfigType = 'TEXT' | 'ARRAY' | 'BOOLEAN' | 'INTEGER' | 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL';

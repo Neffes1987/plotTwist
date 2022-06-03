@@ -41,6 +41,14 @@ export class ChallengeModel extends AbstractModel {
     return this._weight;
   }
 
+  get callIds(): string[] {
+    return this._callIds;
+  }
+
+  get rewardId(): string {
+    return this._rewardId;
+  }
+
   setIsActive(newValue: boolean): void {
     this._isActive = newValue;
   }

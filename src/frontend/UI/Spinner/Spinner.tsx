@@ -47,7 +47,7 @@ export const Spinner = (): ReactElement => {
   }, []);
 
   return (
-    <Flex direction="column" justify="space-around" gapY={20}>
+    <Flex direction="column" justify="space-around" gapY={40} styles={{ maxHeight: 120 }}>
       <Flex>
         {[11, 23, 21].map((size: number, index: number) => (
           <View

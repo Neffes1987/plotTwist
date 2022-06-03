@@ -1,13 +1,4 @@
-import {
-  ICommonWorld,
-  IHiddenCaveWorldModel,
-  IHolidayWorldModel,
-  IPlainWorldWorld,
-  IPrivateWorld,
-  IReturnWithPotionWorldModel,
-  IWorldListQuery,
-  WorldType,
-} from '@backend';
+import { ICommonWorld, IHiddenCaveWorldModel, IHolidayWorldModel, IPlainWorld, IPrivateWorld, IReturnWithPotionWorldModel, IWorldListQuery } from '@backend';
 
 import { AbstractRepository } from '../../../base/abstractRepository';
 import { UxException } from '../../../base/errors/uxException';
@@ -15,6 +6,7 @@ import { ColumnsConfigType } from '../../../base/interface';
 
 import { HiddenCaveWorldModel } from './hiddenCaveWorldModel';
 import { HolidayWorldModel } from './holidayWorldModel';
+import { WorldType } from './interface';
 import { PlainWorldModel } from './plainWorldModel';
 import { PrivateWorldModel } from './privateWorldModel';
 import { ReturnWithPotionWorldModel } from './returnWithPotionModel';
@@ -83,7 +75,7 @@ export class WorldRepository extends AbstractRepository<WorldModel> {
   generateModel(data: ICommonWorld): WorldModel {
     switch (data.worldType) {
       case 'plainWorld':
-        return new PlainWorldModel(data as IPlainWorldWorld);
+        return new PlainWorldModel(data as IPlainWorld);
       case 'privateWorld':
         return new PrivateWorldModel(data as IPrivateWorld);
       case 'hiddenCave':

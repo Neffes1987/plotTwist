@@ -15,6 +15,12 @@ export class PlotService extends AbstractService {
     this._plotRepository = new PlotRepository();
   }
 
+  async getPlotDTO(plotId: string): Promise<IPlotModel> {
+    const plot = await this.getPlot(plotId);
+
+    return plot.serialize() as IPlotModel;
+  }
+
   async getPlotsList(page: number, limit: number): Promise<PlotModel[]> {
     return this._plotRepository.list(page, limit);
   }

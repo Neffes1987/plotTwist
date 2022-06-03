@@ -16,7 +16,7 @@ export interface IHolidayWorldModel extends ICommonWorld {
   chase?: ChaseType;
 }
 
-export interface IPlainWorldWorld extends ICommonWorld {
+export interface IPlainWorld extends ICommonWorld {
   introduction: string;
   charactersProblems: string;
   worldProblems: string;

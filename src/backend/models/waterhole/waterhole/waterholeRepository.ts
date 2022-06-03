@@ -10,10 +10,8 @@ export class WaterholeRepository extends AbstractRepository<WaterholeModel> {
     super('waterhole');
   }
 
-  async list(worldId: string): Promise<WaterholeModel[]> {
-    return super.getList<IWaterholeListQuery>({
-      worldId,
-    });
+  async list(props: IWaterholeListQuery): Promise<WaterholeModel[]> {
+    return super.getList<IWaterholeListQuery>(props);
   }
 
   generateModel(data: IWaterholeModel): WaterholeModel {

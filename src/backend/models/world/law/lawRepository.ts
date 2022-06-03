@@ -14,10 +14,8 @@ export class LawRepository extends AbstractRepository<LawModel> {
     return new LawModel(data);
   }
 
-  list(worldId: string): Promise<LawModel[]> {
-    return super.getList<ILawListQuery>({
-      worldId,
-    });
+  list(props: ILawListQuery): Promise<LawModel[]> {
+    return super.getList<ILawListQuery>(props);
   }
 
   getDbTableColumns(): Record<string, ColumnsConfigType> {
