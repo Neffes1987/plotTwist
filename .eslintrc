@@ -454,7 +454,6 @@
     "wrap-iife": ["error", "any", { "functionPrototypeMethods": true }],
     "yield-star-spacing": ["error", "both"],
     "yoda": ["error", "never"],
-    "arrow-parens": ["error", "always"],
     "for-direction": "error",
     "getter-return": "error",
     "no-dupe-else-if": "error",

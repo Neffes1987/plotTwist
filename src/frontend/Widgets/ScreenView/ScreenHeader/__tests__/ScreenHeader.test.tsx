@@ -37,13 +37,13 @@ describe('WHEN "ScreenHeader" is mounted', () => {
 
   describe('AND "onSettingClick" callback is provided', () => {
     it('MUST render subtitle', () => {
-      const component = render(<ScreenHeader onSettingClick={onSettingsMock} title="test-title" />);
+      const component = render(<ScreenHeader onRightIconClick={onSettingsMock} title="test-title" rightIconType="gear" />);
 
       expect(component.getByTestId('gear')).toBeDefined();
     });
 
     it('AND user click on "settings" icon, MUST call provided callback', () => {
-      const component = render(<ScreenHeader onSettingClick={onSettingsMock} title="test-title" />);
+      const component = render(<ScreenHeader onRightIconClick={onSettingsMock} title="test-title" rightIconType="gear" />);
 
       fireEvent.press(component.getByTestId('gear'));
 

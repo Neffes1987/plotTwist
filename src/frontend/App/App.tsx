@@ -20,6 +20,12 @@ const App = (): ReactElement => {
           <Stack.Screen name={ROUTES.loading} component={components.Loading} options={DEFAULT_ROUTE_OPTIONS} />
 
           <Stack.Screen name={ROUTES.home} component={components.Home} options={DEFAULT_ROUTE_OPTIONS} />
+
+          <Stack.Screen name={ROUTES.plotList} component={components.PlotList} options={DEFAULT_ROUTE_OPTIONS} />
+
+          <Stack.Screen name={ROUTES.worldConstructor} component={components.WorldEditor} options={DEFAULT_ROUTE_OPTIONS} />
+
+          <Stack.Screen name={ROUTES.oops} component={components.OopsErrorScreen} options={DEFAULT_ROUTE_OPTIONS} />
         </Stack.Navigator>
       </NavigationContainer>
     </NotifierWrapper>

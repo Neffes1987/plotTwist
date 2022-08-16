@@ -16,7 +16,7 @@ export const ListItem = (props: ListItemProps): ReactElement => {
   return (
     <Card color="accentWhite" bordered={!noBorder}>
       <Flex onPress={onListItemPressedHandler}>
-        <Flex>
+        <Flex fullWidth>
           <Typography color="accentDarkBlue" mode="caption-bold">
             {caption}
           </Typography>

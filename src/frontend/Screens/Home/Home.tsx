@@ -1,10 +1,9 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { plotController, PlotInfoResponse, WorldInfo } from '@backend';
-import { useNavigation } from '@react-navigation/native';
+import { WorldDTO } from 'backend';
+import { observer } from 'mobx-react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-import notifier from '../../App/notify/notify';
-import store from '../../store/Store';
 import { UIButton } from '../../UI/Buttons/UIButton';
 import { Flex } from '../../UI/Flex/Flex';
 import { Typography } from '../../UI/Typography/Typography';
@@ -12,61 +11,75 @@ import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 import { WorldWidget } from '../../Widgets/WorldWidget/WorldWidget';
 import { ROUTES } from '../routes';
 
-export const Home = (): ReactElement => {
-  const { t } = useTranslation();
-  const { navigate } = useNavigation<Navigation>();
-  const [currentPlotInfo, setCurrentPlotInfo] = useState<Nullable<PlotInfoResponse>>();
-  const { plot, worlds, characters } = currentPlotInfo ?? {};
+import homeData from './HomeStore';
 
-  async function getPlot(selectedPlot: string): Promise<void> {
-    const plotInfo = await plotController.getPlot(selectedPlot);
+export const Home = observer(
+  (): ReactElement => {
+    const { t } = useTranslation();
+    const { navigate } = useNavigation<Navigation>();
+    const params = useRoute();
+    const { plotName, getNextStep, worlds } = homeData;
+    const nextStepWorld = getNextStep();
 
-    setCurrentPlotInfo(plotInfo);
-  }
+    useEffect(() => {
+      homeData.getPlot().catch(() => {
+        navigate(ROUTES.oops, { state: { error: { key: 'pages.home.errors.cantGetWorlds' } } });
+      });
+    }, [params]);
 
-  useEffect(() => {
-    try {
-      const selectedPlot = store.settings.currentPlotId;
+    useEffect(() => {
+      if (homeData.error) {
+        navigate(ROUTES.oops, { state: { error: homeData.error } });
 
-      if (!selectedPlot) {
-        navigate(ROUTES.plotList);
+        return;
       }
 
-      getPlot(selectedPlot);
-    } catch (e) {
-      notifier.showMessage(t('errors.oops'), t('pages.home.errors.cantGetWorlds'));
+      if (homeData.isPlotLoaded === false) {
+        onNavigateToListHandler();
+      }
+    }, [homeData.isPlotLoaded]);
+
+    function onCreateNewWorldHandler(): void {
+      navigate(ROUTES.worldConstructor, { state: { caption: homeData.getNextStep(), id: null } });
     }
-  }, []);
 
-  function onCreateNewWorldHandler(): void {
-    navigate(ROUTES.worldConstructor);
-  }
+    function onEditWorldHandler(worldType: WorldDTO['type'], id: string): void {
+      navigate(ROUTES.worldConstructor, { state: { caption: worldType, id } });
+    }
 
-  return (
-    <ScreenView
-      header={{
-        title: t('pages.home.caption', { name: plot?.name }),
-      }}
-    >
-      <Flex>
-        {!currentPlotInfo?.worlds.length && (
-          <Flex>
-            <Typography>{t('pages.home.greetingMessage')}</Typography>
+    function onNavigateToListHandler(): void {
+      navigate(ROUTES.plotList);
+    }
 
-            <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.buttons.createFirstWorld')}</UIButton>
-          </Flex>
-        )}
+    return (
+      <ScreenView
+        header={{
+          title: t('pages.home.caption', { name: plotName }),
+          onBackClick: onNavigateToListHandler,
+        }}
+      >
+        <Flex direction="column" flex={1}>
+          {nextStepWorld === 'plainWorld' ? (
+            <Flex direction="column" grow={1} align="center" justify="center">
+              <Typography align="center">{t('pages.home.messages.greetingMessage')}</Typography>
 
-        {!!worlds?.length && (
-          <Flex>
-            {worlds.map((world: WorldInfo) => (
-              <WorldWidget key={world.world.id} worldInfo={world} onEditWorld={console.error} onOpenWorldProperty={console.error} characters={characters} />
-            ))}
+              <Flex gapY={8} />
 
-            <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.buttons.createFirstWorld')}</UIButton>
-          </Flex>
-        )}
-      </Flex>
-    </ScreenView>
-  );
-};
+              <UIButton type="primary" onPress={onCreateNewWorldHandler}>
+                {t('pages.home.actions.createFirstWorld')}
+              </UIButton>
+            </Flex>
+          ) : (
+            <Flex direction="column" fullWidth>
+              {worlds.map(world => (
+                <WorldWidget key={world.type} worldInfo={world} onEditWorld={onEditWorldHandler} onOpenWorldProperty={console.error} />
+              ))}
+
+              {homeData.getNextStep() && <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.actions.createNextWorld')}</UIButton>}
+            </Flex>
+          )}
+        </Flex>
+      </ScreenView>
+    );
+  },
+);

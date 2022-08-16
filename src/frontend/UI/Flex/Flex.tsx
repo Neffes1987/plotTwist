@@ -1,33 +1,76 @@
 import React, { PropsWithChildren, ReactElement } from 'react';
-import { TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Dimensions, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { UI_COLORS } from '../colors';
 import { FlexProps } from '../interface';
 
+import { SHADOWS } from './constants';
+
 export const Flex = (props: PropsWithChildren<FlexProps>): ReactElement => {
-  const { onPress, children, backgroundColor, direction = 'row', justify, grow, shrink, align = 'center', wrap, styles, gapY, gapX, gap } = props;
+  const {
+    testID,
+    fullWidth,
+    onPress,
+    children,
+    backgroundColor,
+    direction = 'row',
+    justify,
+    grow,
+    shrink,
+    align = 'center',
+    wrap,
+    styles,
+    gapY,
+    gapX,
+    gap,
+    width,
+    flex,
+    height,
+    radius,
+    fullHeight,
+    shadowType,
+    marginX,
+    marginY,
+  } = props;
+
+  let shadowConfig = {};
+
+  if (shadowType) {
+    shadowConfig = SHADOWS[shadowType];
+  }
 
   const customStyles = {
     backgroundColor: backgroundColor ? UI_COLORS[backgroundColor] : undefined,
-    // @ts-ignore
-    ...styles,
-    flex: 1,
     flexDirection: direction,
     justifyContent: justify,
     flexGrow: grow,
     flexShrink: shrink,
     alignItems: align,
     flexWrap: wrap,
+    marginHorizontal: marginX,
+    marginVertical: marginY,
+    flex,
+    height: fullHeight ? Dimensions.get('window').height : height,
+    borderRadius: radius,
     paddingVertical: gapY ?? gap,
     paddingHorizontal: gapX ?? gap,
+    width: fullWidth ? '100%' : width,
+    // @ts-ignore
+    ...styles,
+
+    ...shadowConfig,
   };
 
   if (!onPress) {
-    return <View style={customStyles as ViewStyle}>{children}</View>;
+    return (
+      <View testID={testID} style={customStyles as ViewStyle}>
+        {children}
+      </View>
+    );
   }
 
   return (
-    <TouchableOpacity style={customStyles as ViewStyle} onPress={onPress}>
+    <TouchableOpacity testID={testID} style={customStyles as ViewStyle} onPress={onPress}>
       {children}
     </TouchableOpacity>
   );

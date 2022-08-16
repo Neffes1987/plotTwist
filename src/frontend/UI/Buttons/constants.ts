@@ -1,19 +1,7 @@
-import { TextStyle, ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
 
 import { UI_COLORS } from '../colors';
 import { UIButtonPropsType } from '../interface';
-
-export const TEXT_STYLES_CONFIG: Record<UIButtonPropsType, TextStyle> = {
-  primary: {
-    color: UI_COLORS.accentWhite,
-  },
-  round: {
-    color: UI_COLORS.accentDarkBlue,
-  },
-  secondary: {
-    color: UI_COLORS.accentDarkBlue,
-  },
-};
 
 const DEFAULT_BUTTON_STYLES: ViewStyle = {
   paddingVertical: 4,

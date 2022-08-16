@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReactTestInstance } from 'react-test-renderer';
 import { render } from '@testing-library/react-native';
 
 import { UI_COLORS } from '../../colors';
@@ -18,12 +19,12 @@ describe('WHEN "Typography" is mounted', () => {
     ['AND "mode" is equal "label", MUST use "label" set', { mode: 'label' } as TypographyProps, TYPOGRAPHY_STYLES.label],
     [
       'AND "color" is provided, MUST use provided "color" over set',
-      { color: UI_COLORS.primary } as TypographyProps,
+      { color: 'primary' } as TypographyProps,
       { ...TYPOGRAPHY_STYLES.default, color: UI_COLORS.primary },
     ],
   ])('%s', (_, props: TypographyProps, expectation) => {
     const component = render(<Typography {...props}>test</Typography>);
 
-    expect(component.toJSON()?.props.style).toEqual(expectation);
+    expect((component.toJSON()?.children?.[0] as ReactTestInstance).props.style).toEqual(expect.objectContaining(expectation));
   });
 });

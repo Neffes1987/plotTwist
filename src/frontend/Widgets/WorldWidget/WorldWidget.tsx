@@ -1,152 +1,63 @@
 import React, { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CharacterType, IChallengeModel, ICharacterModel } from '@backend';
 
 import { IconButton } from '../../UI/Buttons/IconButton';
-import { Card } from '../../UI/Card/Card';
 import { Drawer } from '../../UI/Drawer/Drawer';
 import { Flex } from '../../UI/Flex/Flex';
 import { Typography } from '../../UI/Typography/Typography';
 
+import { EdgeBlock } from './EdgeBlock/EdgeBlock';
+import { Faq } from './Faq/Faq';
 import { WorldWidgetProps } from './interface';
-import { PropertyRow } from './PropertyRow/PropertyRow';
+import { NPCBlock } from './NPCBlock/NPCBlock';
+import { WorldInfoBlock } from './WorldInfoBlock/WorldInfoBlock';
 
 export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => {
   const { t } = useTranslation();
   const [isShowWorldFaqPopover, setIsShowWorldFaqPopover] = useState(false);
   const [isShowWorldBody, setIsShowWorldBody] = useState(false);
-  const { worldInfo, onEditWorld, onOpenWorldProperty, characters } = props;
-  const { edge, world, laws, waterholes } = worldInfo;
-  const { worldType } = world;
-  const { rewards, challenges } = edge;
+  const { worldInfo, onEditWorld, onOpenWorldProperty } = props;
+  const { type, id } = worldInfo;
 
-  if (!worldType) {
+  if (!type) {
     return null;
-  }
-
-  function calculateCharacterQuantity(): Record<CharacterType, number> {
-    const result: Record<CharacterType, number> = {
-      ally: 0,
-      enemy: 0,
-      guard: 0,
-      mentor: 0,
-      messenger: 0,
-      shadow: 0,
-    };
-
-    characters?.forEach((character: ICharacterModel) => {
-      result[character.type] += 1;
-    });
-
-    return result;
-  }
-
-  function collectBrokenLaws(): number {
-    const brokenLaws: string[] = [];
-    const uniqueBrokenLaws: Record<string, boolean> = {};
-
-    if (edge?.info?.brokenLawIds.length) {
-      brokenLaws.push(...edge.info.brokenLawIds);
-    }
-
-    edge.challenges.forEach((challenge: IChallengeModel) => {
-      brokenLaws.push(...challenge.brokenLawIds);
-    });
-
-    brokenLaws.forEach((lawId: string) => {
-      uniqueBrokenLaws[lawId] = true;
-    });
-
-    return Object.keys(uniqueBrokenLaws).length;
   }
 
   function onToggleWorldBody(): void {
     setIsShowWorldBody((prevState: boolean) => !prevState);
   }
 
+  function onCloseFaqHandler(): void {
+    setIsShowWorldFaqPopover(false);
+  }
+
   return (
-    <Flex direction="column">
+    <Flex direction="column" fullWidth marginY={4} radius={8}>
       <Flex direction="row" justify="space-between" backgroundColor="accentGray" gap={4}>
         <IconButton color="neutralGreen" iconType="faq" onPress={(): void => setIsShowWorldFaqPopover(true)} />
 
-        <Flex justify="center" onPress={onToggleWorldBody}>
-          <Typography>{t(`worldWidget.${world}.caption`)}</Typography>
+        <Flex justify="center" onPress={onToggleWorldBody} flex={1}>
+          <Typography>{t(`widget.worldWidgetInfo.labels.captions.${type}`)}</Typography>
         </Flex>
 
-        <IconButton color="neutralGreen" iconType="pencil" onPress={(): void => onEditWorld(worldType)} />
+        <IconButton color="neutralGreen" iconType="pencil" onPress={(): void => onEditWorld(type, id)} />
       </Flex>
 
       {isShowWorldBody && (
-        <Flex backgroundColor="accentWhite" direction="column">
-          <Flex>
-            <Card title={t('worldWidget.npc.caption')}>
-              {Object.keys(calculateCharacterQuantity()).map((type: string) => (
-                <PropertyRow key={type} onPress={onOpenWorldProperty} caption={t(`worldWidget.npc.${type}`)} quantity={`${charactersTotal[type]}`} id={type} />
-              ))}
-            </Card>
+        <Flex backgroundColor="accentWhite" direction="column" align="flex-start">
+          <Flex align="flex-start" marginY={4}>
+            <NPCBlock onOpenWorldProperty={onOpenWorldProperty} />
 
-            <Card title={t('worldWidget.worldInfo.caption')}>
-              <PropertyRow
-                onPress={onOpenWorldProperty}
-                caption={t('worldWidget.worldInfo.brokenLaws')}
-                quantity={`${collectBrokenLaws()}/${laws.length}`}
-                id="brokenLaws"
-              />
-
-              <PropertyRow
-                onPress={onOpenWorldProperty}
-                caption={t('worldWidget.worldInfo.activeCalls')}
-                quantity={`${calls.active}/${edge.calls.length}`}
-                id="activeCalls"
-              />
-
-              <PropertyRow onPress={onOpenWorldProperty} caption={t('worldWidget.worldInfo.waterholes')} quantity={`${waterholes}`} id="waterholes" />
-
-              <PropertyRow onPress={onOpenWorldProperty} caption={t('worldWidget.worldInfo.aboutWorld')} id="aboutWorld" />
-            </Card>
+            <WorldInfoBlock onOpenWorldProperty={onOpenWorldProperty} />
           </Flex>
 
-          <Card title={t('worldWidget.edgeInfo.caption')}>
-            <PropertyRow onPress={onOpenWorldProperty} caption={t('worldWidget.edgeInfo.aboutEdge')} id="aboutEdge" />
-
-            <PropertyRow
-              onPress={onOpenWorldProperty}
-              quantity={`${rewards.collected}/${rewards.length}`}
-              caption={t('worldWidget.edgeInfo.rewards')}
-              id="rewards"
-            />
-
-            <PropertyRow
-              onPress={onOpenWorldProperty}
-              quantity={`${challenges.active}/${edge.challenges.length}`}
-              caption={t('worldWidget.edgeInfo.activeChallenges')}
-              id="activeChallenges"
-            />
-
-            <PropertyRow
-              onPress={onOpenWorldProperty}
-              quantity={`${challenges.passed}/${edge.challenges.length}`}
-              caption={t('worldWidget.edgeInfo.passedChallenges')}
-              id="passedChallenges"
-            />
-
-            <PropertyRow
-              onPress={onOpenWorldProperty}
-              quantity={`${challenges.failed}/${edge.challenges.length}`}
-              caption={t('worldWidget.edgeInfo.failedChallenges')}
-              id="failedChallenges"
-            />
-          </Card>
+          <EdgeBlock onOpenWorldProperty={onOpenWorldProperty} />
         </Flex>
       )}
 
-      <Drawer
-        caption={t(`worldWidget.${worldType}.faq.caption`)}
-        isOpen={isShowWorldFaqPopover}
-        onClose={(): void => {
-          setIsShowWorldFaqPopover(false);
-        }}
-      />
+      <Drawer caption={t(`widget.worldWidgetInfo.labels.faq.${type}`)} isOpen={isShowWorldFaqPopover} onClose={onCloseFaqHandler}>
+        <Faq worldInfo={worldInfo} />
+      </Drawer>
     </Flex>
   );
 };

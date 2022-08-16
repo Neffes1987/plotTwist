@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect } from 'react';
-import { Dimensions } from 'react-native';
+import { observer } from 'mobx-react';
 import { useNavigation } from '@react-navigation/native';
 
 import { Flex } from '../../UI/Flex/Flex';
@@ -10,26 +10,28 @@ import { ROUTES } from '../routes';
 
 import { LOGO_CONTAINER_STYLES, LOGO_SIZE } from './constants';
 
-export const Loading = (): ReactElement => {
-  const { navigate } = useNavigation<Navigation>();
+export const Loading = observer(
+  (): ReactElement => {
+    const { navigate } = useNavigation<Navigation>();
 
-  useEffect(() => {
-    navigate(ROUTES.home);
-  }, []);
+    useEffect(() => {
+      navigate(ROUTES.home);
+    }, []);
 
-  return (
-    <ScreenView>
-      <Flex direction="column" styles={{ height: Dimensions.get('window').height }} backgroundColor="primary">
-        <Flex grow={1} />
+    return (
+      <ScreenView bgColor="primary">
+        <Flex fullHeight direction="column" align="center" justify="center" fullWidth>
+          <Flex>
+            <Flex styles={LOGO_CONTAINER_STYLES} backgroundColor="accentWhite" justify="center" align="center">
+              <Icon type="logo" size={LOGO_SIZE} />
+            </Flex>
+          </Flex>
 
-        <Flex backgroundColor="accentWhite" justify="center" align="center" styles={LOGO_CONTAINER_STYLES}>
-          <Icon type="logo" size={LOGO_SIZE} />
+          <Flex>
+            <Spinner />
+          </Flex>
         </Flex>
-
-        <Flex grow={1}>
-          <Spinner />
-        </Flex>
-      </Flex>
-    </ScreenView>
-  );
-};
+      </ScreenView>
+    );
+  },
+);

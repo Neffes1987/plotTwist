@@ -1,0 +1,4 @@
+export const STEP_BUBBLE_SIZE = 30;
+export const STEP_BUBBLE_MARGIN = 10;
+
+export const FULL_STEP_BUBBLE_SIZE = STEP_BUBBLE_SIZE + 2 * STEP_BUBBLE_MARGIN;

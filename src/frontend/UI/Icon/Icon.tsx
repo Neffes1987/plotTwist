@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Image } from 'react-native';
 
+import Attention from './assets/attention.svg';
 import Chevron from './assets/chevron.svg';
 import Close from './assets/close.svg';
 import Faq from './assets/faq.svg';
@@ -20,6 +21,7 @@ export const Icon = (props: IconProps): Nullable<ReactElement> => {
     testID: type,
     name: type,
     fill: color ? UI_COLORS[color] : undefined,
+    color: color ? UI_COLORS[color] : undefined,
     style: {
       transform: [
         {
@@ -48,6 +50,8 @@ export const Icon = (props: IconProps): Nullable<ReactElement> => {
       return <Search {...iconProps} />;
     case 'tick':
       return <Tick {...iconProps} />;
+    case 'attention':
+      return <Attention {...iconProps} />;
     case 'logo':
       return <Image testID={type} source={require('./assets/logo.png')} style={{ width: size, height: size }} />;
     default:

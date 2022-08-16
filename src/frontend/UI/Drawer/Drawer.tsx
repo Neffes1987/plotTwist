@@ -31,7 +31,9 @@ export const Drawer = (props: PropsWithChildren<DrawerProps>): ReactElement => {
 
         <Divider verticalGap={DRAWER_CAPTION_MARGIN} />
 
-        {children}
+        <Flex marginX="1%" width="98%" direction="column">
+          {children}
+        </Flex>
       </Flex>
     </Modal>
   );

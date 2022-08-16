@@ -19,9 +19,16 @@ const BorderedPropertyGroupStyle: ViewStyle = {
   borderWidth: 1,
 };
 
-export const Card = ({ children, title, color, bordered = true }: PropsWithChildren<CardProps>): ReactElement => {
+export const Card = ({ children, title, color, bordered = true, ...rest }: PropsWithChildren<CardProps>): ReactElement => {
   return (
-    <Flex direction="column" styles={bordered ? BorderedPropertyGroupStyle : DefaultPropertyGroupStyle} gap={4} backgroundColor={color}>
+    <Flex
+      {...rest}
+      align="flex-start"
+      direction="column"
+      styles={bordered ? BorderedPropertyGroupStyle : DefaultPropertyGroupStyle}
+      gap={4}
+      backgroundColor={color}
+    >
       {title && (
         <Flex gapY={4}>
           <Typography mode="caption-bold" color="accentGray">

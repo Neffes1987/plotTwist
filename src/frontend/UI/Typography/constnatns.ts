@@ -1,5 +1,6 @@
 import { TextStyle } from 'react-native';
 
+import { UI_COLORS } from '../colors';
 import { TypographyMode } from '../interface';
 
 const FONT_MEDIUM_SIZE = '500';
@@ -46,9 +47,14 @@ export const TYPOGRAPHY_STYLES: Record<TypographyMode, TextStyle> = {
     fontWeight: FONT_MEDIUM_SIZE,
     fontFamily: FONTS.medium,
   },
+  error: {
+    fontSize: 12,
+    fontWeight: FONT_MEDIUM_SIZE,
+    fontFamily: FONTS.medium,
+    color: UI_COLORS.neutralRed,
+  },
   default: {
     fontSize: 14,
     fontWeight: 'normal',
-    fontFamily: FONTS.regular,
   },
 };

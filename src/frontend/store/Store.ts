@@ -33,6 +33,6 @@ export class Store {
   }
 }
 
-const store = new Store();
+const asyncLocalStorage = new Store();
 
-export default store;
+export default asyncLocalStorage;
