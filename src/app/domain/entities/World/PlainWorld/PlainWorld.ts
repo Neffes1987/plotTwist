@@ -1,5 +1,7 @@
 import { PlainWorldDTO } from 'backend';
 
+import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { EntityValidator } from '../../AbstractEntity/EntityValidator';
 import { Problem } from '../../Problem/Problem';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
@@ -39,5 +41,13 @@ export class PlainWorld extends AbstractWorld {
     super.unSerializeToEntity(object);
     this.setIntroduction(object.introduction);
     this.setProblems(object.problems);
+  }
+
+  validate(): void {
+    super.validate();
+
+    const validator = new EntityValidator<Partial<PlainWorldDTO>>(this.serialize());
+
+    validator.checkFieldRange([{ propertyName: 'introduction', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH }]);
   }
 }

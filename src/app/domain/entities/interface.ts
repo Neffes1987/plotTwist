@@ -1,6 +1,6 @@
 import { PlotStatus } from './Plot/interface';
 import { WorldStatus, WorldType } from './World/AbstractWorld/interface';
-import { ChaseType, HolidaySubType, HolidayType } from './World/HolydayWorld/interface';
+import { ChaseType, HolidayGetSwordType, HolidayType } from './World/HolydayWorld/interface';
 import { FinalType, PotionType } from './World/ReturnWithPotionWorld/interface';
 
 export interface CommonDTO {
@@ -45,7 +45,7 @@ export interface HiddenCaveWorldDTO extends WorldDTO {
 
 export interface HolidayWorldDTO extends WorldDTO {
   holidayType: HolidayType;
-  holidaySubType?: HolidaySubType;
+  holidayGetSwordType?: HolidayGetSwordType;
   chase?: ChaseType;
   shadowRevenge: string;
   type: 'holiday';

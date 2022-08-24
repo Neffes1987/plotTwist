@@ -18,7 +18,7 @@ import { UIInput } from '../../UI/UIInput/UIInput';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 import { ROUTES } from '../routes';
 
-import { DEFAULT_FORM_VALUES } from './constants';
+import { DEFAULT_FORM_VALUES, plotListTranslations } from './constants';
 import { plotListStore } from './PlotListStore';
 
 export const PlotList = observer(
@@ -59,7 +59,7 @@ export const PlotList = observer(
       if (plotId) {
         closeCreateNewPlotPopover();
         resetForm();
-        notifier.showMessage(t('messages.success'), t('pages.plotList.messages.wasCreated'), false);
+        notifier.showMessage(t('messages.success'), t(plotListTranslations.messages.wasCreated), false);
       }
     }
 
@@ -105,18 +105,18 @@ export const PlotList = observer(
           ))}
         </Flex>
 
-        <Flex gapY={40}>{!plotListStore.plots.length && <Typography color="accentDarkBlue">{t('pages.plotList.messages.emptyList')}</Typography>}</Flex>
+        <Flex gapY={40}>{!plotListStore.plots.length && <Typography color="accentDarkBlue">{t(plotListTranslations.messages.emptyList)}</Typography>}</Flex>
 
         <IconButton onPress={openCreateNewPlotPopover} iconType="plus" size={40} color="primary" />
 
-        <Drawer caption={t('pages.plotList.actions.addNew')} isOpen={isEditPlotDrawerOpen} onClose={closeCreateNewPlotPopover}>
+        <Drawer caption={t(plotListTranslations.actions.addNew)} isOpen={isEditPlotDrawerOpen} onClose={closeCreateNewPlotPopover}>
           <UIInput
             maxValueLength={SHORT_VALUE_MAX_LENGTH}
             error={formErrors.name}
             name="name"
             value={form.name}
             onChange={setFormFieldData}
-            label={t('pages.plotList.labels.name')}
+            label={t(plotListTranslations.labels.name)}
           />
 
           <UIInput
@@ -126,30 +126,30 @@ export const PlotList = observer(
             name="description"
             value={form.description}
             onChange={setFormFieldData}
-            label={t('pages.plotList.labels.description')}
+            label={t(plotListTranslations.labels.description)}
           />
 
           {!form.id ? (
             <UIButton onPress={createPlot} type="primary">
-              {t('pages.plotList.actions.addNew')}
+              {t(plotListTranslations.actions.addNew)}
             </UIButton>
           ) : (
             <Flex direction="column">
               <Flex>
                 <UIButton onPress={updatePlot} type="primary" fullWidth>
-                  {t('pages.plotList.actions.update')}
+                  {t(plotListTranslations.actions.update)}
                 </UIButton>
               </Flex>
 
               <Flex gapY={12}>
                 <UIButton onPress={deletePlot} type="secondary" fullWidth>
-                  {t('pages.plotList.actions.delete')}
+                  {t(plotListTranslations.actions.delete)}
                 </UIButton>
               </Flex>
 
               <Flex>
                 <UIButton onPress={onNavigateToPlotHandler} type="secondary" fullWidth>
-                  {t('pages.plotList.actions.open')}
+                  {t(plotListTranslations.actions.open)}
                 </UIButton>
               </Flex>
             </Flex>

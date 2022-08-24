@@ -1,8 +1,8 @@
-import { PlotDTO } from '../../domain/entities/interface';
+import { IPlotController, PlotDTO } from 'backend';
+
 import { Plot } from '../../domain/entities/Plot/Plot';
 import { PlotConstructor } from '../../domain/rulles/Constructors/PlotConstructor/PlotConstructor';
 import { AbstractController } from '../AbstractController/AbstractController';
-import { IPlotController } from '../interface';
 
 export class PlotController extends AbstractController<PlotDTO, Omit<PlotDTO, 'worlds'>> implements IPlotController {
   constructor() {
@@ -13,6 +13,7 @@ export class PlotController extends AbstractController<PlotDTO, Omit<PlotDTO, 'w
     const plot = new Plot();
 
     plot.unSerializeToEntity(dto);
+    plot.validate();
 
     return plot;
   }

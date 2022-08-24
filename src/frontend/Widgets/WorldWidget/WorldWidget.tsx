@@ -11,6 +11,7 @@ import { Faq } from './Faq/Faq';
 import { WorldWidgetProps } from './interface';
 import { NPCBlock } from './NPCBlock/NPCBlock';
 import { WorldInfoBlock } from './WorldInfoBlock/WorldInfoBlock';
+import { worldWidgetInfoTranslations } from './worldWidgetTranslations';
 
 export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => {
   const { t } = useTranslation();
@@ -37,7 +38,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
         <IconButton color="neutralGreen" iconType="faq" onPress={(): void => setIsShowWorldFaqPopover(true)} />
 
         <Flex justify="center" onPress={onToggleWorldBody} flex={1}>
-          <Typography>{t(`widget.worldWidgetInfo.labels.captions.${type}`)}</Typography>
+          <Typography>{t(worldWidgetInfoTranslations.lists.captions[type])}</Typography>
         </Flex>
 
         <IconButton color="neutralGreen" iconType="pencil" onPress={(): void => onEditWorld(type, id)} />
@@ -55,7 +56,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
         </Flex>
       )}
 
-      <Drawer caption={t(`widget.worldWidgetInfo.labels.faq.${type}`)} isOpen={isShowWorldFaqPopover} onClose={onCloseFaqHandler}>
+      <Drawer caption={t(worldWidgetInfoTranslations.lists.faq[type])} isOpen={isShowWorldFaqPopover} onClose={onCloseFaqHandler}>
         <Faq worldInfo={worldInfo} />
       </Drawer>
     </Flex>

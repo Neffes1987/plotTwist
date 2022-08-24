@@ -23,12 +23,3 @@ jest.mock('react-native-notifier', () => ({
   Notifier: jest.fn(),
   NotifierComponents: jest.fn(),
 }));
-
-export const mockExecuteSql = jest.fn();
-
-jest.mock('react-native-sqlite-storage', () => ({
-  enablePromise: jest.fn(),
-  openDatabase: () => ({
-    executeSql: mockExecuteSql,
-  }),
-}));

@@ -12,6 +12,7 @@ import { UIStepper } from '../../UI/Stepper/Stepper';
 import { Typography } from '../../UI/Typography/Typography';
 import { UIInput } from '../../UI/UIInput/UIInput';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
+import { worldWidgetInfoTranslations } from '../../Widgets/WorldWidget/worldWidgetTranslations';
 import { RouteParams } from '../interface';
 import { ROUTES } from '../routes';
 
@@ -78,10 +79,12 @@ export const WorldEditor = observer(
       return null;
     }
 
+    console.log(worldType, worldWidgetInfoTranslations.lists.captions);
+
     return (
       <ScreenView
         header={{
-          title: t(`widget.worldWidgetInfo.labels.captions.${worldType}`),
+          title: t(worldWidgetInfoTranslations.lists.captions[worldType]),
           onBackClick: onNavigateToHomeHandler,
         }}
       >

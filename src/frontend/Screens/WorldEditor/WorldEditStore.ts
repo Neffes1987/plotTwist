@@ -1,10 +1,10 @@
 import { IWorldController, worldController, WorldDTO } from 'backend';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { WORLDS_ADDITIONAL_FIELDS } from '../../../constants';
 import asyncLocalStorage, { Store } from '../../store/Store';
 
 import { StepperFieldField } from './interface';
+import { WORLDS_ADDITIONAL_FIELDS } from './worldTranslations';
 
 export class WorldEditStore {
   error: Nullable<Error> = null;

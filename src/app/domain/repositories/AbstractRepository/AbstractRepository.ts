@@ -39,7 +39,9 @@ export abstract class AbstractRepository implements IRepository {
     return this.dataProvider.update(this.serializeEntity(entity));
   }
 
-  protected abstract serializeEntity(entity: AbstractEntity): RawDataType;
+  private serializeEntity(entity: AbstractEntity): RawDataType {
+    return (entity.serialize() as unknown) as RawDataType;
+  }
 
   protected abstract unSerializeToEntity(object: RawDataType): AbstractEntity;
 }

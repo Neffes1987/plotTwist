@@ -1,5 +1,9 @@
 import { CommonDTO } from 'backend';
 
+import { MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../constants';
+
+import { EntityValidator } from './EntityValidator';
+
 export abstract class AbstractEntity {
   private _id = '';
   private _name = '';
@@ -41,5 +45,14 @@ export abstract class AbstractEntity {
     this.setId(rawData.id ?? '');
     this.setName(rawData.name ?? '');
     this.setDescription(rawData.description ?? '');
+  }
+
+  validate(): void {
+    const validator = new EntityValidator(this.serialize());
+
+    validator.checkFieldRange([
+      { propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: SHORT_VALUE_MAX_LENGTH },
+      { propertyName: 'description', min: null, max: MIDDLE_VALUE_MAX_LENGTH },
+    ]);
   }
 }

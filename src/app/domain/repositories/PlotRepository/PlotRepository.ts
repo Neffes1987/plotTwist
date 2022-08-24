@@ -1,4 +1,5 @@
-import { PlotStatus } from '../../entities/Plot/interface';
+import { PlotDTO } from 'backend';
+
 import { Plot } from '../../entities/Plot/Plot';
 import { AbstractRepository } from '../AbstractRepository/AbstractRepository';
 import { IDataProvider, RawDataType } from '../AbstractRepository/interface';
@@ -8,22 +9,10 @@ export class PlotRepository extends AbstractRepository {
     super(dataProvider);
   }
 
-  protected serializeEntity(entity: Plot): RawDataType {
-    return {
-      name: entity.name,
-      id: entity.id,
-      description: entity.description,
-      status: entity.status,
-    };
-  }
-
   protected unSerializeToEntity(object: RawDataType): Plot {
     const plot = new Plot();
 
-    plot.setId(object.id as string);
-    plot.setName(object.name as string);
-    plot.setDescription(object.description as string);
-    plot.setStatus(object.status as PlotStatus);
+    plot.unSerializeToEntity((object as unknown) as PlotDTO);
 
     return plot;
   }

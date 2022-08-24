@@ -16,7 +16,7 @@ export class DBProvider extends AbstractDataAccessProvider {
   }
 
   get(entityId: string): Promise<RawDataType> {
-    return Promise.resolve({});
+    return Promise.resolve({} as RawDataType);
   }
 
   update(entity: RawDataType): Promise<boolean> {

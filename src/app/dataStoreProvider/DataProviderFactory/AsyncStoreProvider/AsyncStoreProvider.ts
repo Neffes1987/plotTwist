@@ -4,42 +4,59 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ListParams } from '../../../domain/interface';
 import { RawDataType } from '../../../domain/repositories/AbstractRepository/interface';
 import { AbstractDataAccessProvider } from '../AbstractDataAccessProvider/AbstractDataAccessProvider';
+import { DataStoreSchema } from '../interface';
 
 export class AsyncStoreProvider extends AbstractDataAccessProvider {
-  static data: RawDataType[] = [];
+  static data: DataStoreSchema = {
+    world: [],
+    plot: [],
+  };
 
   constructor(entityName: string) {
     super(entityName);
 
-    if (AsyncStoreProvider.data.length === 0) {
+    if (this.schema.length === 0) {
       this.readFromStore();
     }
   }
 
+  get schema(): RawDataType[] {
+    if (!AsyncStoreProvider.data[this.entityName]) {
+      this.setSchema([]);
+    }
+
+    return AsyncStoreProvider.data[this.entityName];
+  }
+
+  setSchema(newSchemaData: RawDataType[]): void {
+    AsyncStoreProvider.data[this.entityName] = newSchemaData;
+  }
+
   async create(entity: RawDataType): Promise<string> {
     entity.id = uuid.v4().toString();
-    AsyncStoreProvider.data.push(entity);
+    this.setSchema([...this.schema, entity]);
+
     await this.writeToStore();
 
     return entity.id;
   }
 
   async delete(entityId: string): Promise<boolean> {
-    AsyncStoreProvider.data = AsyncStoreProvider.data.filter(({ id }) => entityId !== id);
+    this.setSchema(this.schema.filter(({ id }) => entityId !== id));
     await this.writeToStore();
 
     return true;
   }
 
   get(entityId: string): Promise<Nullable<RawDataType>> {
-    const record = AsyncStoreProvider.data.find(({ id }) => entityId === id);
+    const record = this.schema.find(({ id }) => entityId === id);
 
     return Promise.resolve(record ?? null);
   }
 
   async update(entity: RawDataType): Promise<boolean> {
     await this.delete(entity.id as string);
-    AsyncStoreProvider.data.push(entity);
+    this.setSchema([...this.schema, entity]);
     await this.writeToStore();
 
     return true;
@@ -50,11 +67,11 @@ export class AsyncStoreProvider extends AbstractDataAccessProvider {
     const records: RawDataType[] = [];
     const fieldKeys = Object.keys(queryParams);
 
-    AsyncStoreProvider.data.filter(record => {
+    this.schema.filter(record => {
       let isSatisfied = true;
 
       for (const fieldKey of fieldKeys) {
-        if (record[fieldKey] === queryParams[fieldKey]) {
+        if (record[fieldKey] !== queryParams[fieldKey]) {
           isSatisfied = false;
 
           break;
@@ -72,18 +89,18 @@ export class AsyncStoreProvider extends AbstractDataAccessProvider {
   }
 
   private writeToStore(): Promise<void> {
-    return AsyncStorage.setItem(this.entityName, JSON.stringify(AsyncStoreProvider.data));
+    return AsyncStorage.setItem(this.entityName, JSON.stringify(this.schema));
   }
 
-  private readFromStore(): void {
-    AsyncStorage.getItem(this.entityName)
-      .then((value: Nullable<string>) => {
-        if (value) {
-          AsyncStoreProvider.data = JSON.parse(value);
-        }
-      })
-      .catch((e: Error) => {
-        console.error(e);
-      });
+  private async readFromStore(): Promise<void> {
+    try {
+      const value = await AsyncStorage.getItem(this.entityName);
+
+      if (value) {
+        this.setSchema(JSON.parse(value) ?? []);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

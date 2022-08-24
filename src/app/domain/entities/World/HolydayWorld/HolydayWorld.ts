@@ -1,13 +1,15 @@
 import { HolidayWorldDTO } from 'backend';
 
+import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { EntityValidator } from '../../AbstractEntity/EntityValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
-import { ChaseType, HolidaySubType, HolidayType } from './interface';
+import { ChaseType, HolidayGetSwordType, HolidayType } from './interface';
 
 export class HolidayWorld extends AbstractWorld {
   private _shadowRevenge = ''; // not required
   private _holidayType: HolidayType = 'inAShelter';
-  private _holidaySubType?: HolidaySubType; // not required
+  private _holidayGetSwordType?: HolidayGetSwordType; // not required
   private _chase?: ChaseType;
 
   constructor() {
@@ -22,8 +24,8 @@ export class HolidayWorld extends AbstractWorld {
     return this._holidayType;
   }
 
-  get holidaySubType(): HolidaySubType | undefined {
-    return this._holidaySubType;
+  get holidayGetSwordType(): HolidayGetSwordType | undefined {
+    return this._holidayGetSwordType;
   }
 
   get chase(): ChaseType | undefined {
@@ -42,8 +44,8 @@ export class HolidayWorld extends AbstractWorld {
     this._holidayType = newValue;
   }
 
-  setHolidaySubType(newValue: HolidaySubType): void {
-    this._holidaySubType = newValue;
+  setHolidaySubType(newValue: HolidayGetSwordType): void {
+    this._holidayGetSwordType = newValue;
   }
 
   serialize(): HolidayWorldDTO {
@@ -52,16 +54,37 @@ export class HolidayWorld extends AbstractWorld {
       type: 'holiday',
       shadowRevenge: this.shadowRevenge,
       holidayType: this.holidayType,
-      holidaySubType: this.holidaySubType,
+      holidayGetSwordType: this.holidayGetSwordType,
       chase: this.chase,
     };
   }
 
   unSerializeToEntity(object: HolidayWorldDTO): void {
     super.unSerializeToEntity(object);
+
     this.setShadowRevenge(object.shadowRevenge);
     this._chase = object.chase;
     this.setHolidayType(object.holidayType);
-    this._holidaySubType = object.holidaySubType;
+    this._holidayGetSwordType = object.holidayGetSwordType;
+  }
+
+  validate(): void {
+    super.validate();
+
+    const validator = new EntityValidator<Partial<HolidayWorldDTO>>(this.serialize());
+    const requiredFields: (keyof HolidayWorldDTO)[] = ['holidayType'];
+
+    if (this.holidayType === 'getSword') {
+      requiredFields.push('holidayGetSwordType');
+    }
+
+    const fieldRange = [];
+
+    if (this.chase === 'shadowRunning') {
+      fieldRange.push({ propertyName: 'shadowRevenge' as const, min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH });
+    }
+
+    validator.checkRequiredFields(requiredFields);
+    validator.checkFieldRange(fieldRange);
   }
 }

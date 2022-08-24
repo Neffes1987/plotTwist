@@ -1,5 +1,7 @@
 import { HiddenCaveWorldDTO } from 'backend';
 
+import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { EntityValidator } from '../../AbstractEntity/EntityValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
 export class HiddenCaveWorld extends AbstractWorld {
@@ -47,8 +49,21 @@ export class HiddenCaveWorld extends AbstractWorld {
 
   unSerializeToEntity(object: HiddenCaveWorldDTO): void {
     super.unSerializeToEntity(object);
+
     this.setPartyPlan(object.partyPlan);
     this.setShadowIntroduction(object.shadowIntroduction);
     this.setMainEdgeInformation(object.mainEdgeInformation);
+  }
+
+  validate(): void {
+    super.validate();
+
+    const validator = new EntityValidator<Partial<HiddenCaveWorldDTO>>(this.serialize());
+
+    validator.checkFieldRange([
+      { propertyName: 'partyPlan', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },
+      { propertyName: 'shadowIntroduction', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },
+      { propertyName: 'mainEdgeInformation', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },
+    ]);
   }
 }

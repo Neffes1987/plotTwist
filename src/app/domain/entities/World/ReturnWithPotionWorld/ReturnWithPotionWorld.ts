@@ -1,5 +1,7 @@
 import { ReturnWithPotionWorldDTO } from 'backend';
 
+import { BIG_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { EntityValidator } from '../../AbstractEntity/EntityValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
 import { FinalType, PotionType } from './interface';
@@ -52,5 +54,13 @@ export class ReturnWithPotionWorld extends AbstractWorld {
     this.setPotionType(object.potionType);
     this.setCliffhanger(object.cliffhanger);
     this.setFinalType(object.finalType);
+  }
+
+  validate(): void {
+    super.validate();
+
+    const validator = new EntityValidator<Partial<ReturnWithPotionWorldDTO>>(this.serialize());
+
+    validator.checkFieldRange([{ propertyName: 'cliffhanger', min: null, max: BIG_VALUE_MAX_LENGTH }]);
   }
 }

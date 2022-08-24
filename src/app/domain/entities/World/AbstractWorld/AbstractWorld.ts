@@ -1,6 +1,8 @@
 import { WorldDTO } from 'backend';
 
+import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH } from '../../../../../constants';
 import { AbstractEntity } from '../../AbstractEntity/AbstractEntity';
+import { EntityValidator } from '../../AbstractEntity/EntityValidator';
 import { AbstractChallenge } from '../../Challenge/AbstractChallenge/AbstractChallenge';
 import { Law } from '../../Law/lawModel';
 import { Waterhole } from '../../Waterhole/Waterhole';
@@ -117,6 +119,7 @@ export abstract class AbstractWorld extends AbstractEntity {
 
   unSerializeToEntity(object: WorldDTO): void {
     super.unSerializeToEntity(object);
+
     this.setFailPrice(object.failPrice);
     this.setReference(object.reference);
     this.setStatus(object.status);
@@ -126,5 +129,19 @@ export abstract class AbstractWorld extends AbstractEntity {
     this._type = object.type;
     // this.setLaws(object.laws ?? []);
     // this.setWaterholes(object.waterholes ?? []);
+  }
+
+  validate(): void {
+    super.validate();
+
+    const validator = new EntityValidator<Partial<WorldDTO>>(this.serialize());
+
+    validator.checkRequiredFields(['status', 'plotId', 'type']);
+    validator.checkFieldRange([
+      { propertyName: 'failPrice', min: 0, max: MIDDLE_VALUE_MAX_LENGTH },
+      { propertyName: 'reference', min: 0, max: MIDDLE_VALUE_MAX_LENGTH },
+      { propertyName: 'story', min: 0, max: BIG_VALUE_MAX_LENGTH },
+      { propertyName: 'timeline', min: 0, max: MIDDLE_VALUE_MAX_LENGTH },
+    ]);
   }
 }

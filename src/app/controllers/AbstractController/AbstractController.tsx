@@ -1,5 +1,6 @@
+import { CommonDTO } from 'backend';
+
 import { AbstractEntity } from '../../domain/entities/AbstractEntity/AbstractEntity';
-import { CommonDTO } from '../../domain/entities/interface';
 import { ListParams } from '../../domain/interface';
 import { AbstractConstructor } from '../../domain/rulles/Constructors/AbstractConstructor/AbstractConstructor';
 import { ICommonController } from '../interface';

@@ -6,6 +6,7 @@ export interface TranslationPage {
   messages?: Record<string, string>;
   errors?: Record<string, string>;
   actions?: Record<string, string>;
+  lists?: Record<string, Record<string, string>>;
   labels: Record<string, unknown>;
 }
 

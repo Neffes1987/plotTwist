@@ -6,6 +6,7 @@ import asyncLocalStorage, { Store } from '../../store/Store';
 export class HomeStore {
   isPlotLoaded: Nullable<boolean> = null;
   error: Nullable<Error> = null;
+  nextStep: Nullable<WorldDTO['type']> = 'plainWorld';
   private plot: Partial<Nullable<PlotDTO>> = null;
   private readonly controller: IPlotController;
   private readonly storage: Store;
@@ -18,6 +19,10 @@ export class HomeStore {
 
   get plotId(): string {
     return this.plot?.id ?? '';
+  }
+
+  get selectedPlot() {
+    return this.storage.settings.currentPlotId;
   }
 
   get plotName(): string {
@@ -58,6 +63,7 @@ export class HomeStore {
 
       runInAction(() => {
         this.plot = plotInfo;
+        this.getNextStep();
         this.isPlotLoaded = true;
       });
 
@@ -69,30 +75,40 @@ export class HomeStore {
     }
   }
 
-  getNextStep(): WorldDTO['type'] {
+  getNextStep(): void {
     const existedWorlds = this.plot?.worlds?.map(({ type }) => type) ?? [];
 
     if (!existedWorlds.includes('plainWorld')) {
-      return 'plainWorld';
+      this.nextStep = 'plainWorld';
+
+      return;
     }
 
     if (!existedWorlds.includes('privateWorld')) {
-      return 'privateWorld';
+      this.nextStep = 'privateWorld';
+
+      return;
     }
 
     if (!existedWorlds.includes('hiddenCave')) {
-      return 'hiddenCave';
+      this.nextStep = 'hiddenCave';
+
+      return;
     }
 
     if (!existedWorlds.includes('holiday')) {
-      return 'holiday';
+      this.nextStep = 'holiday';
+
+      return;
     }
 
     if (!existedWorlds.includes('returnWithPotion')) {
-      return 'returnWithPotion';
+      this.nextStep = 'returnWithPotion';
+
+      return;
     }
 
-    return 'plainWorld';
+    this.nextStep = null;
   }
 
   resetPlot(): void {

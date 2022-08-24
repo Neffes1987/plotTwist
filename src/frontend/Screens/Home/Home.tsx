@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WorldDTO } from 'backend';
 import { observer } from 'mobx-react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 import { UIButton } from '../../UI/Buttons/UIButton';
 import { Flex } from '../../UI/Flex/Flex';
@@ -17,15 +17,26 @@ export const Home = observer(
   (): ReactElement => {
     const { t } = useTranslation();
     const { navigate } = useNavigation<Navigation>();
-    const params = useRoute();
-    const { plotName, getNextStep, worlds } = homeData;
-    const nextStepWorld = getNextStep();
+    const { selectedPlot, plotName, nextStep, worlds } = homeData;
+    const isFocused = useIsFocused();
 
-    useEffect(() => {
+    function getPlot() {
       homeData.getPlot().catch(() => {
         navigate(ROUTES.oops, { state: { error: { key: 'pages.home.errors.cantGetWorlds' } } });
       });
-    }, [params]);
+    }
+
+    useEffect(() => {
+      if (!isFocused) {
+        return;
+      }
+
+      getPlot();
+    }, [isFocused]);
+
+    useEffect(() => {
+      getPlot();
+    }, [selectedPlot]);
 
     useEffect(() => {
       if (homeData.error) {
@@ -40,7 +51,7 @@ export const Home = observer(
     }, [homeData.isPlotLoaded]);
 
     function onCreateNewWorldHandler(): void {
-      navigate(ROUTES.worldConstructor, { state: { caption: homeData.getNextStep(), id: null } });
+      navigate(ROUTES.worldConstructor, { state: { caption: nextStep, id: null } });
     }
 
     function onEditWorldHandler(worldType: WorldDTO['type'], id: string): void {
@@ -59,7 +70,7 @@ export const Home = observer(
         }}
       >
         <Flex direction="column" flex={1}>
-          {nextStepWorld === 'plainWorld' ? (
+          {nextStep === 'plainWorld' ? (
             <Flex direction="column" grow={1} align="center" justify="center">
               <Typography align="center">{t('pages.home.messages.greetingMessage')}</Typography>
 
@@ -75,7 +86,7 @@ export const Home = observer(
                 <WorldWidget key={world.type} worldInfo={world} onEditWorld={onEditWorldHandler} onOpenWorldProperty={console.error} />
               ))}
 
-              {homeData.getNextStep() && <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.actions.createNextWorld')}</UIButton>}
+              {nextStep && <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.actions.createNextWorld')}</UIButton>}
             </Flex>
           )}
         </Flex>

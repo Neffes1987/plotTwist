@@ -109,6 +109,8 @@ export const Translation: Dictionary = {
             activeCalls: 'Активных посланий',
             waterholes: 'Водопои',
             aboutWorld: 'Подробнее',
+          },
+          lists: {
             captions: {
               plainWorld: 'Обыденном мир',
               privateWorld: 'Тайный мир',
