@@ -1,9 +1,10 @@
-import { ReactElement } from 'react';
+import { IconType } from '../interface';
 
 export interface ListItemProps {
-  onPress: (propertyId: string) => void;
+  onEdit?: (propertyId: string) => void;
+  onOpen: (propertyId: string) => void;
   propertyId: string;
   caption: string;
   noBorder?: boolean;
-  icon?: ReactElement;
+  icon?: IconType;
 }

@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TextInput } from 'react-native';
 
 import { UI_COLORS } from '../colors';
@@ -14,7 +15,9 @@ const InputStyles = {
   borderBottomWidth: 1,
 };
 
-export const UIInput = ({ label, value, onChange, name, multiline = true, error, maxValueLength, autoFocus }: UIInputProps): ReactElement => {
+export const UIInput = ({ label, value, onChange, name, multiline = true, error, maxValueLength, autoFocus, minValueLength }: UIInputProps): ReactElement => {
+  const { t } = useTranslation();
+
   function validateValueLength(value: string): boolean {
     if (!maxValueLength) {
       return true;
@@ -52,6 +55,12 @@ export const UIInput = ({ label, value, onChange, name, multiline = true, error,
       {!!error && (
         <Typography color="neutralRed" mode="caption-medium">
           {error}
+        </Typography>
+      )}
+
+      {!!minValueLength && !error && (
+        <Typography mode="caption-medium" color="accentGray">
+          {t('messages.minimalRequiredValue', { quantity: minValueLength })}
         </Typography>
       )}
     </Flex>

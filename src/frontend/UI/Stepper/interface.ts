@@ -5,4 +5,5 @@ export interface UIStepperProps {
   content: ReactElement[];
   onFinish: () => void;
   onValidateNext?: () => boolean;
+  invalidPoints?: boolean[];
 }

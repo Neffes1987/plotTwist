@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { IconButton } from '../../UI/Buttons/IconButton';
 import { Drawer } from '../../UI/Drawer/Drawer';
 import { Flex } from '../../UI/Flex/Flex';
+import { Icon } from '../../UI/Icon/Icon';
 import { Typography } from '../../UI/Typography/Typography';
 
 import { EdgeBlock } from './EdgeBlock/EdgeBlock';
 import { Faq } from './Faq/Faq';
-import { WorldWidgetProps } from './interface';
+import { PropertyTypeUnion, WorldWidgetProps } from './interface';
 import { NPCBlock } from './NPCBlock/NPCBlock';
 import { WorldInfoBlock } from './WorldInfoBlock/WorldInfoBlock';
 import { worldWidgetInfoTranslations } from './worldWidgetTranslations';
@@ -18,7 +19,8 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
   const [isShowWorldFaqPopover, setIsShowWorldFaqPopover] = useState(false);
   const [isShowWorldBody, setIsShowWorldBody] = useState(false);
   const { worldInfo, onEditWorld, onOpenWorldProperty } = props;
-  const { type, id } = worldInfo;
+  const { type, id, status } = worldInfo;
+  const isWorldReady = status === 'release';
 
   if (!type) {
     return null;
@@ -32,6 +34,16 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
     setIsShowWorldFaqPopover(false);
   }
 
+  function onClickPropertyHandler(propertyType: PropertyTypeUnion): void {
+    if (propertyType === 'aboutWorld') {
+      setIsShowWorldFaqPopover(true);
+
+      return;
+    }
+
+    onOpenWorldProperty(propertyType);
+  }
+
   return (
     <Flex direction="column" fullWidth marginY={4} radius={8}>
       <Flex direction="row" justify="space-between" backgroundColor="accentGray" gap={4}>
@@ -39,6 +51,8 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
 
         <Flex justify="center" onPress={onToggleWorldBody} flex={1}>
           <Typography>{t(worldWidgetInfoTranslations.lists.captions[type])}</Typography>
+
+          <Icon type={isWorldReady ? 'tick' : 'flame'} color={isWorldReady ? 'primary' : 'neutralRed'} />
         </Flex>
 
         <IconButton color="neutralGreen" iconType="pencil" onPress={(): void => onEditWorld(type, id)} />
@@ -46,10 +60,16 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
 
       {isShowWorldBody && (
         <Flex backgroundColor="accentWhite" direction="column" align="flex-start">
+          {!isWorldReady && (
+            <Typography mode="error" color="neutralRed">
+              {t('errors.worldInDraft')}
+            </Typography>
+          )}
+
           <Flex align="flex-start" marginY={4}>
             <NPCBlock onOpenWorldProperty={onOpenWorldProperty} />
 
-            <WorldInfoBlock onOpenWorldProperty={onOpenWorldProperty} />
+            <WorldInfoBlock worldInfo={worldInfo} onOpenWorldProperty={onClickPropertyHandler} />
           </Flex>
 
           <EdgeBlock onOpenWorldProperty={onOpenWorldProperty} />

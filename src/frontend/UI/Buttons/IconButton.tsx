@@ -10,7 +10,7 @@ import { BUTTON_STYLES_CONFIG } from './constants';
 export const IconButton = (props: IconButtonProps): ReactElement => {
   const { size = 20, color, iconType, rotate, ...rest } = props;
 
-  const iconForegroundColor = color ?? 'accentLightGray';
+  const iconForegroundColor = color ?? 'accentDarkBlue';
 
   return (
     <Flex

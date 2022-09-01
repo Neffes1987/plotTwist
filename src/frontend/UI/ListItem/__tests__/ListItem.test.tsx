@@ -8,7 +8,7 @@ import { ListItem } from '../ListItem';
 describe('WHEN "ListItem" is mounted', () => {
   const defultProps: ListItemProps = {
     caption: 'test caption',
-    onPress: jest.fn(),
+    onEdit: jest.fn(),
     propertyId: 'test id',
   };
 
@@ -29,6 +29,6 @@ describe('WHEN "ListItem" is mounted', () => {
 
     fireEvent.press(component.getByText(defultProps.caption));
 
-    expect(defultProps.onPress).toHaveBeenCalledWith(defultProps.propertyId);
+    expect(defultProps.onEdit).toHaveBeenCalledWith(defultProps.propertyId);
   });
 });

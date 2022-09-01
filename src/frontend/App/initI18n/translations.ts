@@ -1,5 +1,3 @@
-import { BIG_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../constants';
-
 import { Dictionary } from './interface';
 
 export const Translation: Dictionary = {
@@ -7,19 +5,19 @@ export const Translation: Dictionary = {
     translation: {
       messages: {
         success: 'Успех!',
+        minimalRequiredValue: 'Минимальное количество символов: {{quantity}}',
+        emptyList: 'Список пуст, давайте создадим первый элемент?',
       },
       actions: {
         next: 'Далее',
       },
       errors: {
         oops: 'Что-то пошло не так...',
-        dbNotReady: 'Ошибка инициализации, пожалуйста свяжитесь с разработчиком =(',
-        wrongID: 'Переданный идентификатор для {{property}} не найден',
-        TOO_BIG: 'Максимальная длинна поля "{{property}}" равна {{value}}',
-        validation: {
-          name: `Имя должно быть не менее ${NAME_VALUE_MIN_LENGTH} символов и не более ${SHORT_VALUE_MAX_LENGTH}`,
-          description: `Описанние должно быть не менее 1 символа не более ${BIG_VALUE_MAX_LENGTH}`,
-        },
+        quantity: 'Количество ошибок на форме: {{quantity}}',
+        RANGE: 'Поле должно быть длинее {{min}}, но короче {{max}} символов.',
+        REQUIRED: 'Это поле является обязательным!',
+        ENTITY_DUPLICATION: 'Запись с {{entityId}} уже существует',
+        worldInDraft: 'Текущий модуль не готов, пожулуйста заполните все поля',
       },
       pages: {
         worldEditor: {
@@ -55,6 +53,7 @@ export const Translation: Dictionary = {
             laws: 'Какие законы у этого мира?',
             name: 'Как называется место в котором оказались игроки?',
             description: 'Как его можно описать?',
+            partyPlan: 'Какой оптимальный план помог бы игрокам решить проблему?',
           },
         },
         home: {
@@ -112,7 +111,7 @@ export const Translation: Dictionary = {
           },
           lists: {
             captions: {
-              plainWorld: 'Обыденном мир',
+              plainWorld: 'Обыденный мир',
               privateWorld: 'Тайный мир',
               hiddenCaveWorld: 'Скрытая пещера',
               holidayWorld: 'Торжество',

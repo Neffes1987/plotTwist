@@ -1,6 +1,7 @@
 import { HiddenCaveWorldDTO } from 'backend';
 
 import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { ValidationError } from '../../../../errors/ValidationError';
 import { EntityValidator } from '../../AbstractEntity/EntityValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
@@ -56,14 +57,28 @@ export class HiddenCaveWorld extends AbstractWorld {
   }
 
   validate(): void {
-    super.validate();
+    const error = new ValidationError();
+
+    try {
+      super.validate();
+    } catch (e) {
+      error.merge(e);
+    }
 
     const validator = new EntityValidator<Partial<HiddenCaveWorldDTO>>(this.serialize());
 
-    validator.checkFieldRange([
-      { propertyName: 'partyPlan', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },
-      { propertyName: 'shadowIntroduction', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },
-      { propertyName: 'mainEdgeInformation', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },
-    ]);
+    try {
+      validator.checkFieldRange([
+        { propertyName: 'partyPlan', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },
+        { propertyName: 'shadowIntroduction', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },
+        { propertyName: 'mainEdgeInformation', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },
+      ]);
+    } catch (e) {
+      error.merge(e);
+    }
+
+    if (error.length) {
+      throw error;
+    }
   }
 }

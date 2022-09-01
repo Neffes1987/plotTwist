@@ -35,7 +35,7 @@ export interface TypographyProps {
   align?: TextStyle['textAlign'];
 }
 
-export type IconType = 'logo' | 'chevron' | 'faq' | 'pencil' | 'plus' | 'close' | 'gear' | 'tick' | 'search' | 'attention';
+export type IconType = 'logo' | 'chevron' | 'faq' | 'pencil' | 'plus' | 'close' | 'gear' | 'tick' | 'search' | 'attention' | 'flame';
 export interface IconProps {
   type: IconType;
   rotate?: number;
@@ -57,7 +57,7 @@ export interface IconButtonProps extends TouchableOpacityProps {
 }
 
 export interface DrawerProps {
-  caption: string;
+  caption: string | JSX.Element;
   isOpen: boolean;
   onClose: () => void;
 }

@@ -91,10 +91,6 @@ export class EntityValidator<T extends Partial<CommonDTO>> {
       return true;
     }
 
-    if (!value) {
-      return false;
-    }
-
     return value.length <= max;
   }
 }

@@ -28,6 +28,17 @@ export class ValidationError extends Error {
     }
   }
 
+  get length(): number {
+    return Object.keys(this.properties).length;
+  }
+
+  merge(error: ValidationError): void {
+    this.properties = {
+      ...this.properties,
+      ...error.properties,
+    };
+  }
+
   setError(error: ValidationErrorProps): void {
     const { code, property } = error;
 

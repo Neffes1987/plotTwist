@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 
+import { IconButton } from '../Buttons/IconButton';
 import { Card } from '../Card/Card';
 import { Flex } from '../Flex/Flex';
 import { Typography } from '../Typography/Typography';
@@ -7,10 +8,14 @@ import { Typography } from '../Typography/Typography';
 import { ListItemProps } from './interface';
 
 export const ListItem = (props: ListItemProps): ReactElement => {
-  const { caption, onPress, propertyId, noBorder, icon = null } = props;
+  const { caption, onEdit, propertyId, noBorder, onOpen, icon = 'pencil' } = props;
 
   function onListItemPressedHandler(): void {
-    onPress(propertyId);
+    onOpen(propertyId);
+  }
+
+  function onEditItemPressedHandler(): void {
+    onEdit?.(propertyId);
   }
 
   return (
@@ -22,7 +27,7 @@ export const ListItem = (props: ListItemProps): ReactElement => {
           </Typography>
         </Flex>
 
-        {icon}
+        {!!onEdit && <IconButton size={32} iconType={icon} onPress={onEditItemPressedHandler} />}
       </Flex>
     </Card>
   );

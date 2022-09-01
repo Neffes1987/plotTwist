@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CommonDTO } from 'backend';
+
+import { useErrorContext } from './ErrorBoundaryContext/useErrorContext';
 
 interface UseFormResult<T> {
   form: T;
@@ -7,12 +9,18 @@ interface UseFormResult<T> {
   setFormFieldData: (fieldName: string, fieldValue: string) => void;
   setFormErrors: (errors: T) => void;
   resetForm: (values?: T) => void;
-  formatBackendError: (error: Error) => void;
 }
 
-export function useForm<T extends Omit<CommonDTO, 'id'>>(defaultValues: T, errorsList: T): UseFormResult<T> {
+export function useForm<T extends Partial<CommonDTO>>(defaultValues: T, errorsList: T): UseFormResult<T> {
+  const { errors } = useErrorContext();
   const [form, setForm] = useState<T>(defaultValues);
   const [formErrors, setFormErrors] = useState<T & { common?: string }>(errorsList);
+
+  useEffect(() => {
+    if (errors) {
+      setFormErrors(errors as T);
+    }
+  }, [errors]);
 
   function setFormFieldData(fieldName: string, fieldValue: string): void {
     setForm((prevValue: T) => ({ ...prevValue, [fieldName]: fieldValue }));
@@ -23,16 +31,11 @@ export function useForm<T extends Omit<CommonDTO, 'id'>>(defaultValues: T, error
     setFormErrors(errorsList);
   }
 
-  function formatBackend(error: Error): void {
-    console.log(error);
-  }
-
   return {
     form,
     formErrors,
     setFormFieldData,
     setFormErrors,
     resetForm,
-    formatBackendError: formatBackend,
   };
 }

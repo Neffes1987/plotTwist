@@ -9,26 +9,32 @@ import './initI18n/initI18n';
 import { components, ROUTES } from '../Screens';
 
 import { DEFAULT_ROUTE_OPTIONS } from './constants';
+import { ErrorBoundaryProvider } from './hooks/ErrorBoundaryContext/ErrorBoundaryContext';
+import { useSetErrorToErrorsContext } from './hooks/ErrorBoundaryContext/useSetErrorToErrorsContext';
 
 const Stack = createStackNavigator();
 
 const App = (): ReactElement => {
+  const { errors, onErrorHandler } = useSetErrorToErrorsContext();
+
   return (
-    <NotifierWrapper>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName={ROUTES.loading}>
-          <Stack.Screen name={ROUTES.loading} component={components.Loading} options={DEFAULT_ROUTE_OPTIONS} />
+    <ErrorBoundaryProvider.Provider value={{ errors, updateContextErrors: onErrorHandler }}>
+      <NotifierWrapper>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName={ROUTES.loading}>
+            <Stack.Screen name={ROUTES.loading} component={components.Loading} options={DEFAULT_ROUTE_OPTIONS} />
 
-          <Stack.Screen name={ROUTES.home} component={components.Home} options={DEFAULT_ROUTE_OPTIONS} />
+            <Stack.Screen name={ROUTES.home} component={components.Home} options={DEFAULT_ROUTE_OPTIONS} />
 
-          <Stack.Screen name={ROUTES.plotList} component={components.PlotList} options={DEFAULT_ROUTE_OPTIONS} />
+            <Stack.Screen name={ROUTES.plotList} component={components.PlotList} options={DEFAULT_ROUTE_OPTIONS} />
 
-          <Stack.Screen name={ROUTES.worldConstructor} component={components.WorldEditor} options={DEFAULT_ROUTE_OPTIONS} />
+            <Stack.Screen name={ROUTES.worldConstructor} component={components.WorldEditor} options={DEFAULT_ROUTE_OPTIONS} />
 
-          <Stack.Screen name={ROUTES.oops} component={components.OopsErrorScreen} options={DEFAULT_ROUTE_OPTIONS} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </NotifierWrapper>
+            <Stack.Screen name={ROUTES.oops} component={components.OopsErrorScreen} options={DEFAULT_ROUTE_OPTIONS} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </NotifierWrapper>
+    </ErrorBoundaryProvider.Provider>
   );
 };
 

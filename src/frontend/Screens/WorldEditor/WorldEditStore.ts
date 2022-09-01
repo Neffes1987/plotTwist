@@ -7,7 +7,6 @@ import { StepperFieldField } from './interface';
 import { WORLDS_ADDITIONAL_FIELDS } from './worldTranslations';
 
 export class WorldEditStore {
-  error: Nullable<Error> = null;
   firstErrorStep = 0;
   private _world: Nullable<WorldDTO> = null;
   private readonly _asyncLocalStorage: Store;
@@ -27,91 +26,64 @@ export class WorldEditStore {
     this._world = value;
   }
 
-  setError(error: Nullable<Error>): void {
-    this.error = error;
-  }
-
   async loadWorld(): Promise<boolean> {
-    try {
-      if (!this._world?.id) {
-        return false;
-      }
-
-      const world = await this._worldController.get(this._world.id);
-
-      runInAction(() => {
-        this._world = world;
-      });
-
-      return true;
-    } catch (e) {
-      runInAction(() => {
-        this.setError(e);
-      });
-
+    if (!this._world?.id) {
       return false;
     }
+
+    const world = await this._worldController.get(this._world.id);
+
+    runInAction(() => {
+      this._world = world;
+    });
+
+    return true;
   }
 
   async saveWorld(): Promise<boolean> {
-    try {
-      if (!this.world) {
-        return false;
-      }
-
-      if (!this.world?.id) {
-        const plotId = this._asyncLocalStorage.settings.currentPlotId;
-        const id = await this._worldController.create({ ...this.world, plotId });
-
-        runInAction(() => {
-          if (!this._world) {
-            return;
-          }
-
-          this._world = {
-            ...this._world,
-            id,
-          };
-        });
-
-        return true;
-      }
-
-      await this._worldController.update(this.world);
-
-      return true;
-    } catch (e) {
-      runInAction(() => {
-        this.setError(e);
-      });
-
+    if (!this.world) {
       return false;
     }
+
+    const plotId = this._asyncLocalStorage.settings.currentPlotId;
+
+    if (!this.world?.id) {
+      const id = await this._worldController.create({ ...this.world, plotId });
+
+      runInAction(() => {
+        if (!this._world) {
+          return;
+        }
+
+        this._world = {
+          ...this._world,
+          id,
+        };
+      });
+
+      return true;
+    }
+
+    await this._worldController.update({ ...this.world, plotId });
+
+    return true;
   }
 
   async deleteWorld(): Promise<boolean> {
-    try {
-      if (!this._world) {
-        return false;
-      }
-
-      await this._worldController.delete(this._world.id);
-      runInAction(() => {
-        this._world = null;
-      });
-
-      return true;
-    } catch (e) {
-      runInAction(() => {
-        this.setError(e);
-      });
-
+    if (!this._world) {
       return false;
     }
+
+    await this._worldController.delete(this._world.id);
+    runInAction(() => {
+      this._world = null;
+    });
+
+    return true;
   }
 
-  getStepperConfig(): StepperFieldField[] {
-    const config: StepperFieldField[] = [];
+  getStepperConfig(): StepperFieldField<Record<string, string>>[] {
+    const config: StepperFieldField<Record<string, string>>[] = [];
 
     if (this._world?.type && WORLDS_ADDITIONAL_FIELDS[this._world.type]) {
       config.push(...WORLDS_ADDITIONAL_FIELDS[this._world.type]);

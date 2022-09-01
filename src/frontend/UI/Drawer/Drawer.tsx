@@ -25,9 +25,13 @@ export const Drawer = (props: PropsWithChildren<DrawerProps>): ReactElement => {
       <Flex grow={1} direction="column" styles={DRAWER_STYLES.body}>
         <Divider verticalGap={2} />
 
-        <Typography mode="caption-bold" color="accentDarkBlue">
-          {caption}
-        </Typography>
+        {typeof caption === 'string' ? (
+          <Typography mode="caption-bold" color="accentDarkBlue">
+            {caption}
+          </Typography>
+        ) : (
+          caption
+        )}
 
         <Divider verticalGap={DRAWER_CAPTION_MARGIN} />
 

@@ -26,7 +26,7 @@ export const PropertyRow = (props: PropertyRowProps): ReactElement => {
         </Typography>
       )}
 
-      {showAlert && <Icon type="attention" />}
+      {showAlert && <Icon type="attention" color="neutralRed" />}
     </Flex>
   );
 };

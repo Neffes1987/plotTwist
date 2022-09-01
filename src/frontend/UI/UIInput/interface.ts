@@ -7,4 +7,5 @@ export interface UIInputProps {
   autoFocus?: boolean;
   error?: string;
   maxValueLength?: number;
+  minValueLength?: number;
 }

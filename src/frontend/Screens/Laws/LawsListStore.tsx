@@ -1,8 +1,8 @@
-import { IPlotController, plotController, PlotDTO } from 'backend';
+import { IPlotController, LawDTO, plotController } from 'backend';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-export class PlotListStore {
-  plots: PlotDTO[] = [];
+export class ListStore {
+  laws: LawDTO[] = [];
   private readonly crud: IPlotController;
 
   constructor() {
@@ -19,21 +19,21 @@ export class PlotListStore {
     });
 
     runInAction(() => {
-      this.plots = data;
+      this.laws = data;
     });
   }
 
-  async updatePlot({ id = '', name = '', description = '', status = 'draft' }: Partial<PlotDTO>): Promise<void> {
+  async update({ id = '', name = '', description = '', status = 'draft' }: Partial<LawDTO>): Promise<void> {
     await this.crud.update({ id, name, description, status });
     await this.list();
   }
 
-  async deletePlot(id: string): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.crud.delete(id);
     await this.list();
   }
 
-  async createPlot(name: string, description: string): Promise<string> {
+  async create(name: string, description: string): Promise<string> {
     const plotId = await this.crud.create({ name, description, status: 'draft' });
 
     if (plotId) {
@@ -46,4 +46,4 @@ export class PlotListStore {
   }
 }
 
-export const plotListStore = new PlotListStore();
+export const lawsListStore = new ListStore();

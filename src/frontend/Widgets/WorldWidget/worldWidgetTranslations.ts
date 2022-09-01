@@ -35,6 +35,9 @@ export const worldWidgetNPCTranslations = new TranslationNamespace<typeof WORLD_
 
 export const WORLD_WIDGET_INFO_TRANSLATION_SCHEMA = {
   caption: 'caption',
+  errors: {
+    worldInDraft: 'worldInDraft',
+  },
   labels: {
     brokenLaws: 'brokenLaws',
     activeCalls: 'activeCalls',
