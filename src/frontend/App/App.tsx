@@ -6,7 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import './initI18n/initI18n';
-import { components, ROUTES } from '../Screens';
+import { components } from '../Screens';
+import { ROUTES } from '../Screens/routes';
 
 import { DEFAULT_ROUTE_OPTIONS } from './constants';
 import { ErrorBoundaryProvider } from './hooks/ErrorBoundaryContext/ErrorBoundaryContext';
@@ -31,6 +32,8 @@ const App = (): ReactElement => {
             <Stack.Screen name={ROUTES.worldConstructor} component={components.WorldEditor} options={DEFAULT_ROUTE_OPTIONS} />
 
             <Stack.Screen name={ROUTES.oops} component={components.OopsErrorScreen} options={DEFAULT_ROUTE_OPTIONS} />
+
+            <Stack.Screen name={ROUTES.laws} component={components.Laws} options={DEFAULT_ROUTE_OPTIONS} />
           </Stack.Navigator>
         </NavigationContainer>
       </NotifierWrapper>

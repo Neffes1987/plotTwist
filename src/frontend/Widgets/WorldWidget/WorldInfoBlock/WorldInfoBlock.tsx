@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ROUTES } from '../../../Screens/routes';
 import { Card } from '../../../UI/Card/Card';
 import { WorldWidgetProps } from '../interface';
 import { PropertyRow } from '../parts/PropertyRow/PropertyRow';
@@ -20,20 +21,20 @@ export const WorldInfoBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWid
         onPress={onOpenWorldProperty}
         caption={t(worldWidgetInfoTranslations.labels.brokenLaws)}
         quantity={`${brokenLawsQuantity}/${lawsQuantity}`}
-        id="brokenLaws"
+        id={ROUTES.laws}
       />
 
-      <PropertyRow onPress={onOpenWorldProperty} caption={t(worldWidgetInfoTranslations.labels.activeCalls)} quantity={`${0}/${0}`} id="activeCalls" />
+      <PropertyRow onPress={onOpenWorldProperty} caption={t(worldWidgetInfoTranslations.labels.activeCalls)} quantity={`${0}/${0}`} id={ROUTES.activeCalls} />
 
       <PropertyRow
         showAlert={!waterholesQuantity}
         onPress={onOpenWorldProperty}
         caption={t(worldWidgetInfoTranslations.labels.waterholes)}
         quantity={`${waterholesQuantity}`}
-        id="waterholes"
+        id={ROUTES.waterholes}
       />
 
-      <PropertyRow onPress={onOpenWorldProperty} caption={t(worldWidgetInfoTranslations.labels.aboutWorld)} id="aboutWorld" />
+      <PropertyRow onPress={onOpenWorldProperty} caption={t(worldWidgetInfoTranslations.labels.aboutWorld)} id={ROUTES.aboutWorld} />
     </Card>
   );
 };

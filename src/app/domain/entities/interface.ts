@@ -1,7 +1,7 @@
+import { ChaseType, FinalType, HolidayGetSwordType, HolidayType, PotionType } from 'backend';
+
 import { PlotStatus } from './Plot/interface';
 import { WorldStatus, WorldType } from './World/AbstractWorld/interface';
-import { ChaseType, HolidayGetSwordType, HolidayType } from './World/HolydayWorld/interface';
-import { FinalType, PotionType } from './World/ReturnWithPotionWorld/interface';
 
 export interface CommonDTO {
   id: string;

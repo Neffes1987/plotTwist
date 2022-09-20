@@ -11,6 +11,11 @@ interface SelectOption {
   name: string;
 }
 
+interface SelectOptionTyped<T> {
+  id: T;
+  name: string;
+}
+
 declare module '*.svg' {
   import React from 'react';
   import { SvgProps } from 'react-native-svg';

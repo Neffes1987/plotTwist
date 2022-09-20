@@ -68,6 +68,7 @@ export const WorldEditor = observer(
 
         if (isSuccess) {
           notify.showMessage(t('messages.success'), '', false);
+          onNavigateToHomeHandler();
         }
       } catch (e) {
         if (!(e instanceof ValidationError)) {

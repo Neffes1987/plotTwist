@@ -10,6 +10,7 @@ export class AsyncStoreProvider extends AbstractDataAccessProvider {
   static data: DataStoreSchema = {
     world: [],
     plot: [],
+    laws: [],
   };
 
   constructor(entityName: string) {
@@ -43,6 +44,7 @@ export class AsyncStoreProvider extends AbstractDataAccessProvider {
 
   async delete(entityId: string): Promise<boolean> {
     this.setSchema(this.schema.filter(({ id }) => entityId !== id));
+
     await this.writeToStore();
 
     return true;
@@ -55,7 +57,7 @@ export class AsyncStoreProvider extends AbstractDataAccessProvider {
   }
 
   async update(entity: RawDataType): Promise<boolean> {
-    await this.delete(entity.id as string);
+    await this.delete(entity.id);
     this.setSchema([...this.schema, entity]);
     await this.writeToStore();
 

@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlotDTO } from 'backend';
 import { observer } from 'mobx-react';
@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { BIG_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../constants';
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
+import { useTogglePopover } from '../../App/hooks/useTogglePopover';
 import notifier from '../../App/notify/notify';
 import store from '../../store/Store';
 import { UIInput } from '../../UI/UIInput/UIInput';
@@ -23,7 +24,7 @@ export const PlotList = observer(
     const { t } = useTranslation();
     const { updateContextErrors } = useErrorContext();
     const { navigate } = useNavigation<Navigation>();
-    const [isEditPlotDrawerOpen, setIsEditPlotDrawerOpen] = useState(false);
+    const { isEditDrawerOpen, onOpenPopoverHandler, onClosePopoverHandler } = useTogglePopover();
     const { form, setFormFieldData, formErrors, resetForm } = useForm<Omit<PlotDTO, 'worlds'>>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
 
     useEffect(() => {
@@ -38,7 +39,7 @@ export const PlotList = observer(
       }
 
       resetForm();
-      closeCreateNewPlotPopover();
+      onClosePopoverHandler();
     }
 
     async function deletePlot(): Promise<void> {
@@ -49,7 +50,7 @@ export const PlotList = observer(
       }
 
       resetForm();
-      closeCreateNewPlotPopover();
+      onClosePopoverHandler();
     }
 
     async function createPlot(): Promise<void> {
@@ -59,21 +60,13 @@ export const PlotList = observer(
         const plotId = await plotListStore.createPlot(name, description);
 
         if (plotId) {
-          closeCreateNewPlotPopover();
+          onClosePopoverHandler();
           resetForm();
           notifier.showMessage(t('messages.success'), t(plotListTranslations.messages.wasCreated), false);
         }
       } catch (e) {
         updateContextErrors?.(e);
       }
-    }
-
-    function openCreateNewPlotPopover(): void {
-      setIsEditPlotDrawerOpen(true);
-    }
-
-    function closeCreateNewPlotPopover(): void {
-      setIsEditPlotDrawerOpen(false);
     }
 
     function onEditPlot(plotId: string): void {
@@ -90,7 +83,7 @@ export const PlotList = observer(
         status: form.status,
       });
 
-      setIsEditPlotDrawerOpen(true);
+      onOpenPopoverHandler();
     }
 
     async function onNavigateToPlotHandler(plotId: string): Promise<void> {
@@ -109,15 +102,15 @@ export const PlotList = observer(
           emptyListCaption={plotListTranslations.messages.emptyList}
           onEdit={onEditPlot}
           onOpen={onNavigateToPlotHandler}
-          onCreate={openCreateNewPlotPopover}
+          onCreate={onOpenPopoverHandler}
         />
 
         <CreateEntityWidget
           onApply={!form.id ? createPlot : updatePlot}
           onDelete={form.id ? deletePlot : undefined}
           caption={t(!form.id ? plotListTranslations.actions.addNew : plotListTranslations.actions.update)}
-          isOpen={isEditPlotDrawerOpen}
-          onClose={closeCreateNewPlotPopover}
+          isOpen={isEditDrawerOpen}
+          onClose={onClosePopoverHandler}
         >
           <UIInput
             maxValueLength={SHORT_VALUE_MAX_LENGTH}

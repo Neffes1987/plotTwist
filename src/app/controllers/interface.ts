@@ -1,4 +1,5 @@
-import { CommonDTO, PlotDTO, WorldDTO } from '../domain/entities/interface';
+import { CommonDTO, LawDTO, PlotDTO, WorldDTO } from 'backend';
+
 import { ListParams } from '../domain/interface';
 
 export interface ICommonController<Get extends CommonDTO, Update extends CommonDTO> {
@@ -11,3 +12,4 @@ export interface ICommonController<Get extends CommonDTO, Update extends CommonD
 
 export type IPlotController = ICommonController<PlotDTO, Omit<PlotDTO, 'worlds'>>;
 export type IWorldController = ICommonController<WorldDTO, Omit<WorldDTO, 'laws' | 'waterholes'>>;
+export type ILawsController = ICommonController<LawDTO, LawDTO>;

@@ -33,10 +33,8 @@ export const Translation: Dictionary = {
             contrast: 'Чем этот мир отличается от обычного мира персонажей?',
             shadowIntroduction: 'Как проявит себя тень? Что игрокам известно о нем?',
             mainEdge: 'Кульминационное испытание в сюжете, какое оно?',
-            holidayType: {
-              caption: 'Укажите тип торжества',
-              types: {},
-            },
+            holidayType: 'Укажите тип торжества',
+            holidaySubType: 'Укажите подтип торжества',
             chase: 'Укажите, кто может заставить игровок вернуться в обыденный мир?',
             shadowRevenge: 'Как главный злодей может отомстить за свое поражение?',
             journeyResult: 'Какой жизненный опыт получат игроки завершив этот сюжет?',
@@ -55,6 +53,21 @@ export const Translation: Dictionary = {
             description: 'Как его можно описать?',
             partyPlan: 'Какой оптимальный план помог бы игрокам решить проблему?',
           },
+          lists: {
+            journeyResult: {
+              wisdom: 'Мудрость - как награда',
+              love: 'Любовь - как награда',
+              responsible: 'Обретение ответственности',
+              tragedy: 'Усиление трагедии',
+              badExperience: 'Неудачный опыт',
+              wastedTime: 'Неудачное путешествие - потеря времени',
+            },
+            finalType: {
+              cycle: 'Возврат в начало',
+              achievePerfect: 'Путешествие завершено',
+              openEnd: 'Открытый конец',
+            },
+          },
         },
         home: {
           caption: 'Сюжет: #{{name}}',
@@ -68,6 +81,25 @@ export const Translation: Dictionary = {
           actions: {
             createFirstWorld: 'Добавить обыденный мир',
             createNextWorld: 'Добавить слудующий мир',
+          },
+        },
+        lawsList: {
+          caption: 'Список законов',
+          messages: {
+            wasCreated: 'Закон успешно создан!',
+            emptyList: 'Список законов пуст, давайте создадим новый?',
+          },
+          actions: {
+            addNew: 'Добавить новый закон',
+            update: 'Изменить закон',
+            delete: 'Удалить',
+            assign: 'Привязать к миру',
+            unAssign: 'Отвязать от мира',
+          },
+          labels: {
+            name: 'Название закона',
+            description: 'Описание закона',
+            punishment: 'Что будет если его нарушить?',
           },
         },
         plotList: {

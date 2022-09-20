@@ -1,7 +1,9 @@
-import { LawDTO } from '../../../app/domain/entities/interface';
+import { LawDTO } from 'backend';
+
 import { TranslationNamespace } from '../../App/initI18n/translationsSchema';
 
-export const DEFAULT_FORM_VALUES: Omit<LawDTO, 'id'> = {
+export const DEFAULT_FORM_VALUES: LawDTO = {
+  id: '',
   isBroken: false,
   punishment: '',
   name: '',
@@ -19,12 +21,15 @@ export const TRANSLATION_SCHEMA = {
     update: 'update',
     delete: 'delete',
     open: 'open',
+    assign: 'assign',
+    unAssign: 'unAssign',
   },
   errors: {},
   labels: {
     name: 'name',
     description: 'description',
+    punishment: 'punishment',
   },
 };
 
-export const plotListTranslations = new TranslationNamespace<typeof TRANSLATION_SCHEMA>('pages.plotList', TRANSLATION_SCHEMA);
+export const lawListTranslations = new TranslationNamespace<typeof TRANSLATION_SCHEMA>('pages.lawsList', TRANSLATION_SCHEMA);

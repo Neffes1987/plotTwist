@@ -1,4 +1,16 @@
-import { HiddenCaveWorldDTO, HolidayWorldDTO, PlainWorldDTO, PrivateWorldDTO, ReturnWithPotionWorldDTO, WorldDTO } from 'backend';
+import {
+  ChaseType,
+  FinalType,
+  HiddenCaveWorldDTO,
+  HolidayGetSwordType,
+  HolidayType,
+  HolidayWorldDTO,
+  PlainWorldDTO,
+  PotionType,
+  PrivateWorldDTO,
+  ReturnWithPotionWorldDTO,
+  WorldDTO,
+} from 'backend';
 
 import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../constants';
 import { TranslationNamespace } from '../../App/initI18n/translationsSchema';
@@ -18,10 +30,8 @@ export const WORLD_EDITOR_TRANSLATION_SCHEMA = {
     contrast: 'contrast',
     shadowIntroduction: 'shadowIntroduction',
     mainEdge: 'mainEdge',
-    holidayType: {
-      caption: 'holidayType',
-      types: {},
-    },
+    holidayType: 'holidayType',
+    holidaySubType: 'holidaySubType',
     chase: 'chase',
     shadowRevenge: 'shadowRevenge',
     journeyResult: 'journeyResult',
@@ -39,6 +49,21 @@ export const WORLD_EDITOR_TRANSLATION_SCHEMA = {
     name: 'name',
     description: 'description',
     partyPlan: 'partyPlan',
+  },
+  lists: {
+    journeyResult: {
+      wisdom: 'wisdom',
+      love: 'love',
+      responsible: 'responsible',
+      tragedy: 'tragedy',
+      badExperience: 'badExperience',
+      wastedTime: 'wastedTime',
+    },
+    finalType: {
+      cycle: 'cycle',
+      achievePerfect: 'achievePerfect',
+      openEnd: 'openEnd',
+    },
   },
 };
 
@@ -69,9 +94,6 @@ export const COMMON_WORLD_FIELDS_CONFIG: StepperFieldField<Omit<WorldDTO, 'laws'
     minValueLength: SHORT_VALUE_MAX_LENGTH,
     type: 'text',
   },
-  // { label: 'pages.worldEditor.labels.edge', name: 'edgeId' },
-  // { label: 'pages.worldEditor.labels.waterholes', name: 'waterholes' },
-  // { label: 'pages.worldEditor.labels.laws', name: 'laws' },
 ];
 
 export const PLAIN_WORLD_FIELDS_CONFIG: StepperFieldField<PlainWorldDTO>[] = [
@@ -83,8 +105,6 @@ export const PLAIN_WORLD_FIELDS_CONFIG: StepperFieldField<PlainWorldDTO>[] = [
     minValueLength: SHORT_VALUE_MAX_LENGTH,
     type: 'text',
   },
-  // { label: 'pages.worldEditor.labels.charactersProblems', name: 'charactersProblems' },
-  // { label: 'pages.worldEditor.labels.worldProblems', name: 'worldProblems' },
 ];
 
 export const PRIVATE_WORLD_FIELDS_CONFIG: StepperFieldField<PrivateWorldDTO>[] = [
@@ -105,18 +125,36 @@ export const HIDDEN_CAVE_WORLD_FIELDS_CONFIG: StepperFieldField<HiddenCaveWorldD
   { label: worldListTranslations.labels.partyPlan, name: 'partyPlan', maxValueLength: BIG_VALUE_MAX_LENGTH, type: 'text' },
 ];
 
+const ChaseTypeOptions: SelectOptionTyped<ChaseType>[] = [];
+const HolidayGetSwordTypeOptions: SelectOptionTyped<HolidayGetSwordType>[] = [];
+const HolidayTypeOptions: SelectOptionTyped<HolidayType>[] = [];
+
 export const HOLIDAY_WORLD_FIELDS_CONFIG: StepperFieldField<HolidayWorldDTO>[] = [
   ...COMMON_WORLD_FIELDS_CONFIG,
-  // { label: 'pages.worldEditor.labels.chase', name: 'chase' },
-  // { label: 'pages.worldEditor.labels.holidayType', name: 'holidayType' },
-  // { label: 'pages.worldEditor.labels.holidaySubType', name: 'holidaySubType' },
+  { label: worldListTranslations.labels.chase, name: 'chase', type: 'list', options: ChaseTypeOptions },
+  { label: worldListTranslations.labels.holidayType, name: 'holidayType', type: 'list', options: HolidayTypeOptions },
+  { label: worldListTranslations.labels.holidaySubType, name: 'holidayGetSwordType', type: 'list', options: HolidayGetSwordTypeOptions },
   { label: worldListTranslations.labels.mainEdge, name: 'shadowRevenge', maxValueLength: BIG_VALUE_MAX_LENGTH, type: 'text' },
+];
+
+const FinalTypeOption: SelectOptionTyped<FinalType>[] = [
+  { id: 'cycle', name: '' },
+  { id: 'achievePerfect', name: '' },
+  { id: 'openEnd', name: '' },
+];
+const PotionTypeOption: SelectOptionTyped<PotionType>[] = [
+  { id: 'wisdom', name: '' },
+  { id: 'love', name: '' },
+  { id: 'responsible', name: '' },
+  { id: 'tragedy', name: '' },
+  { id: 'badExperience', name: '' },
+  { id: 'wastedTime', name: '' },
 ];
 
 export const RETURN_WITH_POTION_WORLD_FIELDS_CONFIG: StepperFieldField<ReturnWithPotionWorldDTO>[] = [
   ...COMMON_WORLD_FIELDS_CONFIG,
-  // { label: 'pages.worldEditor.labels.journeyResult', name: 'journeyResult', maxValueLength: BIG_VALUE_MAX_LENGTH },
-  { label: worldListTranslations.labels.endType, name: 'finalType', type: 'text' },
+  { label: worldListTranslations.labels.journeyResult, name: 'potionType', type: 'list', options: PotionTypeOption },
+  { label: worldListTranslations.labels.endType, name: 'finalType', type: 'list', options: FinalTypeOption },
   { label: worldListTranslations.labels.cliffhanger, name: 'cliffhanger', maxValueLength: BIG_VALUE_MAX_LENGTH, type: 'text' },
 ];
 

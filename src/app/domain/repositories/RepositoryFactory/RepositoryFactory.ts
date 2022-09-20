@@ -1,5 +1,6 @@
 import { DataProviderFactory } from '../../../dataStoreProvider/DataProviderFactory/DataProviderFactory';
 import { AbstractRepository } from '../AbstractRepository/AbstractRepository';
+import { LawsRepository } from '../LawsRepository/LawsRepository';
 import { PlotRepository } from '../PlotRepository/PlotRepository';
 import { WorldRepository } from '../WorldRepository/WorldRepository';
 
@@ -15,6 +16,8 @@ export class RepositoryFactory {
         return new PlotRepository(provider);
       case 'world':
         return new WorldRepository(provider);
+      case 'laws':
+        return new LawsRepository(provider);
     }
   }
 }

@@ -1,13 +1,13 @@
-import { IPlotController, LawDTO, plotController } from 'backend';
+import { ILawsController, LawDTO, lawsController } from 'backend';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 export class ListStore {
   laws: LawDTO[] = [];
-  private readonly crud: IPlotController;
+  private readonly crud: ILawsController;
 
   constructor() {
     makeAutoObservable(this);
-    this.crud = plotController;
+    this.crud = lawsController;
   }
 
   async list(): Promise<void> {
@@ -23,8 +23,8 @@ export class ListStore {
     });
   }
 
-  async update({ id = '', name = '', description = '', status = 'draft' }: Partial<LawDTO>): Promise<void> {
-    await this.crud.update({ id, name, description, status });
+  async update(law: LawDTO): Promise<void> {
+    await this.crud.update({ ...law, isBroken: law.isBroken ?? false });
     await this.list();
   }
 
@@ -33,8 +33,8 @@ export class ListStore {
     await this.list();
   }
 
-  async create(name: string, description: string): Promise<string> {
-    const plotId = await this.crud.create({ name, description, status: 'draft' });
+  async create(name: string, description: string, punishment: string): Promise<string> {
+    const plotId = await this.crud.create({ name, description, punishment, isBroken: false });
 
     if (plotId) {
       await this.list();

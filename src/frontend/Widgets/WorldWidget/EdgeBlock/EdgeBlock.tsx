@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ROUTES } from '../../../Screens/routes';
 import { Card } from '../../../UI/Card/Card';
 import { WorldWidgetProps } from '../interface';
 import { PropertyRow } from '../parts/PropertyRow/PropertyRow';
@@ -11,29 +12,29 @@ export const EdgeBlock = ({ onOpenWorldProperty }: Pick<WorldWidgetProps, 'onOpe
 
   return (
     <Card title={t(worldWidgetEdgeTranslations.caption)} align="flex-start" fullWidth testID="edge-block">
-      <PropertyRow onPress={onOpenWorldProperty} caption={t(worldWidgetEdgeTranslations.caption)} id="aboutEdge" />
+      <PropertyRow onPress={onOpenWorldProperty} caption={t(worldWidgetEdgeTranslations.caption)} id={ROUTES.aboutEdge} />
 
-      <PropertyRow onPress={onOpenWorldProperty} quantity={`${0}/${0}`} caption={t(worldWidgetEdgeTranslations.labels.rewards)} id="rewards" />
+      <PropertyRow onPress={onOpenWorldProperty} quantity={`${0}/${0}`} caption={t(worldWidgetEdgeTranslations.labels.rewards)} id={ROUTES.rewards} />
 
       <PropertyRow
         onPress={onOpenWorldProperty}
         quantity={`${0}/${0}`}
         caption={t(worldWidgetEdgeTranslations.labels.activeChallenges)}
-        id="activeChallenges"
+        id={ROUTES.activeChallenges}
       />
 
       <PropertyRow
         onPress={onOpenWorldProperty}
         quantity={`${0}/${0}`}
         caption={t(worldWidgetEdgeTranslations.labels.passedChallenges)}
-        id="passedChallenges"
+        id={ROUTES.passedChallenges}
       />
 
       <PropertyRow
         onPress={onOpenWorldProperty}
         quantity={`${0}/${0}`}
         caption={t(worldWidgetEdgeTranslations.labels.failedChallenges)}
-        id="failedChallenges"
+        id={ROUTES.failedChallenges}
       />
     </Card>
   );

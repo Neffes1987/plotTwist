@@ -1,6 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ROUTES } from '../../Screens/routes';
 import { IconButton } from '../../UI/Buttons/IconButton';
 import { Drawer } from '../../UI/Drawer/Drawer';
 import { Flex } from '../../UI/Flex/Flex';
@@ -9,7 +10,7 @@ import { Typography } from '../../UI/Typography/Typography';
 
 import { EdgeBlock } from './EdgeBlock/EdgeBlock';
 import { Faq } from './Faq/Faq';
-import { PropertyTypeUnion, WorldWidgetProps } from './interface';
+import { WorldWidgetProps } from './interface';
 import { NPCBlock } from './NPCBlock/NPCBlock';
 import { WorldInfoBlock } from './WorldInfoBlock/WorldInfoBlock';
 import { worldWidgetInfoTranslations } from './worldWidgetTranslations';
@@ -34,8 +35,8 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
     setIsShowWorldFaqPopover(false);
   }
 
-  function onClickPropertyHandler(propertyType: PropertyTypeUnion): void {
-    if (propertyType === 'aboutWorld') {
+  function onClickPropertyHandler(propertyType: string): void {
+    if (propertyType === ROUTES.aboutWorld) {
       setIsShowWorldFaqPopover(true);
 
       return;

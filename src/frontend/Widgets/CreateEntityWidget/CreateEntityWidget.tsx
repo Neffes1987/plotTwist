@@ -14,7 +14,7 @@ export const CreateEntityWidget = (props: CreateEntityWidgetProps): JSX.Element 
     <Drawer
       caption={
         <Flex justify="space-between" fullWidth gapX={4}>
-          {!!onDelete && <IconButton iconType="close" size={28} color="accentDarkBlue" onPress={onApply} />}
+          {!!onDelete && <IconButton iconType="close" size={28} color="accentDarkBlue" onPress={onDelete} />}
 
           <Typography>{caption}</Typography>
 

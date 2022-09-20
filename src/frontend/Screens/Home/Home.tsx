@@ -20,7 +20,7 @@ export const Home = observer(
     const { selectedPlot, plotName, nextStep, worlds } = homeData;
     const isFocused = useIsFocused();
 
-    function getPlot() {
+    function getPlot(): void {
       homeData.getPlot().catch(() => {
         navigate(ROUTES.oops, { state: { error: { key: 'pages.home.errors.cantGetWorlds' } } });
       });
@@ -62,6 +62,10 @@ export const Home = observer(
       navigate(ROUTES.plotList);
     }
 
+    function onOpenPropertyHandler(route: string): void {
+      navigate(route);
+    }
+
     return (
       <ScreenView
         header={{
@@ -83,7 +87,7 @@ export const Home = observer(
           ) : (
             <Flex direction="column" fullWidth>
               {worlds.map(world => (
-                <WorldWidget key={world.type} worldInfo={world} onEditWorld={onEditWorldHandler} onOpenWorldProperty={console.error} />
+                <WorldWidget key={world.type} worldInfo={world} onEditWorld={onEditWorldHandler} onOpenWorldProperty={onOpenPropertyHandler} />
               ))}
 
               {nextStep && <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.actions.createNextWorld')}</UIButton>}

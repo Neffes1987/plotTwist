@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ROUTES } from '../../../Screens/routes';
 import { Card } from '../../../UI/Card/Card';
 import { WorldWidgetProps } from '../interface';
 import { PropertyRow } from '../parts/PropertyRow/PropertyRow';
@@ -12,7 +13,7 @@ export const NPCBlock = ({ onOpenWorldProperty }: Pick<WorldWidgetProps, 'onOpen
   return (
     <Card title={t(worldWidgetNPCTranslations.caption)} flex={1} height="100%" align="flex-start" testID="npc-block">
       {Object.keys([]).map((type: string) => (
-        <PropertyRow key={type} onPress={onOpenWorldProperty} caption={t(worldWidgetNPCTranslations.labels[type])} quantity={`${0}`} id="aboutEdge" />
+        <PropertyRow key={type} onPress={onOpenWorldProperty} caption={t(worldWidgetNPCTranslations.labels[type])} quantity={`${0}`} id={ROUTES.characters} />
       ))}
     </Card>
   );
