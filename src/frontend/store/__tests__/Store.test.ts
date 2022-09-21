@@ -1,13 +1,15 @@
-import { waitEffectAsync } from '@mocks/functions';
+import { MockedAsyncStorage, waitEffectAsync } from '@mocks/functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Store } from '../Store';
+const storage = new MockedAsyncStorage();
 
 describe('WHEN "Store" created', () => {
   const testId = JSON.stringify({ currentPlotId: 'test-id' });
 
-  beforeEach(async () => {
-    await AsyncStorage.setItem(Store.SETTINGS_STORE_KEY, testId);
+  beforeEach(() => {
+    storage.reset();
+    storage.getItem.mockResolvedValue(testId);
   });
 
   it('MUST load user data from store to memory', async () => {
@@ -28,6 +30,12 @@ describe('WHEN "Store" created', () => {
     });
 
     it('MUST update data in AsyncStorage', async () => {
+      storage.getItem.mockResolvedValue(
+        JSON.stringify({
+          currentPlotId: '1',
+        }),
+      );
+
       const store = new Store();
 
       await store.setCurrentPlot('1');

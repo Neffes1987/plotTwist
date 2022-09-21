@@ -9,6 +9,10 @@ export class MockedAsyncStorage {
     this.getItem = jest.spyOn(Storage, 'getItem');
     this.setItem = jest.spyOn(Storage, 'setItem');
 
+    this.reset();
+  }
+
+  reset(): void {
     this.getItem.mockImplementation((label: string) => {
       return this.storage[label];
     });

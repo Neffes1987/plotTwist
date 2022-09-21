@@ -15,7 +15,7 @@ interface ValidationRangeErrorProps extends CommonValidationField {
   };
 }
 
-type ValidationErrorProps = ValidationRequiredErrorProps | ValidationRangeErrorProps;
+export type ValidationErrorProps = ValidationRequiredErrorProps | ValidationRangeErrorProps;
 
 export class ValidationError extends Error {
   properties: Record<string, Omit<ValidationErrorProps, 'property'>[]> = {};

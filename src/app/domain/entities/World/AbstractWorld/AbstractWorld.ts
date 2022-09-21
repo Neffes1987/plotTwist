@@ -5,7 +5,7 @@ import { ValidationError } from '../../../../errors/ValidationError';
 import { AbstractEntity } from '../../AbstractEntity/AbstractEntity';
 import { EntityValidator } from '../../AbstractEntity/EntityValidator';
 import { AbstractChallenge } from '../../Challenge/AbstractChallenge/AbstractChallenge';
-import { Law } from '../../Law/lawModel';
+import { Law } from '../../Law/Law';
 import { Waterhole } from '../../Waterhole/Waterhole';
 
 import { WorldStatus, WorldType } from './interface';

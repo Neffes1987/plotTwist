@@ -52,7 +52,7 @@ describe('EntityValidator', () => {
       expect(error?.properties.description).toHaveLength(1);
     });
 
-    it('AND provided fields are in rang, MUST exit without error', () => {
+    it('AND provided fields are in range, MUST exit without error', () => {
       let error: Nullable<ValidationError> = null;
 
       try {
@@ -62,6 +62,22 @@ describe('EntityValidator', () => {
       }
 
       expect(error).toBeNull();
+    });
+
+    it('AND provided fields value in empty, MUST throw "ValidationError" for each field', () => {
+      let error: Nullable<ValidationError> = null;
+      const testedValidator = new EntityValidator({
+        name: '',
+        description: 'description',
+      });
+
+      try {
+        testedValidator.checkFieldRange([{ propertyName: 'name', min: 10, max: null }]);
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error?.properties.name).toHaveLength(1);
     });
   });
 });

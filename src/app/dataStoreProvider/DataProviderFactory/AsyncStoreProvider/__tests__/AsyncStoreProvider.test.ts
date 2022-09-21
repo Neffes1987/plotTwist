@@ -79,6 +79,14 @@ describe('AsyncStoreProvider', () => {
     });
   });
 
+  it('WHEN "schema" is called, AND "entityType" is not a part of cached data, MUST return empty array', async () => {
+    const provider = new AsyncStoreProvider('any');
+
+    await waitEffectAsync();
+
+    expect(provider.schema).toEqual([]);
+  });
+
   describe('WHEN "get" is called', () => {
     it('AND result is empty, MUST return null', async () => {
       const provider = new AsyncStoreProvider('plot');

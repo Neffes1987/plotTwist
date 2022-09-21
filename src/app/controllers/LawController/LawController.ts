@@ -1,6 +1,6 @@
 import { LawDTO } from 'backend';
 
-import { Law } from '../../domain/entities/Law/lawModel';
+import { Law } from '../../domain/entities/Law/Law';
 import { LawsConstructor } from '../../domain/rulles/Constructors/LawsConstructor/LawsConstructor';
 import { AbstractController } from '../AbstractController/AbstractController';
 

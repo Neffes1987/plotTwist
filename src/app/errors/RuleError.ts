@@ -7,6 +7,7 @@ interface EntityDuplicationRuleErrorConfig {
   code: 'ENTITY_DUPLICATION';
   payload: {
     entityId: string;
+    entityName: string;
   };
 }
 

@@ -95,14 +95,10 @@ export class AsyncStoreProvider extends AbstractDataAccessProvider {
   }
 
   private async readFromStore(): Promise<void> {
-    try {
-      const value = await AsyncStorage.getItem(this.entityName);
+    const value = await AsyncStorage.getItem(this.entityName);
 
-      if (value) {
-        this.setSchema(JSON.parse(value) ?? []);
-      }
-    } catch (e) {
-      console.error(e);
+    if (value) {
+      this.setSchema(JSON.parse(value) ?? []);
     }
   }
 }

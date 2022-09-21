@@ -23,6 +23,7 @@ export class WorldConstructor extends AbstractConstructor implements IGetWorldWo
         code: 'ENTITY_DUPLICATION',
         payload: {
           entityId: entity.type,
+          entityName: 'world',
         },
       });
     }

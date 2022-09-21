@@ -4,12 +4,12 @@ import { MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../con
 import { ValidationError } from '../../../errors/ValidationError';
 import { AbstractEntity } from '../AbstractEntity/AbstractEntity';
 import { EntityValidator } from '../AbstractEntity/EntityValidator';
-import { Mentor } from '../Character/Mentor/Mentor';
+// import { Mentor } from '../Character/Mentor/Mentor';
 
 export class Law extends AbstractEntity {
   isBroken = false;
   private _punishment = '';
-  private _mentors: Mentor[] = [];
+  // private readonly _mentors: Mentor[] = [];
 
   constructor() {
     super();
@@ -19,17 +19,17 @@ export class Law extends AbstractEntity {
     return this._punishment;
   }
 
-  get mentors(): Mentor[] {
-    return this._mentors;
-  }
+  // get mentors(): Mentor[] {
+  // return this._mentors;
+  // }
 
   setPunishment(newValue: string): void {
     this._punishment = newValue;
   }
 
-  setMentors(newValue: Mentor[]): void {
-    this._mentors = newValue;
-  }
+  // setMentors(newValue: Mentor[]): void {
+  // this._mentors = newValue;
+  // }
 
   serialize(): LawDTO {
     return {

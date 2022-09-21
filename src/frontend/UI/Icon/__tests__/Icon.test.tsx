@@ -2,13 +2,16 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 
 import { UI_COLORS } from '../../colors';
+import { IconType } from '../../interface';
 import { Icon } from '../Icon';
 
-describe('WHEN "Icon" is mounted', () => {
-  it('AND "type" provided, MUST render icon', () => {
-    const component = render(<Icon type="close" />);
+const IconTypes: IconType[] = ['search', 'close', 'gear', 'tick', 'chevron', 'faq', 'attention', 'flame', 'logo', 'pencil', 'plus'];
 
-    expect(component.toJSON()?.props.name).toEqual('close');
+describe('WHEN "Icon" is mounted', () => {
+  it.each(IconTypes.map(type => [type]))('AND %p provided, MUST render icon', type => {
+    const component = render(<Icon type={(type as unknown) as IconType} />);
+
+    expect(component.toJSON()?.props.testID).toEqual(type);
   });
 
   it('AND "type" is not provided, MUST render empty image', () => {

@@ -15,6 +15,26 @@ export class EntityValidator<T extends Partial<CommonDTO>> {
     this.rawData = rawData;
   }
 
+  static checkMinValue(value: string, min: Nullable<number>): boolean {
+    if (min === null) {
+      return true;
+    }
+
+    if (!value) {
+      return false;
+    }
+
+    return value.length >= min;
+  }
+
+  static checkMaxValue(value: string, max: Nullable<number>): boolean {
+    if (max === null) {
+      return true;
+    }
+
+    return value.length <= max;
+  }
+
   checkRequiredFields(fieldNames: (keyof T)[]): void {
     const requiredFields: string[] = [];
 
@@ -45,13 +65,13 @@ export class EntityValidator<T extends Partial<CommonDTO>> {
       const { propertyName, min, max } = config;
       const value = this.rawData[propertyName] ?? '';
 
-      if (!this.checkMinValue(value as string, min)) {
+      if (!EntityValidator.checkMinValue(value as string, min)) {
         failedRangeConfig.push(config);
 
         return;
       }
 
-      if (!this.checkMaxValue(value as string, max)) {
+      if (!EntityValidator.checkMaxValue(value as string, max)) {
         failedRangeConfig.push(config);
       }
     });
@@ -72,25 +92,5 @@ export class EntityValidator<T extends Partial<CommonDTO>> {
 
       throw validationError;
     }
-  }
-
-  private checkMinValue(value: string, min: Nullable<number>): boolean {
-    if (min === null) {
-      return true;
-    }
-
-    if (!value) {
-      return false;
-    }
-
-    return value.length >= min;
-  }
-
-  private checkMaxValue(value: string, max: Nullable<number>): boolean {
-    if (max === null) {
-      return true;
-    }
-
-    return value.length <= max;
   }
 }

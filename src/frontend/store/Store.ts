@@ -9,15 +9,7 @@ export class Store {
   };
 
   constructor() {
-    AsyncStorage.getItem(Store.SETTINGS_STORE_KEY)
-      .then((value: Nullable<string>) => {
-        if (value) {
-          this._settings = JSON.parse(value);
-        }
-      })
-      .catch((e: Error) => {
-        console.error(e);
-      });
+    this.init();
   }
 
   get settings(): Settings {
@@ -30,6 +22,14 @@ export class Store {
       currentPlotId: newValue,
     };
     await AsyncStorage.setItem(Store.SETTINGS_STORE_KEY, JSON.stringify(this._settings));
+  }
+
+  private async init(): Promise<void> {
+    const value = await AsyncStorage.getItem(Store.SETTINGS_STORE_KEY);
+
+    if (value) {
+      this._settings = JSON.parse(value);
+    }
   }
 }
 

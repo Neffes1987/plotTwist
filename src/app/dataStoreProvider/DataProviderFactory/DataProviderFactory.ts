@@ -1,7 +1,6 @@
 import { IDataProvider } from '../../domain/repositories/AbstractRepository/interface';
 
 import { AsyncStoreProvider } from './AsyncStoreProvider/AsyncStoreProvider';
-import { DBProvider } from './DBProvider/DBProvider';
 import { DataProviderType } from './interface';
 
 export class DataProviderFactory {
@@ -13,8 +12,6 @@ export class DataProviderFactory {
 
   createDataProvider(type: DataProviderType): IDataProvider {
     switch (type) {
-      case 'db':
-        return new DBProvider(this.entityName);
       case 'store':
         return new AsyncStoreProvider(this.entityName);
       default:

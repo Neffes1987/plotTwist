@@ -1,15 +1,16 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
 
-import { Icon } from '../../Icon/Icon';
 import { ListItemProps } from '../interface';
 import { ListItem } from '../ListItem';
 
 describe('WHEN "ListItem" is mounted', () => {
   const defultProps: ListItemProps = {
+    onOpen: jest.fn(),
     caption: 'test caption',
     onEdit: jest.fn(),
     propertyId: 'test id',
+    icon: undefined,
   };
 
   it('MUST render provided "caption"', () => {
@@ -19,7 +20,7 @@ describe('WHEN "ListItem" is mounted', () => {
   });
 
   it('AND icon is provided, MUST render provided icon', () => {
-    const component = render(<ListItem {...defultProps} icon={<Icon type="gear" />} />);
+    const component = render(<ListItem {...defultProps} icon="gear" />);
 
     expect(component.getByTestId('gear')).toBeDefined();
   });
@@ -29,6 +30,6 @@ describe('WHEN "ListItem" is mounted', () => {
 
     fireEvent.press(component.getByText(defultProps.caption));
 
-    expect(defultProps.onEdit).toHaveBeenCalledWith(defultProps.propertyId);
+    expect(defultProps.onOpen).toHaveBeenCalledWith(defultProps.propertyId);
   });
 });
