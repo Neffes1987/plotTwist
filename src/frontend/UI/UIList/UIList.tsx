@@ -14,9 +14,9 @@ export const UIList = (props: UIListProps): ReactElement => {
 
   return (
     <>
-      <Flex direction="column" justify="flex-start" align="flex-start" gapX={12}>
-        {list.map(({ id = '', name }) => (
-          <ListItem onOpen={onOpen} key={id} onEdit={onEdit} propertyId={id} caption={name} />
+      <Flex direction="column" justify="flex-start" align="flex-start">
+        {list.map(({ id = '', name, isSelected }) => (
+          <ListItem selected={isSelected} onOpen={onOpen} key={id} onEdit={onEdit} propertyId={id} caption={name} />
         ))}
       </Flex>
 

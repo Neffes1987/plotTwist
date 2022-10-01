@@ -3,6 +3,7 @@ import { LawDTO } from 'backend';
 import { TranslationNamespace } from '../../App/initI18n/translationsSchema';
 
 export const DEFAULT_FORM_VALUES: LawDTO = {
+  worldIds: [],
   id: '',
   isBroken: false,
   punishment: '',

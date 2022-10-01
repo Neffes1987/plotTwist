@@ -1,10 +1,15 @@
 import { RuleError } from '../../../../../errors/RuleError';
+import { Law } from '../../../../entities/Law/Law';
 import { PlainWorld } from '../../../../entities/World/PlainWorld/PlainWorld';
 import { WorldConstructor } from '../WorldConstructor';
 
 const mockWorld = new PlainWorld();
 
 mockWorld.setId('3241');
+
+const mockLaw = new Law();
+
+mockLaw.setId('law-id');
 
 const worldRepository = {
   create: jest.fn(),
@@ -14,12 +19,25 @@ const worldRepository = {
   list: jest.fn().mockResolvedValue([mockWorld]),
 };
 
+const relationRepository = {
+  create: jest.fn(),
+  delete: jest.fn().mockResolvedValue(true),
+  get: jest.fn(),
+  update: jest.fn().mockResolvedValue(true),
+  list: jest.fn().mockResolvedValue([mockLaw]),
+};
+
 describe('WorldConstructor', () => {
   const worldConstructor = new WorldConstructor();
 
   Object.defineProperty(worldConstructor, 'repository', {
     writable: true,
     value: worldRepository,
+  });
+
+  Object.defineProperty(worldConstructor, 'relationsRepository', {
+    writable: true,
+    value: relationRepository,
   });
 
   describe('WHEN "getWorldsByPlotId" is called', () => {
@@ -31,6 +49,22 @@ describe('WorldConstructor', () => {
       await worldConstructor.getWorldsByPlotId('1234');
 
       expect(worldRepository.list).toHaveBeenCalledWith({ pagination: { count: 5, page: 1 }, queryParams: { plotId: '1234' } });
+    });
+
+    it('MUST call "laws.list" from "relation" repository', async () => {
+      await worldConstructor.getWorldsByPlotId(mockWorld.id);
+
+      expect(relationRepository.list).toHaveBeenCalledWith({
+        pagination: {
+          count: 100,
+          page: 1,
+        },
+        queryParams: {
+          fieldName: 'law',
+          siblingId: [mockWorld.id],
+          siblingName: 'world',
+        },
+      });
     });
 
     it('MUST return list of Worlds', async () => {

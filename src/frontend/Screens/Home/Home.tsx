@@ -62,8 +62,12 @@ export const Home = observer(
       navigate(ROUTES.plotList);
     }
 
-    function onOpenPropertyHandler(route: string): void {
-      navigate(route);
+    function onOpenPropertyHandler(route: string, worldId: string): void {
+      navigate(route, {
+        state: {
+          id: worldId,
+        },
+      });
     }
 
     return (

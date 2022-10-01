@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LawDTO } from 'backend';
 import { observer } from 'mobx-react';
+import { useNavigation } from '@react-navigation/native';
 
 import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../constants';
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
@@ -13,15 +14,19 @@ import { UIList } from '../../UI/UIList/UIList';
 import { CreateEntityWidget } from '../../Widgets/CreateEntityWidget/CreateEntityWidget';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 
+// import { RouteParams } from '../interface';
 import { DEFAULT_FORM_VALUES, lawListTranslations } from './constants';
 import { lawsListStore } from './LawsListStore';
 
 export const Laws = observer(
   (): ReactElement => {
     const { t } = useTranslation();
+    const { goBack } = useNavigation();
     const { updateContextErrors } = useErrorContext();
     const { isEditDrawerOpen, onOpenPopoverHandler, onClosePopoverHandler } = useTogglePopover();
     const { form, setFormFieldData, formErrors, resetForm } = useForm<LawDTO>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
+
+    // const { params } = useRoute<RouteParams>();
 
     useEffect(() => {
       lawsListStore.list().catch(updateContextErrors);
@@ -78,6 +83,7 @@ export const Laws = observer(
         name: law.name,
         punishment: law.punishment,
         isBroken: form.isBroken,
+        worldIds: form.worldIds,
       });
 
       onOpenPopoverHandler();
@@ -89,9 +95,15 @@ export const Laws = observer(
       <ScreenView
         header={{
           title: t(lawListTranslations.caption),
+          onBackClick: goBack,
         }}
       >
-        <UIList list={lawsListStore.laws} onEdit={onEditHandler} onOpen={onAddToWorldHandler} onCreate={onOpenPopoverHandler} />
+        <UIList
+          list={lawsListStore.laws.map(law => ({ ...law, isSelected: true }))}
+          onEdit={onEditHandler}
+          onOpen={onAddToWorldHandler}
+          onCreate={onOpenPopoverHandler}
+        />
 
         <CreateEntityWidget
           onApply={!form.id ? onCreateHandler : onUpdateHandler}

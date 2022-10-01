@@ -2,15 +2,15 @@ import { WorldDTO } from 'backend';
 
 import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
 import { ValidationError } from '../../../../errors/ValidationError';
-import { AbstractEntity } from '../../AbstractEntity/AbstractEntity';
-import { EntityValidator } from '../../AbstractEntity/EntityValidator';
+import { AbstractTextEntity } from '../../AbstractTextEntity/AbstractTextEntity';
+import { EntityValidator } from '../../AbstractTextEntity/EntityValidator';
 import { AbstractChallenge } from '../../Challenge/AbstractChallenge/AbstractChallenge';
 import { Law } from '../../Law/Law';
 import { Waterhole } from '../../Waterhole/Waterhole';
 
 import { WorldStatus, WorldType } from './interface';
 
-export abstract class AbstractWorld extends AbstractEntity {
+export abstract class AbstractWorld extends AbstractTextEntity {
   private _type: Nullable<WorldType> = null;
   private _story = '';
   private _reference = '';

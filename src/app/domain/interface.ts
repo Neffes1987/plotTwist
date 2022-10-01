@@ -5,5 +5,5 @@ export interface ListParams {
   };
   sort?: Record<string, string>;
   search?: string;
-  queryParams?: Record<string, string>;
+  queryParams?: Record<string, string | string[]>;
 }

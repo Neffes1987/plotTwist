@@ -1,11 +1,9 @@
-import { ReturnWithPotionWorldDTO } from 'backend';
+import { FinalType, PotionType, ReturnWithPotionWorldDTO } from 'backend';
 
 import { BIG_VALUE_MAX_LENGTH } from '../../../../../constants';
 import { ValidationError } from '../../../../errors/ValidationError';
-import { EntityValidator } from '../../AbstractEntity/EntityValidator';
+import { EntityValidator } from '../../AbstractTextEntity/EntityValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
-
-import { FinalType, PotionType } from './interface';
 
 export class ReturnWithPotionWorld extends AbstractWorld {
   _finalType?: FinalType;

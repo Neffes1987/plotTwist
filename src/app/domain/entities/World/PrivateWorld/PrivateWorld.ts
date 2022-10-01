@@ -2,7 +2,7 @@ import { PrivateWorldDTO } from 'backend';
 
 import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
 import { ValidationError } from '../../../../errors/ValidationError';
-import { EntityValidator } from '../../AbstractEntity/EntityValidator';
+import { EntityValidator } from '../../AbstractTextEntity/EntityValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
 export class PrivateWorld extends AbstractWorld {

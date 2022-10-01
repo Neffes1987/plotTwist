@@ -1,9 +1,9 @@
-import { AbstractEntity } from '../AbstractEntity/AbstractEntity';
+import { AbstractTextEntity } from '../AbstractTextEntity/AbstractTextEntity';
 import { Messenger } from '../Character/Messenger/Messenger';
 
 import { CallStatus, CallType } from './interface';
 
-export class Call extends AbstractEntity {
+export class Call extends AbstractTextEntity {
   readonly type: CallType;
 
   private _partyMotivation = '';

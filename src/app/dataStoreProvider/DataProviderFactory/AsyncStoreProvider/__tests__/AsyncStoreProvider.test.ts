@@ -68,14 +68,26 @@ describe('AsyncStoreProvider', () => {
       expect(list).toHaveLength(0);
     });
 
-    it('AND "queryParams" was provided, MUST return data by provided query', async () => {
-      const provider = new AsyncStoreProvider('plot');
+    describe('AND "queryParams" was provided', () => {
+      it('MUST return data by provided query', async () => {
+        const provider = new AsyncStoreProvider('plot');
 
-      await waitEffectAsync();
+        await waitEffectAsync();
 
-      const list = await provider.list({ pagination: { count: 2, page: 1 }, queryParams: { id: 'id1', name: 'name1' } });
+        const list = await provider.list({ pagination: { count: 2, page: 1 }, queryParams: { id: 'id1', name: 'name1' } });
 
-      expect(list).toEqual([JSON.parse(testData.plot)[0]]);
+        expect(list).toEqual([JSON.parse(testData.plot)[0]]);
+      });
+
+      it('AND one of params are array, MUST return data by provided query', async () => {
+        const provider = new AsyncStoreProvider('plot');
+
+        await waitEffectAsync();
+
+        const list = await provider.list({ pagination: { count: 2, page: 1 }, queryParams: { id: ['id1'], name: 'name1' } });
+
+        expect(list).toEqual([JSON.parse(testData.plot)[0]]);
+      });
     });
   });
 

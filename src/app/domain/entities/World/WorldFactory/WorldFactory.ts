@@ -6,6 +6,7 @@ import { PlainWorld } from '../PlainWorld/PlainWorld';
 import { PrivateWorld } from '../PrivateWorld/PrivateWorld';
 import { ReturnWithPotionWorld } from '../ReturnWithPotionWorld/ReturnWithPotionWorld';
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class WorldFactory {
   static create(type: WorldType): AbstractWorld {
     let world: AbstractWorld;

@@ -1,20 +1,26 @@
 import { ChaseType, FinalType, HolidayGetSwordType, HolidayType, PotionType } from 'backend';
 
 import { PlotStatus } from './Plot/interface';
+import { Problem } from './Problem/Problem';
 import { WorldStatus, WorldType } from './World/AbstractWorld/interface';
 
 export interface CommonDTO {
   id: string;
+}
+
+export interface TextDTO extends CommonDTO {
   name: string;
   description: string;
 }
-export interface LawDTO extends CommonDTO {
+
+export interface LawDTO extends TextDTO {
   isBroken: boolean;
   punishment: string;
+  worldIds: string[];
 }
-export type WaterholeDTO = CommonDTO;
+export type WaterholeDTO = TextDTO;
 
-export interface WorldDTO extends CommonDTO {
+export interface WorldDTO extends TextDTO {
   type: WorldType;
   failPrice: string;
   plotId: string;
@@ -29,6 +35,7 @@ export interface WorldDTO extends CommonDTO {
 export interface PlainWorldDTO extends WorldDTO {
   type: 'plainWorld';
   introduction: string;
+  problems: Problem[];
 }
 
 export interface PrivateWorldDTO extends WorldDTO {
@@ -58,7 +65,17 @@ export interface ReturnWithPotionWorldDTO extends WorldDTO {
   type: 'returnWithPotion';
 }
 
-export interface PlotDTO extends CommonDTO {
+export interface PlotDTO extends TextDTO {
   status: PlotStatus;
   worlds: WorldDTO[];
+}
+
+export type Entities = 'world' | 'plot' | 'law';
+
+export interface RelationDTO {
+  id: string;
+  fieldId: string;
+  fieldName: Entities;
+  siblingId: string;
+  siblingName: Entities;
 }

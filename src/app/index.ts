@@ -4,7 +4,6 @@ import { PlotController } from './controllers/PlotController/PlotController';
 import { WorldController } from './controllers/WorldController/WorldController';
 import { CharacterType } from './domain/entities/Character/AbstractCharacter/interface';
 import type {
-  CommonDTO,
   HiddenCaveWorldDTO,
   HolidayWorldDTO,
   LawDTO,
@@ -12,6 +11,7 @@ import type {
   PlotDTO,
   PrivateWorldDTO,
   ReturnWithPotionWorldDTO,
+  TextDTO,
   WorldDTO,
 } from './domain/entities/interface';
 import { ChaseType, HolidayGetSwordType, HolidayType } from './domain/entities/World/HolydayWorld/interface';
@@ -20,7 +20,6 @@ import { FinalType, PotionType } from './domain/entities/World/ReturnWithPotionW
 export type {
   CharacterType,
   ChaseType,
-  CommonDTO,
   FinalType,
   HiddenCaveWorldDTO,
   HolidayGetSwordType,
@@ -35,6 +34,7 @@ export type {
   PotionType,
   PrivateWorldDTO,
   ReturnWithPotionWorldDTO,
+  TextDTO,
   WorldDTO,
 };
 

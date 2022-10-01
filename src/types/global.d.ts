@@ -9,6 +9,7 @@ interface Navigation {
 interface SelectOption {
   id: string;
   name: string;
+  isSelected?: boolean;
 }
 
 interface SelectOptionTyped<T> {

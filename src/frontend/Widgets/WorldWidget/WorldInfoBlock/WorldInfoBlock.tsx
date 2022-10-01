@@ -14,27 +14,31 @@ export const WorldInfoBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWid
   const brokenLawsQuantity = laws?.filter(({ isBroken }) => isBroken).length ?? 0;
   const waterholesQuantity = waterholes?.length ?? 0;
 
+  function handlePressProperty(id: string): void {
+    onOpenWorldProperty(id, worldInfo.id);
+  }
+
   return (
     <Card title={t(worldWidgetInfoTranslations.caption)} flex={1} height="100%" align="flex-start" testID="world-info-block">
       <PropertyRow
         showAlert={!lawsQuantity}
-        onPress={onOpenWorldProperty}
+        onPress={handlePressProperty}
         caption={t(worldWidgetInfoTranslations.labels.brokenLaws)}
         quantity={`${brokenLawsQuantity}/${lawsQuantity}`}
         id={ROUTES.laws}
       />
 
-      <PropertyRow onPress={onOpenWorldProperty} caption={t(worldWidgetInfoTranslations.labels.activeCalls)} quantity={`${0}/${0}`} id={ROUTES.activeCalls} />
+      <PropertyRow onPress={handlePressProperty} caption={t(worldWidgetInfoTranslations.labels.activeCalls)} quantity={`${0}/${0}`} id={ROUTES.activeCalls} />
 
       <PropertyRow
         showAlert={!waterholesQuantity}
-        onPress={onOpenWorldProperty}
+        onPress={handlePressProperty}
         caption={t(worldWidgetInfoTranslations.labels.waterholes)}
         quantity={`${waterholesQuantity}`}
         id={ROUTES.waterholes}
       />
 
-      <PropertyRow onPress={onOpenWorldProperty} caption={t(worldWidgetInfoTranslations.labels.aboutWorld)} id={ROUTES.aboutWorld} />
+      <PropertyRow onPress={handlePressProperty} caption={t(worldWidgetInfoTranslations.labels.aboutWorld)} id={ROUTES.aboutWorld} />
     </Card>
   );
 };

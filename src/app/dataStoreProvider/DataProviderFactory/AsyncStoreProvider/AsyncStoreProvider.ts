@@ -11,6 +11,7 @@ export class AsyncStoreProvider extends AbstractDataAccessProvider {
     world: [],
     plot: [],
     laws: [],
+    relation: [],
   };
 
   constructor(entityName: string) {
@@ -73,10 +74,21 @@ export class AsyncStoreProvider extends AbstractDataAccessProvider {
       let isSatisfied = true;
 
       for (const fieldKey of fieldKeys) {
-        if (record[fieldKey] !== queryParams[fieldKey]) {
-          isSatisfied = false;
+        const queryParamValue = queryParams[fieldKey];
+        const recordValue = record[fieldKey];
 
-          break;
+        if (Array.isArray(queryParamValue)) {
+          if (!queryParams[fieldKey].includes(`${recordValue}`)) {
+            isSatisfied = false;
+
+            break;
+          }
+        } else {
+          if (recordValue !== queryParamValue) {
+            isSatisfied = false;
+
+            break;
+          }
         }
       }
 

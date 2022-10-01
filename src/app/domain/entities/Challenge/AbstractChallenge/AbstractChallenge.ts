@@ -1,11 +1,11 @@
-import { AbstractEntity } from '../../AbstractEntity/AbstractEntity';
+import { AbstractTextEntity } from '../../AbstractTextEntity/AbstractTextEntity';
 import { Call } from '../../Call/Call';
 import { AbstractCharacter } from '../../Character/AbstractCharacter/AbstractCharacter';
 import { Reward } from '../../Reward/Reward';
 
 import { ChallengeType } from './interface';
 
-export abstract class AbstractChallenge extends AbstractEntity {
+export abstract class AbstractChallenge extends AbstractTextEntity {
   readonly type: ChallengeType;
   isActive = false;
 

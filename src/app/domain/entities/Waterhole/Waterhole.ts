@@ -1,7 +1,7 @@
-import { AbstractEntity } from '../AbstractEntity/AbstractEntity';
+import { AbstractTextEntity } from '../AbstractTextEntity/AbstractTextEntity';
 import { Mentor } from '../Character/Mentor/Mentor';
 
-export class Waterhole extends AbstractEntity {
+export class Waterhole extends AbstractTextEntity {
   private _mentors: Mentor[] = [];
 
   constructor() {

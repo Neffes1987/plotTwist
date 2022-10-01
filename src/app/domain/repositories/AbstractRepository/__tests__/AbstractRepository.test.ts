@@ -1,4 +1,4 @@
-import { CommonDTO } from 'backend';
+import { TextDTO } from 'backend';
 
 import { AbstractEntity } from '../../../entities/AbstractEntity/AbstractEntity';
 import { AbstractRepository } from '../AbstractRepository';
@@ -12,7 +12,11 @@ const mockedDataProvider: IDataProvider = {
   update: jest.fn().mockResolvedValue(true),
 };
 
-class Entity extends AbstractEntity {}
+class Entity extends AbstractEntity {
+  validate(): void {
+    //
+  }
+}
 
 class Repository extends AbstractRepository {
   constructor() {
@@ -22,7 +26,7 @@ class Repository extends AbstractRepository {
   protected unSerializeToEntity(object: RawDataType): AbstractEntity {
     const entity = new Entity();
 
-    entity.unSerializeToEntity((object as unknown) as CommonDTO);
+    entity.unSerializeToEntity((object as unknown) as TextDTO);
 
     return entity;
   }

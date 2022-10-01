@@ -2,7 +2,7 @@ import { PlainWorldDTO } from 'backend';
 
 import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
 import { ValidationError } from '../../../../errors/ValidationError';
-import { EntityValidator } from '../../AbstractEntity/EntityValidator';
+import { EntityValidator } from '../../AbstractTextEntity/EntityValidator';
 import { Problem } from '../../Problem/Problem';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
@@ -35,13 +35,14 @@ export class PlainWorld extends AbstractWorld {
       ...super.serialize(),
       type: 'plainWorld',
       introduction: this.introduction,
+      problems: this.problems,
     };
   }
 
-  unSerializeToEntity(object: PlainWorld): void {
+  unSerializeToEntity(object: PlainWorldDTO): void {
     super.unSerializeToEntity(object);
     this.setIntroduction(object.introduction);
-    this.setProblems(object.problems);
+    this.setProblems(object.problems ?? []);
   }
 
   validate(): void {

@@ -42,7 +42,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
       return;
     }
 
-    onOpenWorldProperty(propertyType);
+    onOpenWorldProperty(propertyType, id);
   }
 
   return (
@@ -68,12 +68,12 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
           )}
 
           <Flex align="flex-start" marginY={4}>
-            <NPCBlock onOpenWorldProperty={onOpenWorldProperty} />
+            <NPCBlock onOpenWorldProperty={onOpenWorldProperty} worldInfo={worldInfo} />
 
             <WorldInfoBlock worldInfo={worldInfo} onOpenWorldProperty={onClickPropertyHandler} />
           </Flex>
 
-          <EdgeBlock onOpenWorldProperty={onOpenWorldProperty} />
+          <EdgeBlock onOpenWorldProperty={onOpenWorldProperty} worldInfo={worldInfo} />
         </Flex>
       )}
 

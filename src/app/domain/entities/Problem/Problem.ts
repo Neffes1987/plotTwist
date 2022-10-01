@@ -1,8 +1,8 @@
-import { AbstractEntity } from '../AbstractEntity/AbstractEntity';
+import { AbstractTextEntity } from '../AbstractTextEntity/AbstractTextEntity';
 
 import { ProblemType } from './interface';
 
-export class Problem extends AbstractEntity {
+export class Problem extends AbstractTextEntity {
   private _type: ProblemType = 'world';
   private _isSolved = false;
 

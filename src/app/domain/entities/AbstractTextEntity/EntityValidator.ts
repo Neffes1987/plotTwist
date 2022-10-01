@@ -1,14 +1,14 @@
-import { CommonDTO } from 'backend';
+import { TextDTO } from 'backend';
 
 import { ValidationError } from '../../../errors/ValidationError';
 
-interface Range<T extends Partial<CommonDTO>> {
+interface Range<T extends Partial<TextDTO>> {
   propertyName: keyof T;
   min: Nullable<number>;
   max: Nullable<number>;
 }
 
-export class EntityValidator<T extends Partial<CommonDTO>> {
+export class EntityValidator<T extends Partial<TextDTO>> {
   private readonly rawData: T;
 
   constructor(rawData: T) {

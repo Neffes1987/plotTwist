@@ -32,4 +32,18 @@ describe('WHEN "ListItem" is mounted', () => {
 
     expect(defultProps.onOpen).toHaveBeenCalledWith(defultProps.propertyId);
   });
+
+  it('AND user clicks on edit icon, MUST call callback function', () => {
+    const component = render(<ListItem {...defultProps} icon="gear" />);
+
+    fireEvent.press(component.getByTestId('gear'));
+
+    expect(defultProps.onEdit).toHaveBeenCalledWith(defultProps.propertyId);
+  });
+
+  it('AND "selected" prop was provided, MUST render "tick" icon', () => {
+    const component = render(<ListItem {...defultProps} selected />);
+
+    expect(component.queryAllByTestId('tick')).toHaveLength(1);
+  });
 });

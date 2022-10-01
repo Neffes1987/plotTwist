@@ -1,8 +1,8 @@
-import { CommonDTO, LawDTO, PlotDTO, WorldDTO } from 'backend';
+import { LawDTO, PlotDTO, TextDTO, WorldDTO } from 'backend';
 
 import { ListParams } from '../domain/interface';
 
-export interface ICommonController<Get extends CommonDTO, Update extends CommonDTO> {
+export interface ICommonController<Get extends TextDTO, Update extends TextDTO> {
   list: (params: ListParams) => Promise<Get[]>;
   create: (data: Omit<Update, 'id'>) => Promise<string>;
   update: (data: Update) => Promise<boolean>;

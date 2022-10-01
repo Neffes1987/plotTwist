@@ -1,11 +1,11 @@
 import { PlotDTO } from 'backend';
 
-import { AbstractEntity } from '../AbstractEntity/AbstractEntity';
+import { AbstractTextEntity } from '../AbstractTextEntity/AbstractTextEntity';
 import { AbstractWorld } from '../World/AbstractWorld/AbstractWorld';
 
 import { PlotStatus } from './interface';
 
-export class Plot extends AbstractEntity {
+export class Plot extends AbstractTextEntity {
   private _status: PlotStatus = 'draft';
   private _worlds: AbstractWorld[] = [];
 

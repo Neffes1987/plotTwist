@@ -34,7 +34,7 @@ export class ListStore {
   }
 
   async create(name: string, description: string, punishment: string): Promise<string> {
-    const plotId = await this.crud.create({ name, description, punishment, isBroken: false });
+    const plotId = await this.crud.create({ name, description, punishment, isBroken: false, worldIds: [] });
 
     if (plotId) {
       await this.list();

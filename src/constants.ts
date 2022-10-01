@@ -1,6 +1,6 @@
 import { HiddenCaveWorldDTO, HolidayWorldDTO, PlainWorldDTO, PrivateWorldDTO, ReturnWithPotionWorldDTO, WorldDTO } from 'backend';
 
-export const SHORT_VALUE_MAX_LENGTH = 256;
+export const SHORT_VALUE_MAX_LENGTH = 25;
 export const MIDDLE_VALUE_MAX_LENGTH = 2048;
 export const BIG_VALUE_MAX_LENGTH = 4096;
 export const NAME_VALUE_MIN_LENGTH = 6;
@@ -22,6 +22,7 @@ export const DEFAULT_WORLD_FORM_STATE: Omit<WorldDTO, 'type'> = {
 export const DEFAULT_PLAIN_WORLD_FORM_STATE: PlainWorldDTO = {
   ...DEFAULT_WORLD_FORM_STATE,
   introduction: '',
+  problems: [],
   type: 'plainWorld',
 };
 

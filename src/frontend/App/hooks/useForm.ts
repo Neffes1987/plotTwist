@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CommonDTO } from 'backend';
+import { TextDTO } from 'backend';
 
 import { useErrorContext } from './ErrorBoundaryContext/useErrorContext';
 
@@ -11,7 +11,7 @@ interface UseFormResult<T> {
   resetForm: (values?: T) => void;
 }
 
-export function useForm<T extends Partial<CommonDTO>>(defaultValues: T, errorsList: T): UseFormResult<T> {
+export function useForm<T extends Partial<TextDTO>>(defaultValues: T, errorsList: T): UseFormResult<T> {
   const { errors } = useErrorContext();
   const [form, setForm] = useState<T>(defaultValues);
   const [formErrors, setFormErrors] = useState<T & { common?: string }>(errorsList);

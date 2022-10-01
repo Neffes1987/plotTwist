@@ -6,5 +6,6 @@ export interface ListItemProps {
   propertyId: string;
   caption: string;
   noBorder?: boolean;
+  selected?: boolean;
   icon?: IconType;
 }

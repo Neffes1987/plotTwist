@@ -5,7 +5,7 @@ import { TypographyProps } from '../../UI/interface';
 export interface WorldWidgetProps {
   worldInfo: WorldDTO;
   onEditWorld: (type: WorldDTO['type'], id: string) => void;
-  onOpenWorldProperty: (propertyType: string) => void;
+  onOpenWorldProperty: (propertyType: string, worldId: string) => void;
 }
 
 export interface PropertyRowProps extends TypographyProps {

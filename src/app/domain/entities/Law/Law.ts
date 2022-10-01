@@ -2,13 +2,14 @@ import { LawDTO } from 'backend';
 
 import { MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../constants';
 import { ValidationError } from '../../../errors/ValidationError';
-import { AbstractEntity } from '../AbstractEntity/AbstractEntity';
-import { EntityValidator } from '../AbstractEntity/EntityValidator';
+import { AbstractTextEntity } from '../AbstractTextEntity/AbstractTextEntity';
+import { EntityValidator } from '../AbstractTextEntity/EntityValidator';
 // import { Mentor } from '../Character/Mentor/Mentor';
 
-export class Law extends AbstractEntity {
+export class Law extends AbstractTextEntity {
   isBroken = false;
   private _punishment = '';
+  private _worldIds: string[] = [];
   // private readonly _mentors: Mentor[] = [];
 
   constructor() {
@@ -19,12 +20,20 @@ export class Law extends AbstractEntity {
     return this._punishment;
   }
 
+  get worldIds(): string[] {
+    return this._worldIds;
+  }
+
   // get mentors(): Mentor[] {
   // return this._mentors;
   // }
 
   setPunishment(newValue: string): void {
     this._punishment = newValue;
+  }
+
+  setWorlds(newValue: string[]): void {
+    this._worldIds = newValue;
   }
 
   // setMentors(newValue: Mentor[]): void {
@@ -36,6 +45,7 @@ export class Law extends AbstractEntity {
       ...super.serialize(),
       punishment: this._punishment,
       isBroken: this.isBroken,
+      worldIds: this._worldIds,
     };
   }
 

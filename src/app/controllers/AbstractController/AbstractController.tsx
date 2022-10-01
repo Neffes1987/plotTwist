@@ -1,11 +1,11 @@
-import { CommonDTO } from 'backend';
+import { TextDTO } from 'backend';
 
 import { AbstractEntity } from '../../domain/entities/AbstractEntity/AbstractEntity';
 import { ListParams } from '../../domain/interface';
 import { AbstractConstructor } from '../../domain/rulles/Constructors/AbstractConstructor/AbstractConstructor';
 import { ICommonController } from '../interface';
 
-export abstract class AbstractController<Get extends CommonDTO, Update extends CommonDTO> implements ICommonController<Get, Update> {
+export abstract class AbstractController<Get extends TextDTO, Update extends TextDTO> implements ICommonController<Get, Update> {
   private readonly builder: AbstractConstructor;
 
   protected constructor(builder: AbstractConstructor) {

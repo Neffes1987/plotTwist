@@ -1,1 +1,1 @@
-export type RepositoryFactoryType = 'plot' | 'world' | 'laws';
+export type RepositoryFactoryType = 'plot' | 'world' | 'laws' | 'relation';

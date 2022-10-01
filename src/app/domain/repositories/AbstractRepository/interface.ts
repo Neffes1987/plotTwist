@@ -1,8 +1,8 @@
-import { CommonDTO } from 'backend';
+import { TextDTO } from 'backend';
 
 import { ListParams } from '../../interface';
 
-export type RawDataType = CommonDTO & Record<string, Nullable<string | number | boolean>>;
+export type RawDataType = TextDTO & Record<string, Nullable<string | number | boolean>>;
 
 export interface IDataProvider {
   create: (entity: RawDataType) => Promise<string>;

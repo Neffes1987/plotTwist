@@ -1,9 +1,9 @@
-import { AbstractEntity } from '../../AbstractEntity/AbstractEntity';
+import { CharacterType } from 'backend';
+
+import { AbstractTextEntity } from '../../AbstractTextEntity/AbstractTextEntity';
 import { Result } from '../../Result/Result';
 
-import { CharacterType } from './interface';
-
-export abstract class AbstractCharacter extends AbstractEntity {
+export abstract class AbstractCharacter extends AbstractTextEntity {
   private readonly _type: CharacterType;
   private _age = 0;
   private _race = '';

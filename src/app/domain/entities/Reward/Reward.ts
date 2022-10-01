@@ -1,6 +1,6 @@
-import { AbstractEntity } from '../AbstractEntity/AbstractEntity';
+import { AbstractTextEntity } from '../AbstractTextEntity/AbstractTextEntity';
 
-export class Reward extends AbstractEntity {
+export class Reward extends AbstractTextEntity {
   constructor() {
     super();
   }

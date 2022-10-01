@@ -1,6 +1,6 @@
 import { Plot } from '../../../entities/Plot/Plot';
 import { ListParams } from '../../../interface';
-import { RepositoryFactory } from '../../../repositories/RepositoryFactory/RepositoryFactory';
+import { createRepository } from '../../../repositories/RepositoryFactory/RepositoryFactory';
 import { AbstractConstructor } from '../AbstractConstructor/AbstractConstructor';
 import { WorldConstructor } from '../WorldConstructor/WorldConstructor';
 
@@ -10,7 +10,7 @@ export class PlotConstructor extends AbstractConstructor {
   private readonly worldConstructor: IGetWorldWorldList;
 
   constructor() {
-    super(new RepositoryFactory().createRepository('plot'));
+    super(createRepository('plot'));
     this.worldConstructor = new WorldConstructor();
   }
 
