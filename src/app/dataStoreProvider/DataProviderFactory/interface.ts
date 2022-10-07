@@ -1,4 +1,4 @@
-import { RawDataType } from '../../domain/repositories/AbstractRepository/interface';
+import { RawDataType } from '../../domain/repositories/Repository/interface';
 import { RepositoryFactoryType } from '../../domain/repositories/RepositoryFactory/interface';
 
 export type DataProviderType = 'db' | 'store';

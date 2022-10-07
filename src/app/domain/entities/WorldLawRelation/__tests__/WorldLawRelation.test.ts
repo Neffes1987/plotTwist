@@ -1,17 +1,16 @@
-import { RelationDTO } from '../../interface';
-import { Relation } from '../Relation';
+import { WorldLawRelationDTO } from '../../interface';
+import { WorldLawRelation } from '../WorldLawRelation';
 
-describe('WHEN "Relation" is created', () => {
-  const relationDTO: RelationDTO = {
+describe('WHEN "WorldLawRelation" is created', () => {
+  const relationDTO: WorldLawRelationDTO = {
     id: 'Id',
-    fieldId: 'lawId',
-    fieldName: 'law',
-    siblingId: 'worldId',
-    siblingName: 'world',
+    lawId: 'lawId',
+    worldId: 'worldId',
+    isBroken: true,
   };
 
   it('AND "serialize" is called, MUST generate raw object from instance fields', () => {
-    const relation = new Relation();
+    const relation = new WorldLawRelation();
 
     relation.unSerialize(relationDTO);
     relation.setId(relationDTO.id);
@@ -20,7 +19,7 @@ describe('WHEN "Relation" is created', () => {
   });
 
   it('AND "setId" is called, MUST update "id" field', () => {
-    const relation = new Relation();
+    const relation = new WorldLawRelation();
 
     relation.unSerialize(relationDTO);
     relation.setId(relationDTO.id);
@@ -29,7 +28,7 @@ describe('WHEN "Relation" is created', () => {
   });
 
   it('AND "unSerialize" is called, MUST generate raw object from instance fields', () => {
-    const relation = new Relation();
+    const relation = new WorldLawRelation();
 
     relation.unSerialize(relationDTO);
 

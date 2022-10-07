@@ -1,11 +1,11 @@
-import { IWorldController, WorldDTO } from 'backend';
+import { WorldDTO } from 'backend';
 
 import { AbstractWorld } from '../../domain/entities/World/AbstractWorld/AbstractWorld';
 import { WorldFactory } from '../../domain/entities/World/WorldFactory/WorldFactory';
 import { WorldConstructor } from '../../domain/rulles/Constructors/WorldConstructor/WorldConstructor';
-import { AbstractController } from '../AbstractController/AbstractController';
+import { Controller } from '../Controller/Controller';
 
-export class WorldController extends AbstractController<WorldDTO, Omit<WorldDTO, 'waterholes' | 'laws'>> implements IWorldController {
+export class WorldController extends Controller {
   constructor() {
     super(new WorldConstructor());
   }

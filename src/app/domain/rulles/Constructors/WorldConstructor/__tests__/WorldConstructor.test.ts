@@ -19,12 +19,8 @@ const worldRepository = {
   list: jest.fn().mockResolvedValue([mockWorld]),
 };
 
-const relationRepository = {
-  create: jest.fn(),
-  delete: jest.fn().mockResolvedValue(true),
-  get: jest.fn(),
-  update: jest.fn().mockResolvedValue(true),
-  list: jest.fn().mockResolvedValue([mockLaw]),
+const lawsConstructor = {
+  getLawsForWorlds: jest.fn().mockResolvedValue([mockLaw]),
 };
 
 describe('WorldConstructor', () => {
@@ -35,9 +31,9 @@ describe('WorldConstructor', () => {
     value: worldRepository,
   });
 
-  Object.defineProperty(worldConstructor, 'relationsRepository', {
+  Object.defineProperty(worldConstructor, 'lawConstructor', {
     writable: true,
-    value: relationRepository,
+    value: lawsConstructor,
   });
 
   describe('WHEN "getWorldsByPlotId" is called', () => {
@@ -54,17 +50,7 @@ describe('WorldConstructor', () => {
     it('MUST call "laws.list" from "relation" repository', async () => {
       await worldConstructor.getWorldsByPlotId(mockWorld.id);
 
-      expect(relationRepository.list).toHaveBeenCalledWith({
-        pagination: {
-          count: 100,
-          page: 1,
-        },
-        queryParams: {
-          fieldName: 'law',
-          siblingId: [mockWorld.id],
-          siblingName: 'world',
-        },
-      });
+      expect(lawsConstructor.getLawsForWorlds).toHaveBeenCalledWith([mockWorld.id]);
     });
 
     it('MUST return list of Worlds', async () => {

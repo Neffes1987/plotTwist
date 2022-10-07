@@ -1,5 +1,5 @@
 import { ListParams } from '../../../domain/interface';
-import { IDataProvider, RawDataType } from '../../../domain/repositories/AbstractRepository/interface';
+import { IDataProvider, RawDataType } from '../../../domain/repositories/Repository/interface';
 
 export abstract class AbstractDataAccessProvider implements IDataProvider {
   protected entityName: string;

@@ -1,7 +1,7 @@
 import { waitEffectAsync } from '@mocks/functions';
 import { MockedAsyncStorage } from '@mocks/MockedAsyncStorage';
 
-import { RawDataType } from '../../../../domain/repositories/AbstractRepository/interface';
+import { RawDataType } from '../../../../domain/repositories/Repository/interface';
 import { AsyncStoreProvider } from '../AsyncStoreProvider';
 
 const storage = new MockedAsyncStorage();

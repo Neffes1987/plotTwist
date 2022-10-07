@@ -2,7 +2,7 @@ import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { ListParams } from '../../../domain/interface';
-import { RawDataType } from '../../../domain/repositories/AbstractRepository/interface';
+import { RawDataType } from '../../../domain/repositories/Repository/interface';
 import { AbstractDataAccessProvider } from '../AbstractDataAccessProvider/AbstractDataAccessProvider';
 import { DataStoreSchema } from '../interface';
 
@@ -11,7 +11,7 @@ export class AsyncStoreProvider extends AbstractDataAccessProvider {
     world: [],
     plot: [],
     laws: [],
-    relation: [],
+    worldLawRelation: [],
   };
 
   constructor(entityName: string) {

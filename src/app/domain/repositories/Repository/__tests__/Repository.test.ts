@@ -1,8 +1,6 @@
-import { TextDTO } from 'backend';
-
-import { AbstractEntity } from '../../../entities/AbstractEntity/AbstractEntity';
-import { AbstractRepository } from '../AbstractRepository';
-import { IDataProvider, RawDataType } from '../interface';
+import { Plot } from '../../../entities/Plot/Plot';
+import { IDataProvider } from '../interface';
+import { Repository } from '../Repository';
 
 const mockedDataProvider: IDataProvider = {
   create: jest.fn().mockResolvedValue('1234'),
@@ -12,29 +10,9 @@ const mockedDataProvider: IDataProvider = {
   update: jest.fn().mockResolvedValue(true),
 };
 
-class Entity extends AbstractEntity {
-  validate(): void {
-    //
-  }
-}
-
-class Repository extends AbstractRepository {
-  constructor() {
-    super(mockedDataProvider);
-  }
-
-  protected unSerializeToEntity(object: RawDataType): AbstractEntity {
-    const entity = new Entity();
-
-    entity.unSerializeToEntity((object as unknown) as TextDTO);
-
-    return entity;
-  }
-}
-
-describe('AbstractRepository', () => {
-  const repository = new Repository();
-  const entity = new Entity();
+describe('Repository', () => {
+  const repository = new Repository(mockedDataProvider, 'plot');
+  const entity = new Plot();
 
   entity.setId('1234');
 

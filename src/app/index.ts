@@ -1,7 +1,5 @@
+import { controllerFactory } from './controllers/controllerFactory';
 import { ILawsController, IPlotController, IWorldController } from './controllers/interface';
-import { LawController } from './controllers/LawController/LawController';
-import { PlotController } from './controllers/PlotController/PlotController';
-import { WorldController } from './controllers/WorldController/WorldController';
 import { CharacterType } from './domain/entities/Character/AbstractCharacter/interface';
 import type {
   HiddenCaveWorldDTO,
@@ -38,6 +36,6 @@ export type {
   WorldDTO,
 };
 
-export const plotController: IPlotController = new PlotController();
-export const worldController: IWorldController = new WorldController();
-export const lawsController: ILawsController = new LawController();
+export const plotController: IPlotController = (controllerFactory('plot') as unknown) as IPlotController;
+export const worldController: IWorldController = (controllerFactory('world') as unknown) as IWorldController;
+export const lawsController: ILawsController = (controllerFactory('law') as unknown) as ILawsController;

@@ -2,7 +2,7 @@ import { DataProviderFactory } from '../../../../../dataStoreProvider/DataProvid
 import { AbstractEntity } from '../../../../entities/AbstractEntity/AbstractEntity';
 import { Plot } from '../../../../entities/Plot/Plot';
 import { ListParams } from '../../../../interface';
-import { AbstractRepository } from '../../../../repositories/AbstractRepository/AbstractRepository';
+import { Repository } from '../../../../repositories/Repository/Repository';
 import { AbstractConstructor } from '../AbstractConstructor';
 
 const mocks = {
@@ -13,7 +13,7 @@ const mocks = {
   delete: jest.fn(),
 };
 
-class TestRepository extends AbstractRepository {
+class TestRepository extends Repository {
   constructor() {
     super(new DataProviderFactory('any').createDataProvider('store'));
   }

@@ -1,4 +1,4 @@
-import { IDataProvider } from '../../domain/repositories/AbstractRepository/interface';
+import { IDataProvider } from '../../domain/repositories/Repository/interface';
 
 import { AsyncStoreProvider } from './AsyncStoreProvider/AsyncStoreProvider';
 import { DataProviderType } from './interface';

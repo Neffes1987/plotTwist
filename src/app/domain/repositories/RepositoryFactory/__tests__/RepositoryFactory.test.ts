@@ -1,16 +1,14 @@
-import { LawsRepository } from '../../LawsRepository/LawsRepository';
-import { PlotRepository } from '../../PlotRepository/PlotRepository';
-import { RelationsRepository } from '../../RelationsRepository/RelationsRepository';
+import { Repository } from '../../Repository/Repository';
 import { WorldRepository } from '../../WorldRepository/WorldRepository';
 import { RepositoryFactoryType } from '../interface';
 import { createRepository } from '../RepositoryFactory';
 
 describe('RepositoryFactory', () => {
   it.each([
-    ['plot', PlotRepository],
+    ['plot', Repository],
     ['world', WorldRepository],
-    ['laws', LawsRepository],
-    ['relation', RelationsRepository],
+    ['laws', Repository],
+    ['worldLawRelation', Repository],
   ])('WHEN "createRepository" is called with %p, MUST return instance of repository for provided key', (type, expected) => {
     const repository = createRepository(type as RepositoryFactoryType);
 

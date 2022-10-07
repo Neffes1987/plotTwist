@@ -70,12 +70,11 @@ export interface PlotDTO extends TextDTO {
   worlds: WorldDTO[];
 }
 
-export type Entities = 'world' | 'plot' | 'law';
-
-export interface RelationDTO {
+export interface WorldLawRelationDTO {
   id: string;
-  fieldId: string;
-  fieldName: Entities;
-  siblingId: string;
-  siblingName: Entities;
+  lawId: string;
+  worldId: string;
+  isBroken: boolean;
 }
+
+export type EntityType = 'plot' | 'laws' | 'worldLawRelation' | WorldType;

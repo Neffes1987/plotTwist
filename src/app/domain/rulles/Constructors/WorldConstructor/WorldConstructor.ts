@@ -1,18 +1,17 @@
 import { RuleError } from '../../../../errors/RuleError';
-import { Law } from '../../../entities/Law/Law';
 import { AbstractWorld } from '../../../entities/World/AbstractWorld/AbstractWorld';
-import { AbstractRepository } from '../../../repositories/AbstractRepository/AbstractRepository';
 import { createRepository } from '../../../repositories/RepositoryFactory/RepositoryFactory';
 import { AbstractConstructor } from '../AbstractConstructor/AbstractConstructor';
+import { LawsConstructor } from '../LawsConstructor/LawsConstructor';
 import { IGetWorldWorldList } from '../PlotConstructor/interface';
 
 export class WorldConstructor extends AbstractConstructor implements IGetWorldWorldList {
-  private readonly relationsRepository: AbstractRepository;
+  lawConstructor: LawsConstructor;
 
   constructor() {
     super(createRepository('world'));
 
-    this.relationsRepository = createRepository('relation');
+    this.lawConstructor = new LawsConstructor();
   }
 
   async create(entity: AbstractWorld): Promise<string> {
@@ -48,7 +47,7 @@ export class WorldConstructor extends AbstractConstructor implements IGetWorldWo
       },
     })) as AbstractWorld[];
 
-    const laws = await this.getLawsForWorlds(result.map(({ id }) => id));
+    const laws = await this.lawConstructor.getLawsForWorlds(result.map(({ id }) => id));
 
     return result.map(world => {
       const worldLaws = laws.filter(({ worldIds }) => worldIds?.includes(world.id));
@@ -57,19 +56,5 @@ export class WorldConstructor extends AbstractConstructor implements IGetWorldWo
 
       return world;
     });
-  }
-
-  private async getLawsForWorlds(worldIds: string[]): Promise<Law[]> {
-    return (await this.relationsRepository.list({
-      pagination: {
-        count: 100,
-        page: 1,
-      },
-      queryParams: {
-        fieldName: 'law',
-        siblingId: worldIds,
-        siblingName: 'world',
-      },
-    })) as Law[];
   }
 }
