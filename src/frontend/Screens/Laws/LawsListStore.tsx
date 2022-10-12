@@ -1,7 +1,7 @@
 import { ILawsController, LawDTO, lawsController } from 'backend';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-export class ListStore {
+export class LawsListStore {
   laws: LawDTO[] = [];
   private readonly crud: ILawsController;
 
@@ -21,6 +21,36 @@ export class ListStore {
     runInAction(() => {
       this.laws = data;
     });
+  }
+
+  async toggleWorldLaw(worldId: string, lawId: string): Promise<void> {
+    const law = this.laws.find(({ id }) => id === lawId);
+
+    if (!law) {
+      return;
+    }
+
+    const lawWorldIndex = law?.worldIds.findIndex(id => worldId === id);
+
+    if (lawWorldIndex < 0) {
+      await this.crud.addLawsToWorld([lawId], worldId);
+      law.worldIds.push(worldId);
+    } else {
+      law.worldIds.splice(lawWorldIndex, 1);
+      await this.crud.removeLawsFromWorld([lawId]);
+    }
+  }
+
+  async toggleLawStatus(lawId: string): Promise<void> {
+    const law = this.laws.find(({ id }) => id === lawId);
+
+    if (!law) {
+      return;
+    }
+
+    law.isBroken = !law.isBroken;
+
+    await this.crud.changeLawStatus(law.id, law.isBroken);
   }
 
   async update(law: LawDTO): Promise<void> {
@@ -46,4 +76,4 @@ export class ListStore {
   }
 }
 
-export const lawsListStore = new ListStore();
+export const lawsListStore = new LawsListStore();

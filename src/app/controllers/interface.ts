@@ -18,8 +18,15 @@ export interface IFactoryController<Get extends TextDTO, Update extends TextDTO>
   get: (id: string) => Promise<Nullable<Get>>;
 }
 
+export interface IWorldLawRelation {
+  addLawsToWorld: (lawIds: string[], worldId: string) => Promise<boolean>;
+  removeLawsFromWorld: (lawId: string[]) => Promise<boolean>;
+  changeLawStatus: (lawId: string, isBroken: boolean) => Promise<boolean>;
+}
+
 export type IPlotController = IFactoryController<PlotDTO, Omit<PlotDTO, 'worlds'>>;
+export type ILawsController = IFactoryController<LawDTO, LawDTO> & IWorldLawRelation;
+
 export type IWorldController = IFactoryController<WorldDTO, Omit<WorldDTO, 'laws' | 'waterholes'>>;
-export type ILawsController = IFactoryController<LawDTO, LawDTO>;
 
 export type ControllerType = 'plot' | 'law' | 'world';

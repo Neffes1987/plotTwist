@@ -1,3 +1,4 @@
+import { DTOConverter } from '../../../DTOConverter/DTOConverter';
 import { Plot } from '../../../entities/Plot/Plot';
 import { IDataProvider } from '../interface';
 import { Repository } from '../Repository';
@@ -11,7 +12,7 @@ const mockedDataProvider: IDataProvider = {
 };
 
 describe('Repository', () => {
-  const repository = new Repository(mockedDataProvider, 'plot');
+  const repository = new Repository(mockedDataProvider, new DTOConverter('plot'));
   const entity = new Plot();
 
   entity.setId('1234');

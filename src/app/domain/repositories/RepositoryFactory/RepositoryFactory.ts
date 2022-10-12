@@ -1,6 +1,6 @@
 import { DataProviderFactory } from '../../../dataStoreProvider/DataProviderFactory/DataProviderFactory';
+import { DTOConverter } from '../../DTOConverter/DTOConverter';
 import { Repository } from '../Repository/Repository';
-import { WorldRepository } from '../WorldRepository/WorldRepository';
 
 import { RepositoryFactoryType } from './interface';
 
@@ -10,8 +10,8 @@ export function createRepository(repositoryType: RepositoryFactoryType): Reposit
 
   switch (repositoryType) {
     case 'world':
-      return new WorldRepository(provider);
+      return new Repository(provider, new DTOConverter());
     default:
-      return new Repository(provider, repositoryType);
+      return new Repository(provider, new DTOConverter(repositoryType));
   }
 }

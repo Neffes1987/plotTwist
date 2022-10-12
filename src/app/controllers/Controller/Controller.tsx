@@ -1,19 +1,19 @@
 import { TextDTO } from 'backend';
 
+import { IDTOConverter } from '../../domain/DTOConverter/IDTOConverter';
 import { AbstractEntity } from '../../domain/entities/AbstractEntity/AbstractEntity';
-import { createEntity } from '../../domain/entities/createEntity';
-import { CommonDTO, EntityType } from '../../domain/entities/interface';
+import { CommonDTO } from '../../domain/entities/interface';
 import { ListParams } from '../../domain/interface';
 import { AbstractConstructor } from '../../domain/rulles/Constructors/AbstractConstructor/AbstractConstructor';
 import { ICommonController } from '../interface';
 
 export class Controller implements ICommonController {
-  private readonly builder: AbstractConstructor;
-  private readonly type?: string;
+  protected readonly builder: AbstractConstructor;
+  private readonly converter: IDTOConverter;
 
-  constructor(builder: AbstractConstructor, type?: string) {
+  constructor(builder: AbstractConstructor, converter: IDTOConverter) {
     this.builder = builder;
-    this.type = type;
+    this.converter = converter;
   }
 
   create(data: Omit<TextDTO, 'id'>): Promise<string> {
@@ -44,10 +44,8 @@ export class Controller implements ICommonController {
     return this.builder.update(this.convertDTOtoEntity(data));
   }
 
-  convertDTOtoEntity(dto: Omit<TextDTO, 'id'>): AbstractEntity {
-    const entity = createEntity(this.type as EntityType);
-
-    entity.unSerializeToEntity((dto as unknown) as CommonDTO);
+  convertDTOtoEntity(dto: Omit<CommonDTO, 'id'>): AbstractEntity {
+    const entity = this.converter.toEntity(dto as CommonDTO);
 
     entity.validate();
 

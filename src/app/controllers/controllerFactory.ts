@@ -1,17 +1,18 @@
-import { LawsConstructor } from '../domain/rulles/Constructors/LawsConstructor/LawsConstructor';
+import { DTOConverter } from '../domain/DTOConverter/DTOConverter';
 import { PlotConstructor } from '../domain/rulles/Constructors/PlotConstructor/PlotConstructor';
+import { WorldConstructor } from '../domain/rulles/Constructors/WorldConstructor/WorldConstructor';
 
 import { Controller } from './Controller/Controller';
 import { ControllerType, ICommonController } from './interface';
-import { WorldController } from './WorldController/WorldController';
+import { LawController } from './LawController/LawController';
 
 export function controllerFactory(type: ControllerType): ICommonController {
   switch (type) {
     case 'plot':
-      return new Controller(new PlotConstructor(), type);
+      return new Controller(new PlotConstructor(), new DTOConverter('plot'));
     case 'law':
-      return new Controller(new LawsConstructor(), type);
+      return new LawController();
     case 'world':
-      return new WorldController();
+      return new Controller(new WorldConstructor(), new DTOConverter());
   }
 }
