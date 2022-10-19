@@ -1,12 +1,11 @@
-import { PlotDTO } from 'backend';
-
+import { StatusEnum } from '../../../constants/status.enum';
+import { PlotDTO } from '../../../types/entities/plot';
 import { TranslationNamespace } from '../../App/initI18n/translationsSchema';
 
-export const DEFAULT_FORM_VALUES: Omit<PlotDTO, 'worlds'> = {
+export const DEFAULT_FORM_VALUES: PlotDTO = {
   id: '',
   name: '',
-  description: '',
-  status: 'draft',
+  status: StatusEnum.Draft,
 };
 
 export const PLOT_TRANSLATION_SCHEMA = {

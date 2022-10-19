@@ -1,39 +1,29 @@
-import { PrivateWorldDTO } from 'backend';
 import { generateString } from '@mocks/generateString';
 
-import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../../constants';
+import { StatusEnum } from '../../../../../../constants/status.enum';
+import { WorldEnum } from '../../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../../frontend/constants';
+import { PrivateWorldDTO } from '../../../../../../types/entities/world';
 import { ValidationError } from '../../../../../errors/ValidationError';
 import { PrivateWorld } from '../PrivateWorld';
 
 describe('WHEN "PrivateWorld" is created', () => {
   const privateDTO: PrivateWorldDTO = {
-    waterholes: [],
-    description: '',
     contrast: generateString(257),
-    type: 'privateWorld',
+    type: WorldEnum.PrivateWorld,
     failPrice: generateString(257),
     id: 'id',
-    laws: [],
     name: generateString(7),
-    plotId: 'plotId',
     reference: generateString(257),
-    status: 'release',
+    status: StatusEnum.Draft,
     story: generateString(257),
     timeline: generateString(257),
   };
 
-  it('AND "setContrast" is called, MUST update field "contrast"', () => {
-    const privateWorld = new PrivateWorld();
-
-    privateWorld.setContrast(privateDTO.contrast);
-
-    expect(privateWorld.contrast).toEqual(privateDTO.contrast);
-  });
-
   it('AND "serialize" is called, MUST generate object by instance fields', () => {
     const privateWorld = new PrivateWorld();
 
-    privateWorld.unSerializeToEntity(privateDTO);
+    privateWorld.unSerialize(privateDTO);
 
     expect(privateWorld.serialize()).toEqual(privateDTO);
   });
@@ -42,7 +32,7 @@ describe('WHEN "PrivateWorld" is created', () => {
     it('AND validation is ok, must exit', () => {
       const privateWorld = new PrivateWorld();
 
-      privateWorld.unSerializeToEntity(privateDTO);
+      privateWorld.unSerialize(privateDTO);
 
       let error: Nullable<ValidationError> = null;
 
@@ -62,7 +52,7 @@ describe('WHEN "PrivateWorld" is created', () => {
     ])('AND validation is failed for field %p, MUST throw validation error', (property, range) => {
       const privateWorld = new PrivateWorld();
 
-      privateWorld.unSerializeToEntity({ ...privateDTO, [property]: generateString(range) });
+      privateWorld.unSerialize({ ...privateDTO, [property]: generateString(range) });
 
       let error: Nullable<ValidationError> = null;
 

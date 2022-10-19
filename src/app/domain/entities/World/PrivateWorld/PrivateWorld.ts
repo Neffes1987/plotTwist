@@ -1,36 +1,27 @@
-import { PrivateWorldDTO } from 'backend';
-
-import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { WorldEnum } from '../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../frontend/constants';
+import { PrivateWorldDTO } from '../../../../../types/entities/world';
 import { ValidationError } from '../../../../errors/ValidationError';
-import { EntityValidator } from '../../AbstractTextEntity/EntityValidator';
+import { DtoValidator } from '../../../../infrastructure/validators/DtoValidator/DtoValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
-export class PrivateWorld extends AbstractWorld {
-  private _contrast = '';
+export class PrivateWorld extends AbstractWorld<PrivateWorldDTO> {
+  contrast = '';
 
-  constructor() {
-    super('privateWorld');
-  }
-
-  get contrast(): string {
-    return this._contrast;
-  }
-
-  setContrast(newValue: string): void {
-    this._contrast = newValue;
+  constructor(id?: string) {
+    super(WorldEnum.PrivateWorld, id ?? '');
   }
 
   serialize(): PrivateWorldDTO {
     return {
       ...super.serialize(),
       contrast: this.contrast,
-      type: 'privateWorld',
     };
   }
 
-  unSerializeToEntity(object: PrivateWorldDTO): void {
-    super.unSerializeToEntity(object);
-    this.setContrast(object.contrast);
+  unSerialize(object: PrivateWorldDTO): void {
+    super.unSerialize(object);
+    this.contrast = object.contrast;
   }
 
   validate(): void {
@@ -42,7 +33,7 @@ export class PrivateWorld extends AbstractWorld {
       error.merge(e);
     }
 
-    const validator = new EntityValidator<Partial<PrivateWorldDTO>>(this.serialize());
+    const validator = new DtoValidator<Partial<PrivateWorldDTO>>(this.serialize());
 
     try {
       validator.checkFieldRange([{ propertyName: 'contrast', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH }]);

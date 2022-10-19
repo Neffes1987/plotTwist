@@ -1,41 +1,17 @@
-import { FinalType, PotionType, ReturnWithPotionWorldDTO } from 'backend';
-
-import { BIG_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { FinalTypeEnum, PotionTypeEnum, WorldEnum } from '../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH } from '../../../../../frontend/constants';
+import { ReturnWithPotionWorldDTO } from '../../../../../types/entities/world';
 import { ValidationError } from '../../../../errors/ValidationError';
-import { EntityValidator } from '../../AbstractTextEntity/EntityValidator';
+import { DtoValidator } from '../../../../infrastructure/validators/DtoValidator/DtoValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
-export class ReturnWithPotionWorld extends AbstractWorld {
-  _finalType?: FinalType;
-  _potionType?: PotionType;
-  _cliffhanger = '';
+export class ReturnWithPotionWorld extends AbstractWorld<ReturnWithPotionWorldDTO> {
+  finalType: FinalTypeEnum;
+  potionType: PotionTypeEnum;
+  cliffhanger = '';
 
-  constructor() {
-    super('returnWithPotion');
-  }
-
-  get finalType(): FinalType | undefined {
-    return this._finalType;
-  }
-
-  get cliffhanger(): string {
-    return this._cliffhanger;
-  }
-
-  get potionType(): PotionType | undefined {
-    return this._potionType;
-  }
-
-  setFinalType(newValue?: FinalType): void {
-    this._finalType = newValue;
-  }
-
-  setPotionType(newValue?: PotionType): void {
-    this._potionType = newValue;
-  }
-
-  setCliffhanger(newValue: string): void {
-    this._cliffhanger = newValue;
+  constructor(id?: string) {
+    super(WorldEnum.ReturnWithPotionWorld, id ?? '');
   }
 
   serialize(): ReturnWithPotionWorldDTO {
@@ -44,15 +20,16 @@ export class ReturnWithPotionWorld extends AbstractWorld {
       finalType: this.finalType,
       cliffhanger: this.cliffhanger,
       potionType: this.potionType,
-      type: 'returnWithPotion',
     };
   }
 
-  unSerializeToEntity(object: ReturnWithPotionWorldDTO): void {
-    super.unSerializeToEntity(object);
-    this.setPotionType(object.potionType);
-    this.setCliffhanger(object.cliffhanger);
-    this.setFinalType(object.finalType);
+  unSerialize(object: ReturnWithPotionWorldDTO): void {
+    super.unSerialize(object);
+    const { potionType, cliffhanger, finalType } = object;
+
+    this.potionType = potionType;
+    this.cliffhanger = cliffhanger;
+    this.finalType = finalType;
   }
 
   validate(): void {
@@ -64,7 +41,7 @@ export class ReturnWithPotionWorld extends AbstractWorld {
       error.merge(e);
     }
 
-    const validator = new EntityValidator<Partial<ReturnWithPotionWorldDTO>>(this.serialize());
+    const validator = new DtoValidator<Partial<ReturnWithPotionWorldDTO>>(this.serialize());
 
     try {
       validator.checkFieldRange([{ propertyName: 'cliffhanger', min: null, max: BIG_VALUE_MAX_LENGTH }]);

@@ -1,102 +1,32 @@
-import { WorldDTO } from 'backend';
 import { generateString } from '@mocks/functions';
 
-import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../../constants';
+import { WorldEnum } from '../../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../../frontend/constants';
+import { WorldDTO } from '../../../../../../types/entities/world';
 import { ValidationError } from '../../../../../errors/ValidationError';
-import { Law } from '../../../Law/Law';
 import { AbstractWorld } from '../AbstractWorld';
 
-class TestWorld extends AbstractWorld {
+class TestWorld extends AbstractWorld<WorldDTO> {
   constructor() {
-    super('plainWorld');
+    super(WorldEnum.PlainWorld, '');
   }
 }
 
 describe('WHEN "AbstractWorld" is created', () => {
   const serializedWorld: WorldDTO = {
-    description: 'description',
     failPrice: generateString(257),
     id: 'id',
-    laws: [],
     name: generateString(7),
-    plotId: 'plotId',
     reference: generateString(257),
-    status: 'release',
     story: generateString(257),
     timeline: generateString(257),
-    type: 'plainWorld',
-    waterholes: [],
+    type: WorldEnum.PrivateWorld,
   };
-
-  it('AND "setStory" is called, MUST update "story" for world', () => {
-    const world = new TestWorld();
-
-    world.setStory('test-story');
-
-    expect(world.story).toEqual('test-story');
-  });
-
-  it('AND "setStatus" is called, MUST update "status" for world', () => {
-    const world = new TestWorld();
-
-    world.setStatus('release');
-
-    expect(world.status).toEqual('release');
-  });
-
-  it('AND "setReference" is called, MUST update "reference" for world', () => {
-    const world = new TestWorld();
-
-    world.setReference('reference');
-
-    expect(world.reference).toEqual('reference');
-  });
-
-  it('AND "setTimeline" is called, MUST update "timeline" for world', () => {
-    const world = new TestWorld();
-
-    world.setTimeline('timeline');
-
-    expect(world.timeline).toEqual('timeline');
-  });
-
-  it('AND "setFailPrice" is called, MUST update "failPrice" for world', () => {
-    const world = new TestWorld();
-
-    world.setFailPrice('failPrice');
-
-    expect(world.failPrice).toEqual('failPrice');
-  });
-
-  it('AND "setPlotId" is called, MUST update "plotId" for world', () => {
-    const world = new TestWorld();
-
-    world.setPlotId('plotId');
-
-    expect(world.plotId).toEqual('plotId');
-  });
-
-  it('AND "setLaws" is called, MUST update "laws" for world', () => {
-    const world = new TestWorld();
-    const law = new Law();
-
-    world.setLaws([law]);
-
-    expect(world.laws).toEqual([law]);
-  });
-
-  it.skip('AND "setChallenges" is called, MUST update "challenges" for world', () => {
-    // const world = new TestWorld();
-  });
-
-  it.skip('AND "setWaterholes" is called, MUST update "waterholes" for world', () => {
-    // const world = new TestWorld();
-  });
 
   it('AND "serialize" is called, MUST return serialized object', () => {
     const world = new TestWorld();
 
-    world.unSerializeToEntity(serializedWorld);
+    world.unSerialize(serializedWorld);
 
     expect(world.serialize()).toEqual(serializedWorld);
   });
@@ -105,7 +35,7 @@ describe('WHEN "AbstractWorld" is created', () => {
     it('AND all data is ok, MUST return', () => {
       const world = new TestWorld();
 
-      world.unSerializeToEntity(serializedWorld);
+      world.unSerialize(serializedWorld);
 
       let error: Nullable<Error> = null;
 
@@ -136,7 +66,7 @@ describe('WHEN "AbstractWorld" is created', () => {
 
       const world = new TestWorld();
 
-      world.unSerializeToEntity(testSet);
+      world.unSerialize(testSet);
 
       let error: Nullable<ValidationError> = null;
 

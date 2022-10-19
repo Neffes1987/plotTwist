@@ -1,41 +1,34 @@
-import { PlotDTO } from 'backend';
+import { StatusEnum } from '../../../../constants/status.enum';
+import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../frontend/constants';
+import { PlotDTO } from '../../../../types/entities/plot';
+import { AsyncStoreDataGateway } from '../../../infrastructure/gateways/AsyncStoreDataGateway/AsyncStoreDataGateway';
+import { DtoValidator } from '../../../infrastructure/validators/DtoValidator/DtoValidator';
+import { ActiveRecord } from '../ActiveRecord/ActiveRecord';
 
-import { AbstractTextEntity } from '../AbstractTextEntity/AbstractTextEntity';
-import { AbstractWorld } from '../World/AbstractWorld/AbstractWorld';
+export class Plot extends ActiveRecord<PlotDTO> {
+  id = '';
+  status: StatusEnum = StatusEnum.Draft;
+  name: string;
 
-import { PlotStatus } from './interface';
-
-export class Plot extends AbstractTextEntity {
-  private _status: PlotStatus = 'draft';
-  private _worlds: AbstractWorld[] = [];
-
-  constructor() {
-    super();
-  }
-
-  get status(): PlotStatus {
-    return this._status;
-  }
-
-  get worlds(): AbstractWorld[] {
-    return this._worlds;
-  }
-
-  setStatus(newValue: PlotStatus): void {
-    this._status = newValue;
-  }
-
-  setWorlds(newValue: AbstractWorld[]): void {
-    this._worlds = newValue;
+  constructor(id?: string) {
+    super(new AsyncStoreDataGateway<PlotDTO>('plot'), id ?? '');
   }
 
   serialize(): PlotDTO {
-    return { ...super.serialize(), status: this.status, worlds: this._worlds };
+    return {
+      status: this.status,
+      id: this.id,
+      name: this.name,
+    };
   }
 
-  unSerializeToEntity(rawData: PlotDTO): void {
-    super.unSerializeToEntity(rawData);
+  validate(): void {
+    const validator = new DtoValidator(this.serialize());
 
-    this.setStatus(rawData.status);
+    validator.checkFieldRange([{ propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: SHORT_VALUE_MAX_LENGTH }]);
+  }
+
+  list(params: ListParams<PlotDTO>): Promise<PlotDTO[]> {
+    return this._gateway.list(params);
   }
 }

@@ -1,7 +1,6 @@
-import { LawDTO } from 'backend';
 import { generateString } from '@mocks/functions';
 
-import { MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../frontend/constants';
 import { ValidationError } from '../../../../errors/ValidationError';
 import { Law } from '../Law';
 
@@ -9,16 +8,14 @@ describe('WHEN "Law" is created', () => {
   const lawDTO: LawDTO = {
     description: 'description',
     id: 'test-law',
-    isBroken: false,
     name: 'test-name',
     punishment: generateString(SHORT_VALUE_MAX_LENGTH),
-    worldIds: ['12345'],
   };
 
   const law = new Law();
 
   beforeEach(() => {
-    law.unSerializeToEntity(lawDTO);
+    law.unSerialize(lawDTO);
   });
 
   describe('AND "validate" is called', () => {
@@ -38,7 +35,7 @@ describe('WHEN "Law" is created', () => {
       let error: Nullable<ValidationError> = null;
 
       try {
-        law.setPunishment('');
+        law.punishment = '';
         law.validate();
       } catch (e) {
         error = e;
@@ -51,7 +48,7 @@ describe('WHEN "Law" is created', () => {
       let error: Nullable<ValidationError> = null;
 
       try {
-        law.setName('');
+        law.name = '';
         law.validate();
       } catch (e) {
         error = e;
@@ -64,7 +61,7 @@ describe('WHEN "Law" is created', () => {
       let error: Nullable<ValidationError> = null;
 
       try {
-        law.setPunishment(generateString(MIDDLE_VALUE_MAX_LENGTH + 1));
+        law.punishment = generateString(MIDDLE_VALUE_MAX_LENGTH + 1);
         law.validate();
       } catch (e) {
         error = e;
@@ -77,26 +74,6 @@ describe('WHEN "Law" is created', () => {
   it('AND "punishment" is called, MUST return "punishment" value', () => {
     expect(law.punishment).toEqual(lawDTO.punishment);
   });
-
-  it.skip('AND "mentors" is called, MUST return "mentors" value', () => {});
-
-  it('AND "isBroken" is called, MUST return "isBroken" value', () => {
-    expect(law.isBroken).toEqual(lawDTO.isBroken);
-  });
-
-  it('AND "setPunishment" is called, MUST set value into "punishment"', () => {
-    law.setPunishment('new-value');
-
-    expect(law.punishment).toEqual('new-value');
-  });
-
-  it('AND "setWorlds" is called, MUST set value into "worldIds"', () => {
-    law.setWorlds(lawDTO.worldIds);
-
-    expect(law.worldIds).toEqual(lawDTO.worldIds);
-  });
-
-  it.skip('AND "setMentors" is called, MUST set value into "mentors"', () => {});
 
   it('AND "serialize" is called, MUST return "LawDTO"', () => {
     expect(law.serialize()).toEqual(lawDTO);

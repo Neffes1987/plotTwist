@@ -1,19 +1,7 @@
-import {
-  ChaseType,
-  FinalType,
-  HiddenCaveWorldDTO,
-  HolidayGetSwordType,
-  HolidayType,
-  HolidayWorldDTO,
-  PlainWorldDTO,
-  PotionType,
-  PrivateWorldDTO,
-  ReturnWithPotionWorldDTO,
-  WorldDTO,
-} from 'backend';
-
-import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../constants';
+import { ChaseTypeEnum, FinalTypeEnum, HolidayGetSwordTypeEnum, HolidayTypeEnum, PotionTypeEnum } from '../../../constants/world.enum';
+import { HiddenCaveWorldDTO, HolidayWorldDTO, PlainWorldDTO, PrivateWorldDTO, ReturnWithPotionWorldDTO, WorldDTO } from '../../../types/entities/world';
 import { TranslationNamespace } from '../../App/initI18n/translationsSchema';
+import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../constants';
 
 import { StepperFieldField } from './interface';
 
@@ -71,7 +59,6 @@ export const worldListTranslations = new TranslationNamespace<typeof WORLD_EDITO
 
 export const COMMON_WORLD_FIELDS_CONFIG: StepperFieldField<Omit<WorldDTO, 'laws' | 'waterholes'>>[] = [
   { label: worldListTranslations.labels.name, name: 'name', maxValueLength: SHORT_VALUE_MAX_LENGTH, minValueLength: NAME_VALUE_MIN_LENGTH, type: 'text' },
-  { label: worldListTranslations.labels.description, name: 'description', maxValueLength: BIG_VALUE_MAX_LENGTH, type: 'text' },
   {
     label: worldListTranslations.labels.reference,
     name: 'reference',
@@ -125,9 +112,9 @@ export const HIDDEN_CAVE_WORLD_FIELDS_CONFIG: StepperFieldField<HiddenCaveWorldD
   { label: worldListTranslations.labels.partyPlan, name: 'partyPlan', maxValueLength: BIG_VALUE_MAX_LENGTH, type: 'text' },
 ];
 
-const ChaseTypeOptions: SelectOptionTyped<ChaseType>[] = [];
-const HolidayGetSwordTypeOptions: SelectOptionTyped<HolidayGetSwordType>[] = [];
-const HolidayTypeOptions: SelectOptionTyped<HolidayType>[] = [];
+const ChaseTypeOptions: SelectOptionTyped<ChaseTypeEnum>[] = [];
+const HolidayGetSwordTypeOptions: SelectOptionTyped<HolidayGetSwordTypeEnum>[] = [];
+const HolidayTypeOptions: SelectOptionTyped<HolidayTypeEnum>[] = [];
 
 export const HOLIDAY_WORLD_FIELDS_CONFIG: StepperFieldField<HolidayWorldDTO>[] = [
   ...COMMON_WORLD_FIELDS_CONFIG,
@@ -137,18 +124,18 @@ export const HOLIDAY_WORLD_FIELDS_CONFIG: StepperFieldField<HolidayWorldDTO>[] =
   { label: worldListTranslations.labels.mainEdge, name: 'shadowRevenge', maxValueLength: BIG_VALUE_MAX_LENGTH, type: 'text' },
 ];
 
-const FinalTypeOption: SelectOptionTyped<FinalType>[] = [
-  { id: 'cycle', name: '' },
-  { id: 'achievePerfect', name: '' },
-  { id: 'openEnd', name: '' },
+const FinalTypeOption: SelectOptionTyped<FinalTypeEnum>[] = [
+  { id: FinalTypeEnum.Cycle, name: worldListTranslations.lists.finalType.cycle },
+  { id: FinalTypeEnum.AchievePerfect, name: worldListTranslations.lists.finalType.achievePerfect },
+  { id: FinalTypeEnum.OpenEnd, name: worldListTranslations.lists.finalType.openEnd },
 ];
-const PotionTypeOption: SelectOptionTyped<PotionType>[] = [
-  { id: 'wisdom', name: '' },
-  { id: 'love', name: '' },
-  { id: 'responsible', name: '' },
-  { id: 'tragedy', name: '' },
-  { id: 'badExperience', name: '' },
-  { id: 'wastedTime', name: '' },
+const PotionTypeOption: SelectOptionTyped<PotionTypeEnum>[] = [
+  { id: PotionTypeEnum.Wisdom, name: worldListTranslations.lists.journeyResult.wisdom },
+  { id: PotionTypeEnum.Love, name: worldListTranslations.lists.journeyResult.love },
+  { id: PotionTypeEnum.Responsible, name: worldListTranslations.lists.journeyResult.responsible },
+  { id: PotionTypeEnum.Tragedy, name: worldListTranslations.lists.journeyResult.tragedy },
+  { id: PotionTypeEnum.BadExperience, name: worldListTranslations.lists.journeyResult.badExperience },
+  { id: PotionTypeEnum.WastedTime, name: worldListTranslations.lists.journeyResult.wastedTime },
 ];
 
 export const RETURN_WITH_POTION_WORLD_FIELDS_CONFIG: StepperFieldField<ReturnWithPotionWorldDTO>[] = [

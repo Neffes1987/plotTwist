@@ -1,48 +1,27 @@
-import { PlainWorldDTO } from 'backend';
-
-import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { WorldEnum } from '../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../frontend/constants';
+import { PlainWorldDTO } from '../../../../../types/entities/world';
 import { ValidationError } from '../../../../errors/ValidationError';
-import { EntityValidator } from '../../AbstractTextEntity/EntityValidator';
-import { Problem } from '../../Problem/Problem';
+import { DtoValidator } from '../../../../infrastructure/validators/DtoValidator/DtoValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
-export class PlainWorld extends AbstractWorld {
-  private _introduction = '';
-  private _problems: Problem[] = [];
+export class PlainWorld extends AbstractWorld<PlainWorldDTO> {
+  introduction = '';
 
-  constructor() {
-    super('plainWorld');
-  }
-
-  get introduction(): string {
-    return this._introduction;
-  }
-
-  get problems(): Problem[] {
-    return this._problems;
-  }
-
-  setIntroduction(newValue: string): void {
-    this._introduction = newValue;
-  }
-
-  setProblems(newValue: Problem[]): void {
-    this._problems = newValue;
+  constructor(id?: string) {
+    super(WorldEnum.PlainWorld, id ?? '');
   }
 
   serialize(): PlainWorldDTO {
     return {
       ...super.serialize(),
-      type: 'plainWorld',
       introduction: this.introduction,
-      problems: this.problems,
     };
   }
 
-  unSerializeToEntity(object: PlainWorldDTO): void {
-    super.unSerializeToEntity(object);
-    this.setIntroduction(object.introduction);
-    this.setProblems(object.problems ?? []);
+  unSerialize(object: PlainWorldDTO): void {
+    super.unSerialize(object);
+    this.introduction = object.introduction;
   }
 
   validate(): void {
@@ -54,7 +33,7 @@ export class PlainWorld extends AbstractWorld {
       error.merge(e);
     }
 
-    const validator = new EntityValidator<Partial<PlainWorldDTO>>(this.serialize());
+    const validator = new DtoValidator<Partial<PlainWorldDTO>>(this.serialize());
 
     try {
       validator.checkFieldRange([{ propertyName: 'introduction', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH }]);

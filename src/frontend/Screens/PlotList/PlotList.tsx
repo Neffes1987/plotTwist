@@ -1,15 +1,16 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PlotDTO } from 'backend';
 import { observer } from 'mobx-react';
 import { useNavigation } from '@react-navigation/native';
 
-import { BIG_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../constants';
+import { PlotDTO } from '../../../types/entities/plot';
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
 import notifier from '../../App/notify/notify';
+import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../constants';
 import store from '../../store/Store';
+import { plotListStore } from '../../Stores/Plot.store';
 import { UIInput } from '../../UI/UIInput/UIInput';
 import { UIList } from '../../UI/UIList/UIList';
 import { CreateEntityWidget } from '../../Widgets/CreateEntityWidget/CreateEntityWidget';
@@ -17,7 +18,6 @@ import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 import { ROUTES } from '../routes';
 
 import { DEFAULT_FORM_VALUES, plotListTranslations } from './constants';
-import { plotListStore } from './PlotListStore';
 
 export const PlotList = observer(
   (): ReactElement => {
@@ -54,10 +54,10 @@ export const PlotList = observer(
     }
 
     async function createPlot(): Promise<void> {
-      const { name, description } = form;
+      const { name } = form;
 
       try {
-        const plotId = await plotListStore.createPlot(name, description);
+        const plotId = await plotListStore.createPlot(name);
 
         if (plotId) {
           onClosePopoverHandler();
@@ -77,7 +77,6 @@ export const PlotList = observer(
       }
 
       resetForm({
-        description: plot.description ?? '',
         id: plot.id,
         name: plot.name,
         status: form.status,
@@ -94,7 +93,7 @@ export const PlotList = observer(
     return (
       <ScreenView
         header={{
-          title: t('pages.plotList.caption'),
+          title: t(plotListTranslations.caption),
         }}
       >
         <UIList
@@ -120,16 +119,6 @@ export const PlotList = observer(
             onChange={setFormFieldData}
             label={t(plotListTranslations.labels.name)}
             minValueLength={NAME_VALUE_MIN_LENGTH}
-          />
-
-          <UIInput
-            error={formErrors.description}
-            multiline
-            maxValueLength={BIG_VALUE_MAX_LENGTH}
-            name="description"
-            value={form.description}
-            onChange={setFormFieldData}
-            label={t(plotListTranslations.labels.description)}
           />
         </CreateEntityWidget>
       </ScreenView>

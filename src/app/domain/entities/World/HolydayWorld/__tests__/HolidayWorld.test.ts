@@ -1,66 +1,32 @@
-import { HolidayWorldDTO } from 'backend';
 import { generateString } from '@mocks/generateString';
 
-import { BIG_VALUE_MAX_LENGTH } from '../../../../../../constants';
+import { StatusEnum } from '../../../../../../constants/status.enum';
+import { ChaseTypeEnum, HolidayGetSwordTypeEnum, HolidayTypeEnum, WorldEnum } from '../../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH } from '../../../../../../frontend/constants';
+import { HolidayWorldDTO } from '../../../../../../types/entities/world';
 import { ValidationError } from '../../../../../errors/ValidationError';
 import { HolidayWorld } from '../HolydayWorld';
 
 describe('WHEN "HolidayWorld" is created', () => {
   const holidayDTO: HolidayWorldDTO = {
-    chase: 'shadowRunning',
-    holidayGetSwordType: 'skewVision',
-    holidayType: 'getSword',
+    chase: ChaseTypeEnum.FollowersChase,
+    holidayGetSwordType: HolidayGetSwordTypeEnum.Epiphania,
+    holidayType: HolidayTypeEnum.GetSword,
     shadowRevenge: generateString(257),
-    description: 'description',
     failPrice: generateString(257),
     id: 'id',
-    laws: [],
     name: generateString(7),
-    plotId: 'plotId',
     reference: generateString(257),
-    status: 'release',
+    status: StatusEnum.Draft,
     story: generateString(257),
     timeline: generateString(257),
-    type: 'holiday',
-    waterholes: [],
+    type: WorldEnum.HolidayWorld,
   };
-
-  it('AND "setChase" is called, MUST update value for "chase"', () => {
-    const holiday = new HolidayWorld();
-
-    holiday.setChase('godSaving');
-
-    expect(holiday.chase).toEqual('godSaving');
-  });
-
-  it('AND "setShadowRevenge" is called, MUST update value for "shadowRevenge"', () => {
-    const holiday = new HolidayWorld();
-
-    holiday.setShadowRevenge(holidayDTO.shadowRevenge);
-
-    expect(holiday.shadowRevenge).toEqual(holidayDTO.shadowRevenge);
-  });
-
-  it('AND "setHolidayType" is called, MUST update value for "holidayType"', () => {
-    const holiday = new HolidayWorld();
-
-    holiday.setHolidayType('getSword');
-
-    expect(holiday.holidayType).toEqual('getSword');
-  });
-
-  it('AND "setHolidaySubType" is called, MUST update value for "holidayGetSwordType"', () => {
-    const holiday = new HolidayWorld();
-
-    holiday.setHolidaySubType('potionSteeling');
-
-    expect(holiday.holidayGetSwordType).toEqual('potionSteeling');
-  });
 
   it('AND "serialize" is called, MUST return serialized object by instance field', () => {
     const holiday = new HolidayWorld();
 
-    holiday.unSerializeToEntity(holidayDTO);
+    holiday.unSerialize(holidayDTO);
 
     expect(holiday.serialize()).toEqual(holidayDTO);
   });
@@ -69,7 +35,7 @@ describe('WHEN "HolidayWorld" is created', () => {
     const holiday = new HolidayWorld();
 
     beforeEach(() => {
-      holiday.unSerializeToEntity(holidayDTO);
+      holiday.unSerialize(holidayDTO);
     });
 
     it('AND validation is ok, must exit', () => {
@@ -87,7 +53,7 @@ describe('WHEN "HolidayWorld" is created', () => {
     it('AND common field validation is failed, MUST throw error', () => {
       let error: Nullable<ValidationError> = null;
 
-      holiday.setName('');
+      holiday.name = '';
 
       try {
         holiday.validate();
@@ -102,7 +68,7 @@ describe('WHEN "HolidayWorld" is created', () => {
       let error: Nullable<ValidationError> = null;
 
       // @ts-ignore
-      holiday.setHolidayType(undefined);
+      holiday.holidayType = undefined;
 
       try {
         holiday.validate();
@@ -116,9 +82,9 @@ describe('WHEN "HolidayWorld" is created', () => {
     it('AND "holidayType" is equal "getSword" AND "holidayGetSwordType" is not provided, MUST throw error', () => {
       let error: Nullable<ValidationError> = null;
 
-      holiday.setHolidayType('getSword');
+      holiday.holidayType = HolidayTypeEnum.GetSword;
       // @ts-ignore
-      holiday.setHolidaySubType(undefined);
+      holiday.holidayGetSwordType = undefined;
 
       try {
         holiday.validate();
@@ -131,11 +97,11 @@ describe('WHEN "HolidayWorld" is created', () => {
 
     describe('AND "chase" is equal "shadowRunning"', () => {
       beforeEach(() => {
-        holiday.setChase('shadowRunning');
+        holiday.chase = ChaseTypeEnum.ShadowRunning;
       });
 
       it('AND "shadowRevenge" is less then min value, MUST throw error', () => {
-        holiday.setShadowRevenge('');
+        holiday.shadowRevenge = '';
 
         let error: Nullable<ValidationError> = null;
 
@@ -149,7 +115,7 @@ describe('WHEN "HolidayWorld" is created', () => {
       });
 
       it('AND "shadowRevenge" is more then max value, MUST throw error', () => {
-        holiday.setShadowRevenge(generateString(BIG_VALUE_MAX_LENGTH + 1));
+        holiday.shadowRevenge = generateString(BIG_VALUE_MAX_LENGTH + 1);
 
         let error: Nullable<ValidationError> = null;
 

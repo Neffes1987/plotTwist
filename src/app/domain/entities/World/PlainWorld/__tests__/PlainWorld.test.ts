@@ -1,48 +1,29 @@
-import { PlainWorldDTO } from 'backend';
 import { generateString } from '@mocks/generateString';
 
-import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../../constants';
+import { StatusEnum } from '../../../../../../constants/status.enum';
+import { WorldEnum } from '../../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../../frontend/constants';
+import { PlainWorldDTO } from '../../../../../../types/entities/world';
 import { ValidationError } from '../../../../../errors/ValidationError';
 import { PlainWorld } from '../PlainWorld';
 
 describe('WHEN "PlainWorld" is created', () => {
   const plainDTO: PlainWorldDTO = {
-    waterholes: [],
-    description: '',
     introduction: generateString(257),
-    type: 'plainWorld',
+    type: WorldEnum.PlainWorld,
     failPrice: generateString(257),
     id: 'id',
-    laws: [],
     name: generateString(7),
-    plotId: 'plotId',
     reference: generateString(257),
-    status: 'release',
+    status: StatusEnum.Draft,
     story: generateString(257),
     timeline: generateString(257),
-    problems: [],
   };
-
-  it('AND "setIntroduction" is called, MUST update field "introduction"', () => {
-    const plain = new PlainWorld();
-
-    plain.setIntroduction(plainDTO.introduction);
-
-    expect(plain.introduction).toEqual(plainDTO.introduction);
-  });
-
-  it('AND "setProblems" is called, MUST update field "problems"', () => {
-    const plain = new PlainWorld();
-
-    plain.setProblems(plainDTO.problems);
-
-    expect(plain.problems).toEqual(plainDTO.problems);
-  });
 
   it('AND "serialize" is called, MUST generate object by instance fields', () => {
     const plain = new PlainWorld();
 
-    plain.unSerializeToEntity(plainDTO);
+    plain.unSerialize(plainDTO);
 
     expect(plain.serialize()).toEqual(plainDTO);
   });
@@ -51,7 +32,7 @@ describe('WHEN "PlainWorld" is created', () => {
     it('AND validation is ok, must exit', () => {
       const plain = new PlainWorld();
 
-      plain.unSerializeToEntity(plainDTO);
+      plain.unSerialize(plainDTO);
 
       let error: Nullable<ValidationError> = null;
 
@@ -71,7 +52,7 @@ describe('WHEN "PlainWorld" is created', () => {
     ])('AND validation is failed for field %p, MUST throw validation error', (property, range) => {
       const plain = new PlainWorld();
 
-      plain.unSerializeToEntity({ ...plainDTO, [property]: generateString(range) });
+      plain.unSerialize({ ...plainDTO, [property]: generateString(range) });
 
       let error: Nullable<ValidationError> = null;
 

@@ -1,7 +1,9 @@
-import { HiddenCaveWorldDTO } from 'backend';
 import { generateString } from '@mocks/generateString';
 
-import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../../constants';
+import { StatusEnum } from '../../../../../../constants/status.enum';
+import { WorldEnum } from '../../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../../frontend/constants';
+import { HiddenCaveWorldDTO } from '../../../../../../types/entities/world';
 import { ValidationError } from '../../../../../errors/ValidationError';
 import { HiddenCaveWorld } from '../HiddenCaveWorld';
 
@@ -10,48 +12,20 @@ describe('WHEN "HiddenCaveWorld" is created', () => {
     mainEdgeInformation: generateString(257),
     partyPlan: generateString(257),
     shadowIntroduction: generateString(257),
-    description: 'description',
     failPrice: generateString(257),
     id: 'id',
-    laws: [],
     name: generateString(7),
-    plotId: 'plotId',
     reference: generateString(257),
-    status: 'release',
+    status: StatusEnum.Draft,
     story: generateString(257),
     timeline: generateString(257),
-    type: 'hiddenCave',
-    waterholes: [],
+    type: WorldEnum.HiddenCaveWorld,
   };
-
-  it('AND "setPartyPlan" is called, MUST update "partyPlan"', () => {
-    const hidden = new HiddenCaveWorld();
-
-    hidden.setPartyPlan(hiddenDTO.partyPlan);
-
-    expect(hidden.partyPlan).toEqual(hiddenDTO.partyPlan);
-  });
-
-  it('AND "setShadowIntroduction" is called, MUST update "shadowIntroduction"', () => {
-    const hidden = new HiddenCaveWorld();
-
-    hidden.setShadowIntroduction(hiddenDTO.shadowIntroduction);
-
-    expect(hidden.shadowIntroduction).toEqual(hiddenDTO.shadowIntroduction);
-  });
-
-  it('AND "setMainEdgeInformation" is called, MUST update "mainEdgeInformation"', () => {
-    const hidden = new HiddenCaveWorld();
-
-    hidden.setMainEdgeInformation(hiddenDTO.mainEdgeInformation);
-
-    expect(hidden.mainEdgeInformation).toEqual(hiddenDTO.mainEdgeInformation);
-  });
 
   it('AND "serialize" is called, MUST generate serialized object from instance fields', () => {
     const hidden = new HiddenCaveWorld();
 
-    hidden.unSerializeToEntity(hiddenDTO);
+    hidden.unSerialize(hiddenDTO);
 
     expect(hidden.serialize()).toEqual(hiddenDTO);
   });
@@ -60,7 +34,7 @@ describe('WHEN "HiddenCaveWorld" is created', () => {
     it('AND validation is ok, MUST exit', () => {
       const hidden = new HiddenCaveWorld();
 
-      hidden.unSerializeToEntity(hiddenDTO);
+      hidden.unSerialize(hiddenDTO);
 
       let error: Nullable<ValidationError> = null;
 
@@ -84,7 +58,7 @@ describe('WHEN "HiddenCaveWorld" is created', () => {
     ])('AND validation is failed for field %p, MUST throw validation error', (property, range) => {
       const hidden = new HiddenCaveWorld();
 
-      hidden.unSerializeToEntity({ ...hiddenDTO, [property]: generateString(range) });
+      hidden.unSerialize({ ...hiddenDTO, [property]: generateString(range) });
 
       let error: Nullable<ValidationError> = null;
 

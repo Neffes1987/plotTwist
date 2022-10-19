@@ -1,59 +1,35 @@
-import { HiddenCaveWorldDTO } from 'backend';
-
-import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { WorldEnum } from '../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../frontend/constants';
+import { HiddenCaveWorldDTO } from '../../../../../types/entities/world';
 import { ValidationError } from '../../../../errors/ValidationError';
-import { EntityValidator } from '../../AbstractTextEntity/EntityValidator';
+import { DtoValidator } from '../../../../infrastructure/validators/DtoValidator/DtoValidator';
 import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 
-export class HiddenCaveWorld extends AbstractWorld {
-  private _mainEdgeInformation = '';
-  private _shadowIntroduction = '';
-  private _partyPlan = '';
+export class HiddenCaveWorld extends AbstractWorld<HiddenCaveWorldDTO> {
+  mainEdgeInformation = '';
+  shadowIntroduction = '';
+  partyPlan = '';
 
-  constructor() {
-    super('hiddenCave');
-  }
-
-  get mainEdgeInformation(): string {
-    return this._mainEdgeInformation;
-  }
-
-  get shadowIntroduction(): string {
-    return this._shadowIntroduction;
-  }
-
-  get partyPlan(): string {
-    return this._partyPlan;
-  }
-
-  setPartyPlan(newValue: string): void {
-    this._partyPlan = newValue;
-  }
-
-  setShadowIntroduction(newValue: string): void {
-    this._shadowIntroduction = newValue;
-  }
-
-  setMainEdgeInformation(newValue: string): void {
-    this._mainEdgeInformation = newValue;
+  constructor(id?: string) {
+    super(WorldEnum.HiddenCaveWorld, id ?? '');
   }
 
   serialize(): HiddenCaveWorldDTO {
     return {
       ...super.serialize(),
-      type: 'hiddenCave',
       mainEdgeInformation: this.mainEdgeInformation,
       partyPlan: this.partyPlan,
       shadowIntroduction: this.shadowIntroduction,
     };
   }
 
-  unSerializeToEntity(object: HiddenCaveWorldDTO): void {
-    super.unSerializeToEntity(object);
+  unSerialize(object: HiddenCaveWorldDTO): void {
+    super.unSerialize(object);
+    const { partyPlan, mainEdgeInformation, shadowIntroduction } = object;
 
-    this.setPartyPlan(object.partyPlan);
-    this.setShadowIntroduction(object.shadowIntroduction);
-    this.setMainEdgeInformation(object.mainEdgeInformation);
+    this.partyPlan = partyPlan;
+    this.mainEdgeInformation = mainEdgeInformation;
+    this.shadowIntroduction = shadowIntroduction;
   }
 
   validate(): void {
@@ -65,7 +41,7 @@ export class HiddenCaveWorld extends AbstractWorld {
       error.merge(e);
     }
 
-    const validator = new EntityValidator<Partial<HiddenCaveWorldDTO>>(this.serialize());
+    const validator = new DtoValidator<Partial<HiddenCaveWorldDTO>>(this.serialize());
 
     try {
       validator.checkFieldRange([

@@ -1,156 +1,65 @@
-import { WorldDTO } from 'backend';
-
-import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../constants';
+import { StatusEnum } from '../../../../../constants/status.enum';
+import { WorldEnum } from '../../../../../constants/world.enum';
+import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../frontend/constants';
+import { WorldDTO } from '../../../../../types/entities/world';
 import { ValidationError } from '../../../../errors/ValidationError';
-import { AbstractTextEntity } from '../../AbstractTextEntity/AbstractTextEntity';
-import { EntityValidator } from '../../AbstractTextEntity/EntityValidator';
-import { AbstractChallenge } from '../../Challenge/AbstractChallenge/AbstractChallenge';
-import { Law } from '../../Law/Law';
-import { Waterhole } from '../../Waterhole/Waterhole';
+import { AsyncStoreDataGateway } from '../../../../infrastructure/gateways/AsyncStoreDataGateway/AsyncStoreDataGateway';
+import { DtoValidator } from '../../../../infrastructure/validators/DtoValidator/DtoValidator';
+import { ActiveRecord } from '../../ActiveRecord/ActiveRecord';
 
-import { WorldStatus, WorldType } from './interface';
+export abstract class AbstractWorld<DTO extends WorldDTO> extends ActiveRecord<DTO> implements Serialization<DTO> {
+  type: WorldEnum;
+  story = '';
+  name = '';
+  reference = '';
+  timeline = '';
+  failPrice = '';
+  status: StatusEnum;
 
-export abstract class AbstractWorld extends AbstractTextEntity {
-  private _type: Nullable<WorldType> = null;
-  private _story = '';
-  private _reference = '';
-  private _timeline = '';
-  private _failPrice = '';
-  private _plotId = '';
-  private _status: WorldStatus = 'draft';
-  private _laws: Law[] = [];
-  private _waterholes: Waterhole[] = [];
-  private _challenge: Nullable<AbstractChallenge> = null;
-
-  protected constructor(worldType: WorldType) {
-    super();
-    this._type = worldType;
+  protected constructor(worldType: WorldEnum, id: string) {
+    super(new AsyncStoreDataGateway(worldType), id);
+    this.type = worldType;
   }
 
-  get type(): WorldType {
-    return this._type ?? 'plainWorld';
-  }
-
-  get plotId(): string {
-    return this._plotId;
-  }
-
-  get story(): string {
-    return this._story;
-  }
-
-  get status(): WorldStatus {
-    return this._status;
-  }
-
-  get reference(): string {
-    return this._reference;
-  }
-
-  get timeline(): string {
-    return this._timeline;
-  }
-
-  get failPrice(): string {
-    return this._failPrice;
-  }
-
-  get laws(): Law[] {
-    return this._laws;
-  }
-
-  get challenge(): Nullable<AbstractChallenge> {
-    return this._challenge;
-  }
-
-  get waterholes(): Waterhole[] {
-    return this._waterholes;
-  }
-
-  setStory(newValue: string): void {
-    this._story = newValue;
-  }
-
-  setStatus(newValue: WorldStatus): void {
-    this._status = newValue;
-  }
-
-  setReference(newValue: string): void {
-    this._reference = newValue;
-  }
-
-  setTimeline(newValue: string): void {
-    this._timeline = newValue;
-  }
-
-  setFailPrice(newValue: string): void {
-    this._failPrice = newValue;
-  }
-
-  setPlotId(newValue: string): void {
-    this._plotId = newValue;
-  }
-
-  setLaws(newValue: Law[]): void {
-    this._laws = newValue;
-  }
-
-  setChallenges(newValue: AbstractChallenge): void {
-    this._challenge = newValue;
-  }
-
-  setWaterholes(newValue: Waterhole[]): void {
-    this._waterholes = newValue;
-  }
-
+  // @ts-ignore
   serialize(): WorldDTO {
     return {
-      ...super.serialize(),
+      id: this.id,
+      name: this.name,
       failPrice: this.failPrice,
       reference: this.reference,
-      status: this.status,
       story: this.story,
       timeline: this.timeline,
-      plotId: this.plotId,
-      laws: this.laws,
-      waterholes: this.waterholes,
-      type: 'plainWorld',
+      type: this.type,
+      status: this.status,
     };
   }
 
-  unSerializeToEntity(object: WorldDTO): void {
-    super.unSerializeToEntity(object);
+  unSerialize(object: WorldDTO): void {
+    const { id, name, failPrice, reference, story, timeline, type } = object;
 
-    this.setFailPrice(object.failPrice);
-    this.setReference(object.reference);
-    this.setStatus(object.status);
-    this.setStory(object.story);
-    this.setTimeline(object.timeline);
-    this.setPlotId(object.plotId);
-    this._type = object.type;
-    // this.setLaws(object.laws ?? []);
-    // this.setWaterholes(object.waterholes ?? []);
+    this.id = id;
+    this.name = name;
+    this.failPrice = failPrice;
+    this.reference = reference;
+    this.story = story;
+    this.timeline = timeline;
+    this.type = type;
   }
 
   validate(): void {
     const error = new ValidationError();
+    const validator = new DtoValidator(this.serialize());
 
     try {
-      super.validate();
-    } catch (e) {
-      error.merge(e);
-    }
-
-    const validator = new EntityValidator<Partial<WorldDTO>>(this.serialize());
-
-    try {
-      validator.checkRequiredFields(['status', 'plotId', 'type']);
+      validator.checkRequiredFields(['type']);
     } catch (e) {
       error.merge(e);
     }
 
     try {
       validator.checkFieldRange([
+        { propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: SHORT_VALUE_MAX_LENGTH },
         { propertyName: 'failPrice', min: SHORT_VALUE_MAX_LENGTH, max: MIDDLE_VALUE_MAX_LENGTH },
         { propertyName: 'reference', min: SHORT_VALUE_MAX_LENGTH, max: MIDDLE_VALUE_MAX_LENGTH },
         { propertyName: 'story', min: SHORT_VALUE_MAX_LENGTH, max: BIG_VALUE_MAX_LENGTH },

@@ -1,9 +1,11 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { WorldDTO } from 'backend';
 import { observer } from 'mobx-react';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 
+import { WorldEnum } from '../../../constants/world.enum';
+import { WorldDTO } from '../../../types/entities/world';
+import activePlotStore from '../../Stores/ActivePlot.store';
 import { UIButton } from '../../UI/Buttons/UIButton';
 import { Flex } from '../../UI/Flex/Flex';
 import { Typography } from '../../UI/Typography/Typography';
@@ -11,17 +13,16 @@ import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 import { WorldWidget } from '../../Widgets/WorldWidget/WorldWidget';
 import { ROUTES } from '../routes';
 
-import homeData from './HomeStore';
-
 export const Home = observer(
   (): ReactElement => {
     const { t } = useTranslation();
     const { navigate } = useNavigation<Navigation>();
-    const { selectedPlot, plotName, nextStep, worlds } = homeData;
+    const { worlds } = activePlotStore.plot ?? {};
+    const { selectedPlotId, isPlotLoaded, error, nextStep, plotName, loadPlot } = activePlotStore;
     const isFocused = useIsFocused();
 
     function getPlot(): void {
-      homeData.getPlot().catch(() => {
+      activePlotStore.loadPlot().catch(() => {
         navigate(ROUTES.oops, { state: { error: { key: 'pages.home.errors.cantGetWorlds' } } });
       });
     }
@@ -35,20 +36,22 @@ export const Home = observer(
     }, [isFocused]);
 
     useEffect(() => {
-      getPlot();
-    }, [selectedPlot]);
+      loadPlot().catch(() => {
+        navigate(ROUTES.oops, { state: { error: { key: 'pages.home.errors.cantGetWorlds' } } });
+      });
+    }, [selectedPlotId]);
 
     useEffect(() => {
-      if (homeData.error) {
-        navigate(ROUTES.oops, { state: { error: homeData.error } });
+      if (error) {
+        navigate(ROUTES.oops, { state: { error } });
 
         return;
       }
 
-      if (homeData.isPlotLoaded === false) {
+      if (isPlotLoaded === false) {
         onNavigateToListHandler();
       }
-    }, [homeData.isPlotLoaded]);
+    }, [isPlotLoaded]);
 
     function onCreateNewWorldHandler(): void {
       navigate(ROUTES.worldConstructor, { state: { caption: nextStep, id: null } });
@@ -78,7 +81,7 @@ export const Home = observer(
         }}
       >
         <Flex direction="column" flex={1}>
-          {nextStep === 'plainWorld' ? (
+          {nextStep === WorldEnum.PlainWorld ? (
             <Flex direction="column" grow={1} align="center" justify="center">
               <Typography align="center">{t('pages.home.messages.greetingMessage')}</Typography>
 
@@ -90,8 +93,8 @@ export const Home = observer(
             </Flex>
           ) : (
             <Flex direction="column" fullWidth>
-              {worlds.map(world => (
-                <WorldWidget key={world.type} worldInfo={world} onEditWorld={onEditWorldHandler} onOpenWorldProperty={onOpenPropertyHandler} />
+              {worlds?.map(({ worldData }) => (
+                <WorldWidget key={worldData.type} worldInfo={worldData} onEditWorld={onEditWorldHandler} onOpenWorldProperty={onOpenPropertyHandler} />
               ))}
 
               {nextStep && <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.actions.createNextWorld')}</UIButton>}

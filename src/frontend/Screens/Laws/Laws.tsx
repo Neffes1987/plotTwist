@@ -4,11 +4,11 @@ import { LawDTO } from 'backend';
 import { observer } from 'mobx-react';
 import { useNavigation } from '@react-navigation/native';
 
-import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../constants';
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
 import notifier from '../../App/notify/notify';
+import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../constants';
 import { UIInput } from '../../UI/UIInput/UIInput';
 import { UIList } from '../../UI/UIList/UIList';
 import { CreateEntityWidget } from '../../Widgets/CreateEntityWidget/CreateEntityWidget';

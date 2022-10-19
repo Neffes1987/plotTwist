@@ -1,5 +1,4 @@
-import { WorldDTO } from 'backend';
-
+import { WorldDTO } from '../../../types/entities/world';
 import { TypographyProps } from '../../UI/interface';
 
 export interface WorldWidgetProps {
