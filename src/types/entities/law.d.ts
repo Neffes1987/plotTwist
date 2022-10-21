@@ -3,3 +3,7 @@ interface LawDTO extends CommonEntityDTO {
   description: string;
   punishment: string;
 }
+
+interface LawInWorldDTO extends LawDTO {
+  isBroken: boolean;
+}

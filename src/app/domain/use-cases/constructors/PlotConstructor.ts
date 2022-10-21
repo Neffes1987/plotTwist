@@ -4,13 +4,17 @@ import { Plot } from '../../entities/Plot/Plot';
 
 export class PlotConstructor implements IPlotConstructor {
   async delete(id: string): Promise<boolean> {
-    const plot = new Plot(id);
+    const plot = new Plot();
+
+    plot.id = id;
 
     return plot.remove();
   }
 
   async get(plotId: string): Promise<PlotDTO> {
-    const plot = new Plot(plotId);
+    const plot = new Plot();
+
+    plot.id = plotId;
 
     await plot.load();
 
@@ -27,7 +31,7 @@ export class PlotConstructor implements IPlotConstructor {
     const plot = new Plot();
 
     plot.unSerialize(dto);
-    await plot.save();
+    plot.id = await plot.save();
 
     return plot.id;
   }

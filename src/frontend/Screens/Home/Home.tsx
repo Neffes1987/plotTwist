@@ -17,8 +17,6 @@ export const Home = observer(
   (): ReactElement => {
     const { t } = useTranslation();
     const { navigate } = useNavigation<Navigation>();
-    const { worlds } = activePlotStore.plot ?? {};
-    const { selectedPlotId, isPlotLoaded, error, nextStep, plotName, loadPlot } = activePlotStore;
     const isFocused = useIsFocused();
 
     function getPlot(): void {
@@ -36,25 +34,21 @@ export const Home = observer(
     }, [isFocused]);
 
     useEffect(() => {
-      loadPlot().catch(() => {
-        navigate(ROUTES.oops, { state: { error: { key: 'pages.home.errors.cantGetWorlds' } } });
-      });
-    }, [selectedPlotId]);
-
-    useEffect(() => {
-      if (error) {
-        navigate(ROUTES.oops, { state: { error } });
-
-        return;
-      }
-
-      if (isPlotLoaded === false) {
+      if (!activePlotStore.selectedPlotId) {
         onNavigateToListHandler();
       }
-    }, [isPlotLoaded]);
+
+      getPlot();
+    }, [activePlotStore.selectedPlotId]);
+
+    useEffect(() => {
+      if (activePlotStore.error) {
+        navigate(ROUTES.oops, { state: { error: activePlotStore.error } });
+      }
+    }, []);
 
     function onCreateNewWorldHandler(): void {
-      navigate(ROUTES.worldConstructor, { state: { caption: nextStep, id: null } });
+      navigate(ROUTES.worldConstructor, { state: { caption: activePlotStore.nextStep, id: null } });
     }
 
     function onEditWorldHandler(worldType: WorldDTO['type'], id: string): void {
@@ -76,12 +70,12 @@ export const Home = observer(
     return (
       <ScreenView
         header={{
-          title: t('pages.home.caption', { name: plotName }),
+          title: t('pages.home.caption', { name: activePlotStore.plotName }),
           onBackClick: onNavigateToListHandler,
         }}
       >
         <Flex direction="column" flex={1}>
-          {nextStep === WorldEnum.PlainWorld ? (
+          {activePlotStore.nextStep === WorldEnum.PlainWorld ? (
             <Flex direction="column" grow={1} align="center" justify="center">
               <Typography align="center">{t('pages.home.messages.greetingMessage')}</Typography>
 
@@ -93,11 +87,11 @@ export const Home = observer(
             </Flex>
           ) : (
             <Flex direction="column" fullWidth>
-              {worlds?.map(({ worldData }) => (
-                <WorldWidget key={worldData.type} worldInfo={worldData} onEditWorld={onEditWorldHandler} onOpenWorldProperty={onOpenPropertyHandler} />
+              {activePlotStore?.plot?.worlds?.map(world => (
+                <WorldWidget key={world.worldData.type} worldInfo={world} onEditWorld={onEditWorldHandler} onOpenWorldProperty={onOpenPropertyHandler} />
               ))}
 
-              {nextStep && <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.actions.createNextWorld')}</UIButton>}
+              {activePlotStore.nextStep && <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.actions.createNextWorld')}</UIButton>}
             </Flex>
           )}
         </Flex>

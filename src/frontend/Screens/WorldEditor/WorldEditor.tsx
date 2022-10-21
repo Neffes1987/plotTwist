@@ -9,7 +9,8 @@ import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorCo
 import { useForm } from '../../App/hooks/useForm';
 import notify from '../../App/notify/notify';
 import { FORM_DEFAULT_STATE } from '../../constants';
-import activeWorldStore from '../../Stores/ActiveWorldStore';
+import activePlotStore from '../../Stores/ActivePlot.store';
+import activeWorldStore from '../../Stores/ActiveWorld.store';
 import { Flex } from '../../UI/Flex/Flex';
 import { UIStepper } from '../../UI/Stepper/Stepper';
 import { Typography } from '../../UI/Typography/Typography';
@@ -27,10 +28,10 @@ export const WorldEditor = observer(
     const { params } = useRoute<RouteParams>();
     const { updateContextErrors } = useErrorContext();
     const { state } = params;
-    const plotId = state?.id;
+    const plotId = activePlotStore.selectedPlotId;
     const worldType = state?.caption as WorldDTO['type'];
     const defaultFormData = FORM_DEFAULT_STATE[worldType];
-    const { saveWorld, setWorld, loadWorld, getStepperConfig, firstErrorStep } = activeWorldStore;
+    const { firstErrorStep } = activeWorldStore;
     const { form, setFormFieldData, formErrors, resetForm } = useForm<WorldDTO>(defaultFormData, defaultFormData);
 
     useEffect(() => {
@@ -46,8 +47,8 @@ export const WorldEditor = observer(
 
       activeWorldStore.plotId = plotId;
 
-      setWorld({ ...defaultFormData, id: state.id ?? '' });
-      loadWorld().catch(updateContextErrors);
+      activeWorldStore.setWorld({ ...defaultFormData, id: state.id ?? '' });
+      activeWorldStore.loadWorld().catch(updateContextErrors);
     }, [plotId, worldType]);
 
     function onNavigateToHomeHandler(): void {
@@ -55,19 +56,16 @@ export const WorldEditor = observer(
     }
 
     async function onStepperFinished(): Promise<void> {
-      if (activeWorldStore.world) {
-        resetForm(activeWorldStore.world);
-      }
-
       const world: Omit<WorldDTO, 'laws' | 'waterholes'> = {
+        ...(activeWorldStore.world ?? {}),
         ...form,
         id: activeWorldStore.world?.id ?? state.id ?? '',
       };
 
-      setWorld(world as WorldDTO);
+      activeWorldStore.setWorld(world as WorldDTO);
 
       try {
-        const isSuccess = await saveWorld();
+        const isSuccess = await activeWorldStore.saveWorld();
 
         if (isSuccess) {
           notify.showMessage(t('messages.success'), '', false);
@@ -87,13 +85,15 @@ export const WorldEditor = observer(
     }
 
     const errorsQuantity = Object.keys(formErrors)?.length;
-    const worldConstructorSteps = getStepperConfig();
+    const worldConstructorSteps = activeWorldStore.getStepperConfig();
 
     return (
       <ScreenView
         header={{
           title: t(worldWidgetInfoTranslations.lists.captions[worldType]),
           onBackClick: onNavigateToHomeHandler,
+          rightIconType: 'tick',
+          onRightIconClick: onStepperFinished,
         }}
       >
         {!!errorsQuantity && (
@@ -103,7 +103,6 @@ export const WorldEditor = observer(
         )}
 
         <UIStepper
-          onFinish={onStepperFinished}
           currentStep={firstErrorStep}
           invalidPoints={worldConstructorSteps.map(({ name }) => !!formErrors?.[name])}
           content={[

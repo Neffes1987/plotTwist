@@ -83,6 +83,24 @@ export const Translation: Dictionary = {
             createNextWorld: 'Добавить слудующий мир',
           },
         },
+        waterholesList: {
+          caption: 'Список водопоев',
+          messages: {
+            wasCreated: 'Водопой успешно создан!',
+            emptyList: 'Список водопоев пуст, давайте создадим новый?',
+          },
+          actions: {
+            addNew: 'Добавить новый водопой',
+            update: 'Изменить водопой',
+            delete: 'Удалить',
+            assign: 'Привязать к миру',
+            unAssign: 'Отвязать от мира',
+          },
+          labels: {
+            name: 'Название водопоя',
+            description: 'Описание водопоя',
+          },
+        },
         lawsList: {
           caption: 'Список законов',
           messages: {

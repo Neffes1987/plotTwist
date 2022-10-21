@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LayoutChangeEvent, ScrollView } from 'react-native';
 
-import { IconButton } from '../Buttons/IconButton';
 import { Flex } from '../Flex/Flex';
 import { ColorType } from '../interface';
 import { Typography } from '../Typography/Typography';
@@ -10,7 +9,7 @@ import { FULL_STEP_BUBBLE_SIZE, STEP_BUBBLE_MARGIN, STEP_BUBBLE_SIZE } from './c
 import { UIStepperProps } from './interface';
 
 export const UIStepper = (props: UIStepperProps): JSX.Element => {
-  const { currentStep = 0, content, onFinish, onValidateNext, invalidPoints } = props;
+  const { currentStep = 0, content, onValidateNext, invalidPoints } = props;
   const [activeStepIndex, setActiveStepIndex] = useState(currentStep);
   const scrollRef = useRef<ScrollView>(null);
   const [stepsPosition, setStepsPosition] = useState(0);
@@ -97,10 +96,6 @@ export const UIStepper = (props: UIStepperProps): JSX.Element => {
             );
           })}
         </ScrollView>
-
-        <Flex gap={4} radius={50}>
-          <IconButton iconType="tick" size={STEP_BUBBLE_SIZE} onPress={onFinish} color="accentDarkBlue" />
-        </Flex>
       </Flex>
 
       {content[activeStepIndex]}

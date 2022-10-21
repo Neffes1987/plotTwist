@@ -9,8 +9,8 @@ export class Law extends ActiveRecord<LawDTO> implements Serialization<LawDTO> {
   name = '';
   description = '';
 
-  constructor(id?: string) {
-    super(new AsyncStoreDataGateway('law'), id ?? '');
+  constructor() {
+    super(new AsyncStoreDataGateway('law'));
   }
 
   serialize(): LawDTO {

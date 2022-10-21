@@ -15,7 +15,7 @@ export const ScreenHeader = (props: ScreenHeaderProps): ReactElement => {
       <Flex justify="space-between">
         {onBackClick ? <IconButton iconType="chevron" color="accentDarkBlue" onPress={onBackClick} size={ICON_SIZE_DPI} /> : null}
 
-        <Flex gapX={4}>
+        <Flex gapX={4} grow={1}>
           <Typography mode="title" color="accentDarkBlue">
             {title}
           </Typography>

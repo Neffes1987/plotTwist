@@ -1,6 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { StatusEnum } from '../../../constants/status.enum';
 import { ROUTES } from '../../Screens/routes';
 import { IconButton } from '../../UI/Buttons/IconButton';
 import { Drawer } from '../../UI/Drawer/Drawer';
@@ -20,8 +21,9 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
   const [isShowWorldFaqPopover, setIsShowWorldFaqPopover] = useState(false);
   const [isShowWorldBody, setIsShowWorldBody] = useState(false);
   const { worldInfo, onEditWorld, onOpenWorldProperty } = props;
-  const { type, id, status } = worldInfo;
-  const isWorldReady = status === 'release';
+  const { worldData } = worldInfo;
+  const { type, id, status } = worldData;
+  const isWorldReady = status === StatusEnum.Released;
 
   if (!type) {
     return null;

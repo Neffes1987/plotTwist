@@ -2,9 +2,8 @@ export abstract class ActiveRecord<DTO extends CommonEntityDTO> implements IActi
   id = '';
   protected readonly _gateway: DataStoreGateway<DTO>;
 
-  protected constructor(gateway: DataStoreGateway<DTO>, id: string) {
+  protected constructor(gateway: DataStoreGateway<DTO>) {
     this._gateway = gateway;
-    this.id = id;
   }
 
   async load(): Promise<void> {

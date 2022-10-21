@@ -13,3 +13,8 @@ interface CrossWorldLawDTO extends CommonEntityDTO {
   lawId: string;
   worldId: string;
 }
+
+interface CrossWorldWaterholeDTO extends CommonEntityDTO {
+  waterholeId: string;
+  worldId: string;
+}

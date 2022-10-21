@@ -11,7 +11,7 @@ export const NPCBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWidgetPro
   const { t } = useTranslation();
 
   function handlePressProperty(id: string): void {
-    onOpenWorldProperty(id, worldInfo.id);
+    onOpenWorldProperty(id, worldInfo.worldData.id);
   }
 
   return (

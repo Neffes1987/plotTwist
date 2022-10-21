@@ -7,8 +7,8 @@ export class CrossWorldLaw extends ActiveRecord<CrossWorldLawDTO> {
   lawId: string;
   worldId: string;
 
-  constructor(id?: string) {
-    super(new AsyncStoreDataGateway('cross-world-law'), id ?? '');
+  constructor() {
+    super(new AsyncStoreDataGateway('cross-world-law'));
   }
 
   serialize(): CrossWorldLawDTO {

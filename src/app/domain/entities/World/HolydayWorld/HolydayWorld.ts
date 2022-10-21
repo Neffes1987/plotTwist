@@ -11,8 +11,8 @@ export class HolidayWorld extends AbstractWorld<HolidayWorldDTO> {
   holidayGetSwordType?: HolidayGetSwordTypeEnum; // not required
   chase?: ChaseTypeEnum;
 
-  constructor(id?: string) {
-    super(WorldEnum.HolidayWorld, id ?? '');
+  constructor() {
+    super(WorldEnum.HolidayWorld);
   }
 
   serialize(): HolidayWorldDTO {

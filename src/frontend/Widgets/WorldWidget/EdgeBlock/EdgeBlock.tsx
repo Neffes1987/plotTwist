@@ -11,7 +11,7 @@ export const EdgeBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWidgetPr
   const { t } = useTranslation();
 
   function handlePressProperty(id: string): void {
-    onOpenWorldProperty(id, worldInfo.id);
+    onOpenWorldProperty(id, worldInfo.worldData.id);
   }
 
   return (

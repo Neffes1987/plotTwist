@@ -40,4 +40,6 @@ interface ReturnWithPotionWorldDTO extends WorldDTO {
 
 interface ActivePlotWorld {
   worldData: WorldDTO;
+  laws: LawInWorldDTO[];
+  waterholes: WaterholeInWorldDTO[];
 }

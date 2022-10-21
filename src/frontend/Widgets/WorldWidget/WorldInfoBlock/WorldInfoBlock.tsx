@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ROUTES } from '../../../Screens/routes';
@@ -9,19 +9,19 @@ import { worldWidgetInfoTranslations } from '../worldWidgetTranslations';
 
 export const WorldInfoBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWidgetProps, 'onOpenWorldProperty' | 'worldInfo'>): JSX.Element => {
   const { t } = useTranslation();
-  const { laws, waterholes } = worldInfo;
+  const { laws, worldData, waterholes } = worldInfo;
   const lawsQuantity = laws?.length ?? 0;
-  const brokenLawsQuantity = laws?.filter(({ isBroken }) => isBroken).length ?? 0;
+  const brokenLawsQuantity = useMemo(() => laws?.filter(({ isBroken }) => isBroken).length ?? 0, [laws]);
   const waterholesQuantity = waterholes?.length ?? 0;
 
   function handlePressProperty(id: string): void {
-    onOpenWorldProperty(id, worldInfo.id);
+    onOpenWorldProperty(id, worldData.id);
   }
 
   return (
     <Card title={t(worldWidgetInfoTranslations.caption)} flex={1} height="100%" align="flex-start" testID="world-info-block">
       <PropertyRow
-        showAlert={!lawsQuantity}
+        showAlert={!!0}
         onPress={handlePressProperty}
         caption={t(worldWidgetInfoTranslations.labels.brokenLaws)}
         quantity={`${brokenLawsQuantity}/${lawsQuantity}`}

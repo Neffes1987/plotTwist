@@ -16,8 +16,8 @@ export abstract class AbstractWorld<DTO extends WorldDTO> extends ActiveRecord<D
   failPrice = '';
   status: StatusEnum;
 
-  protected constructor(worldType: WorldEnum, id: string) {
-    super(new AsyncStoreDataGateway(worldType), id);
+  protected constructor(worldType: WorldEnum) {
+    super(new AsyncStoreDataGateway(worldType));
     this.type = worldType;
   }
 
@@ -36,7 +36,7 @@ export abstract class AbstractWorld<DTO extends WorldDTO> extends ActiveRecord<D
   }
 
   unSerialize(object: WorldDTO): void {
-    const { id, name, failPrice, reference, story, timeline, type } = object;
+    const { id, name, failPrice, reference, story, timeline, type, status } = object;
 
     this.id = id;
     this.name = name;
@@ -45,6 +45,7 @@ export abstract class AbstractWorld<DTO extends WorldDTO> extends ActiveRecord<D
     this.story = story;
     this.timeline = timeline;
     this.type = type;
+    this.status = status ?? StatusEnum.Draft;
   }
 
   validate(): void {

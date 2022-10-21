@@ -1,16 +1,15 @@
-import { CrossWorldLawDTO } from '../../../../../../types/entities/cross';
-import { CrossWorldLaw } from '../CrossWorldLaw';
+import { CrossWorldWaterholeDTO } from '../../../../../../types/entities/cross';
+import { CrossWorldWaterhole } from '../CrossWorldWaterhole';
 
-describe('WHEN "CrossWorldLaw" is created', () => {
-  const relationDTO: CrossWorldLawDTO = {
+describe('WHEN "CrossWorldWaterhole" is created', () => {
+  const relationDTO: CrossWorldWaterholeDTO = {
     id: 'Id',
-    lawId: 'lawId',
+    waterholeId: 'waterholeId',
     worldId: 'worldId',
-    isBroken: true,
   };
 
   it('AND "serialize" is called, MUST generate raw object from instance fields', () => {
-    const relation = new CrossWorldLaw();
+    const relation = new CrossWorldWaterhole();
 
     relation.unSerialize(relationDTO);
     relation.id = relationDTO.id;
@@ -19,7 +18,7 @@ describe('WHEN "CrossWorldLaw" is created', () => {
   });
 
   it('AND "setId" is called, MUST update "id" field', () => {
-    const relation = new CrossWorldLaw();
+    const relation = new CrossWorldWaterhole();
 
     relation.unSerialize(relationDTO);
     relation.id = relationDTO.id;
@@ -28,7 +27,7 @@ describe('WHEN "CrossWorldLaw" is created', () => {
   });
 
   it('AND "unSerialize" is called, MUST generate raw object from instance fields', () => {
-    const relation = new CrossWorldLaw();
+    const relation = new CrossWorldWaterhole();
 
     relation.unSerialize(relationDTO);
 

@@ -8,8 +8,8 @@ import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 export class PlainWorld extends AbstractWorld<PlainWorldDTO> {
   introduction = '';
 
-  constructor(id?: string) {
-    super(WorldEnum.PlainWorld, id ?? '');
+  constructor() {
+    super(WorldEnum.PlainWorld);
   }
 
   serialize(): PlainWorldDTO {

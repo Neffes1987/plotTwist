@@ -9,13 +9,17 @@ export class LawsConstructor implements ILawConstructor {
     await crossWorldLaw.loadByLawId(id);
     await crossWorldLaw.remove();
 
-    const law = new Law(id);
+    const law = new Law();
+
+    law.id = id;
 
     return law.remove();
   }
 
   async get(id: string): Promise<Nullable<LawDTO>> {
-    const law = new Law(id);
+    const law = new Law();
+
+    law.id = id;
 
     await law.load();
 
@@ -33,37 +37,8 @@ export class LawsConstructor implements ILawConstructor {
 
     law.unSerialize(dto);
 
-    await law.save();
+    law.id = await law.save();
 
     return law.id;
-  }
-
-  async toggleWorldLawRelation(lawId: string, worldId: string): Promise<boolean> {
-    const crossWorldLaw = new CrossWorldLaw();
-
-    await crossWorldLaw.loadByLawId(lawId);
-
-    if (crossWorldLaw.worldId) {
-      await crossWorldLaw.remove();
-    } else {
-      crossWorldLaw.worldId = worldId;
-      crossWorldLaw.lawId = lawId;
-      crossWorldLaw.isBroken = false;
-
-      await crossWorldLaw.save();
-    }
-
-    return true;
-  }
-
-  async toggleWorldLawStatus(lawId: string, isBroken: boolean): Promise<boolean> {
-    const crossWorldLaw = new CrossWorldLaw();
-
-    await crossWorldLaw.loadByLawId(lawId);
-    crossWorldLaw.isBroken = isBroken;
-
-    await crossWorldLaw.save();
-
-    return true;
   }
 }

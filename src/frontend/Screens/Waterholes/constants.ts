@@ -26,8 +26,7 @@ export const TRANSLATION_SCHEMA = {
   labels: {
     name: 'name',
     description: 'description',
-    punishment: 'punishment',
   },
 };
 
-export const lawListTranslations = new TranslationNamespace<typeof TRANSLATION_SCHEMA>('pages.lawsList', TRANSLATION_SCHEMA);
+export const waterholesListTranslations = new TranslationNamespace<typeof TRANSLATION_SCHEMA>('pages.waterholesList', TRANSLATION_SCHEMA);

@@ -1,4 +1,4 @@
-import { ChaseTypeEnum, FinalTypeEnum, HolidayGetSwordTypeEnum, HolidayTypeEnum, PotionTypeEnum } from '../../../constants/world.enum';
+import { ChaseTypeEnum, FinalTypeEnum, HolidayGetSwordTypeEnum, HolidayTypeEnum, PotionTypeEnum, WorldEnum } from '../../../constants/world.enum';
 import { HiddenCaveWorldDTO, HolidayWorldDTO, PlainWorldDTO, PrivateWorldDTO, ReturnWithPotionWorldDTO, WorldDTO } from '../../../types/entities/world';
 import { TranslationNamespace } from '../../App/initI18n/translationsSchema';
 import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../constants';
@@ -146,9 +146,9 @@ export const RETURN_WITH_POTION_WORLD_FIELDS_CONFIG: StepperFieldField<ReturnWit
 ];
 
 export const WORLDS_ADDITIONAL_FIELDS = {
-  hiddenCave: HIDDEN_CAVE_WORLD_FIELDS_CONFIG,
-  holiday: HOLIDAY_WORLD_FIELDS_CONFIG,
-  plainWorld: PLAIN_WORLD_FIELDS_CONFIG,
-  privateWorld: PRIVATE_WORLD_FIELDS_CONFIG,
-  returnWithPotion: RETURN_WITH_POTION_WORLD_FIELDS_CONFIG,
+  [WorldEnum.HiddenCaveWorld]: HIDDEN_CAVE_WORLD_FIELDS_CONFIG,
+  [WorldEnum.HolidayWorld]: HOLIDAY_WORLD_FIELDS_CONFIG,
+  [WorldEnum.PlainWorld]: PLAIN_WORLD_FIELDS_CONFIG,
+  [WorldEnum.PrivateWorld]: PRIVATE_WORLD_FIELDS_CONFIG,
+  [WorldEnum.ReturnWithPotionWorld]: RETURN_WITH_POTION_WORLD_FIELDS_CONFIG,
 };

@@ -9,8 +9,8 @@ import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
 import notifier from '../../App/notify/notify';
 import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../constants';
-import store from '../../store/Store';
-import { plotListStore } from '../../Stores/Plot.store';
+import activePlotStore from '../../Stores/ActivePlot.store';
+import { plotsStore } from '../../Stores/Plots.store';
 import { UIInput } from '../../UI/UIInput/UIInput';
 import { UIList } from '../../UI/UIList/UIList';
 import { CreateEntityWidget } from '../../Widgets/CreateEntityWidget/CreateEntityWidget';
@@ -28,12 +28,12 @@ export const PlotList = observer(
     const { form, setFormFieldData, formErrors, resetForm } = useForm<Omit<PlotDTO, 'worlds'>>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
 
     useEffect(() => {
-      plotListStore.list().catch(updateContextErrors);
+      plotsStore.list().catch(updateContextErrors);
     }, []);
 
     async function updatePlot(): Promise<void> {
       try {
-        await plotListStore.updatePlot(form);
+        await plotsStore.updatePlot(form);
       } catch (e) {
         updateContextErrors?.(e);
       }
@@ -44,7 +44,7 @@ export const PlotList = observer(
 
     async function deletePlot(): Promise<void> {
       try {
-        await plotListStore.deletePlot(form.id);
+        await plotsStore.deletePlot(form.id);
       } catch (e) {
         updateContextErrors?.(e);
       }
@@ -57,7 +57,7 @@ export const PlotList = observer(
       const { name } = form;
 
       try {
-        const plotId = await plotListStore.createPlot(name);
+        const plotId = await plotsStore.createPlot(name);
 
         if (plotId) {
           onClosePopoverHandler();
@@ -70,7 +70,7 @@ export const PlotList = observer(
     }
 
     function onEditPlot(plotId: string): void {
-      const plot = plotListStore.plots.find(({ id }) => id === plotId);
+      const plot = plotsStore.plots.find(({ id }) => id === plotId);
 
       if (!plot) {
         return;
@@ -85,8 +85,8 @@ export const PlotList = observer(
       onOpenPopoverHandler();
     }
 
-    async function onNavigateToPlotHandler(plotId: string): Promise<void> {
-      await store.setCurrentPlot(plotId);
+    function onNavigateToPlotHandler(plotId: string): void {
+      activePlotStore.selectedPlotId = plotId;
       navigate(ROUTES.home);
     }
 
@@ -97,7 +97,7 @@ export const PlotList = observer(
         }}
       >
         <UIList
-          list={plotListStore.plots}
+          list={plotsStore.plots}
           emptyListCaption={plotListTranslations.messages.emptyList}
           onEdit={onEditPlot}
           onOpen={onNavigateToPlotHandler}

@@ -10,8 +10,8 @@ export class CrossWorldPlot extends ActiveRecord<CrossWorldPlotDTO> {
   worldId: string;
   type: WorldEnum;
 
-  constructor(id?: string) {
-    super(new AsyncStoreDataGateway('cross-world-plot'), id ?? '');
+  constructor() {
+    super(new AsyncStoreDataGateway('cross-world-plot'));
   }
 
   serialize(): CrossWorldPlotDTO {

@@ -8,8 +8,8 @@ import { AbstractWorld } from '../AbstractWorld/AbstractWorld';
 export class PrivateWorld extends AbstractWorld<PrivateWorldDTO> {
   contrast = '';
 
-  constructor(id?: string) {
-    super(WorldEnum.PrivateWorld, id ?? '');
+  constructor() {
+    super(WorldEnum.PrivateWorld);
   }
 
   serialize(): PrivateWorldDTO {

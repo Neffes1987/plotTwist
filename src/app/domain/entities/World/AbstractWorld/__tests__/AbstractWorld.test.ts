@@ -1,5 +1,6 @@
 import { generateString } from '@mocks/functions';
 
+import { StatusEnum } from '../../../../../../constants/status.enum';
 import { WorldEnum } from '../../../../../../constants/world.enum';
 import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../../frontend/constants';
 import { WorldDTO } from '../../../../../../types/entities/world';
@@ -8,7 +9,7 @@ import { AbstractWorld } from '../AbstractWorld';
 
 class TestWorld extends AbstractWorld<WorldDTO> {
   constructor() {
-    super(WorldEnum.PlainWorld, '');
+    super(WorldEnum.PlainWorld);
   }
 }
 
@@ -21,6 +22,7 @@ describe('WHEN "AbstractWorld" is created', () => {
     story: generateString(257),
     timeline: generateString(257),
     type: WorldEnum.PrivateWorld,
+    status: StatusEnum.Draft,
   };
 
   it('AND "serialize" is called, MUST return serialized object', () => {

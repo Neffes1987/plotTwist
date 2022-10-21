@@ -1,18 +1,31 @@
-import { AbstractTextEntity } from '../AbstractTextEntity/AbstractTextEntity';
-import { Mentor } from '../Character/Mentor/Mentor';
+import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../frontend/constants';
+import { AsyncStoreDataGateway } from '../../../infrastructure/gateways/AsyncStoreDataGateway/AsyncStoreDataGateway';
+import { DtoValidator } from '../../../infrastructure/validators/DtoValidator/DtoValidator';
+import { ActiveRecord } from '../ActiveRecord/ActiveRecord';
 
-export class Waterhole extends AbstractTextEntity {
-  private _mentors: Mentor[] = [];
+export class Waterhole extends ActiveRecord<WaterholeDTO> {
+  name = '';
+  description = '';
 
   constructor() {
-    super();
+    super(new AsyncStoreDataGateway('waterhole'));
   }
 
-  get mentors(): Mentor[] {
-    return this._mentors;
+  serialize(): WaterholeDTO {
+    return {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+    };
   }
 
-  setMentors(newValue: Mentor[]): void {
-    this._mentors = newValue;
+  validate(): void {
+    const validator = new DtoValidator(this.serialize());
+
+    validator.checkFieldRange([{ propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: SHORT_VALUE_MAX_LENGTH }]);
+  }
+
+  list(params: ListParams<WaterholeDTO>): Promise<WaterholeDTO[]> {
+    return this._gateway.list(params);
   }
 }

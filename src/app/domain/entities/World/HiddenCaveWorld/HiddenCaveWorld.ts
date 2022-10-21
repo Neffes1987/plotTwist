@@ -10,8 +10,8 @@ export class HiddenCaveWorld extends AbstractWorld<HiddenCaveWorldDTO> {
   shadowIntroduction = '';
   partyPlan = '';
 
-  constructor(id?: string) {
-    super(WorldEnum.HiddenCaveWorld, id ?? '');
+  constructor() {
+    super(WorldEnum.HiddenCaveWorld);
   }
 
   serialize(): HiddenCaveWorldDTO {

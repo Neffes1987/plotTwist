@@ -1,20 +1,44 @@
 import { WorldEnum } from '../../constants/world.enum';
 import { ILawConstructor } from '../../types/constructors/law.constructor';
 import { IPlotConstructor } from '../../types/constructors/plot.constructor';
+import { IWaterholeConstructor } from '../../types/constructors/waterhole.constructor';
 import { IWorldConstructor } from '../../types/constructors/world.constructor';
 import { ICommonController } from '../../types/controllers/controller';
 import { PlotDTO } from '../../types/entities/plot';
-import { WorldDTO } from '../../types/entities/world';
+import { ActivePlotWorld, WorldDTO } from '../../types/entities/world';
 
 export class Controller implements ICommonController {
   protected readonly plotConstructor: IPlotConstructor;
   protected readonly worldConstructor: IWorldConstructor;
   protected readonly lawsConstructor: ILawConstructor;
+  protected readonly waterholesConstructor: IWaterholeConstructor;
 
-  constructor(plotConstructor: IPlotConstructor, worldConstructor: IWorldConstructor, lawsConstructor: ILawConstructor) {
+  constructor(
+    plotConstructor: IPlotConstructor,
+    worldConstructor: IWorldConstructor,
+    lawsConstructor: ILawConstructor,
+    waterholesConstructor: IWaterholeConstructor,
+  ) {
     this.plotConstructor = plotConstructor;
     this.worldConstructor = worldConstructor;
     this.lawsConstructor = lawsConstructor;
+    this.waterholesConstructor = waterholesConstructor;
+  }
+
+  getWaterhole(id: string): Promise<Nullable<WaterholeDTO>> {
+    return this.waterholesConstructor.get(id);
+  }
+
+  saveWaterhole(dto: WaterholeDTO): Promise<string> {
+    return this.waterholesConstructor.save(dto);
+  }
+
+  deleteWaterhole(id: string): Promise<boolean> {
+    return this.waterholesConstructor.delete(id);
+  }
+
+  waterholeList(params: ListParams<WaterholeDTO>): Promise<WaterholeDTO[]> {
+    return this.waterholesConstructor.list(params);
   }
 
   deletePlot(id: string): Promise<boolean> {
@@ -37,7 +61,7 @@ export class Controller implements ICommonController {
     return this.worldConstructor.create(plotId, dto);
   }
 
-  worldList(plotId: string): Promise<WorldDTO[]> {
+  worldList(plotId: string): Promise<ActivePlotWorld[]> {
     return this.worldConstructor.list(plotId);
   }
 
@@ -49,7 +73,7 @@ export class Controller implements ICommonController {
     return this.worldConstructor.get(id, type);
   }
 
-  delete(id: string): Promise<boolean> {
+  deleteLaw(id: string): Promise<boolean> {
     return this.lawsConstructor.delete(id);
   }
 
@@ -58,14 +82,22 @@ export class Controller implements ICommonController {
   }
 
   toggleLawInWorld(lawId: string, worldId: string): Promise<boolean> {
-    return this.lawsConstructor.toggleWorldLawRelation(lawId, worldId);
+    return this.worldConstructor.toggleWorldLawRelation(lawId, worldId);
   }
 
   toggleLawStatus(lawId: string, isBroken: boolean): Promise<boolean> {
-    return this.lawsConstructor.toggleWorldLawStatus(lawId, isBroken);
+    return this.worldConstructor.toggleWorldLawStatus(lawId, isBroken);
   }
 
   saveLaw(dto: LawDTO): Promise<string> {
     return this.lawsConstructor.save(dto);
+  }
+
+  getLaw(id: string): Promise<Nullable<LawDTO>> {
+    return this.lawsConstructor.get(id);
+  }
+
+  toggleWaterholeInWorld(waterholeId: string, worldId: string): Promise<boolean> {
+    return this.worldConstructor.toggleWorldWaterholeRelation(waterholeId, worldId);
   }
 }

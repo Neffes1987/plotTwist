@@ -1,3 +1,4 @@
+import { WorldEnum } from '../../../constants/world.enum';
 import { TranslationNamespace } from '../../App/initI18n/translationsSchema';
 
 export const WORLD_WIDGET_EDGE_TRANSLATION_SCHEMA = {
@@ -46,18 +47,18 @@ export const WORLD_WIDGET_INFO_TRANSLATION_SCHEMA = {
   },
   lists: {
     captions: {
-      plainWorld: 'plainWorld',
-      privateWorld: 'privateWorld',
-      hiddenCave: 'hiddenCaveWorld',
-      holiday: 'holidayWorld',
-      returnWithPotion: 'returnWithPotionWorld',
+      [WorldEnum.PlainWorld]: 'plainWorld',
+      [WorldEnum.PrivateWorld]: 'privateWorld',
+      [WorldEnum.HiddenCaveWorld]: 'hiddenCaveWorld',
+      [WorldEnum.HolidayWorld]: 'holidayWorld',
+      [WorldEnum.ReturnWithPotionWorld]: 'returnWithPotionWorld',
     },
     faq: {
-      plainWorld: 'plainWorld',
-      privateWorld: 'privateWorld',
-      hiddenCave: 'hiddenCaveWorld',
-      holiday: 'holidayWorld',
-      returnWithPotion: 'returnWithPotionWorld',
+      [WorldEnum.PlainWorld]: 'plainWorld',
+      [WorldEnum.PrivateWorld]: 'privateWorld',
+      [WorldEnum.HiddenCaveWorld]: 'hiddenCaveWorld',
+      [WorldEnum.HolidayWorld]: 'holidayWorld',
+      [WorldEnum.ReturnWithPotionWorld]: 'returnWithPotionWorld',
     },
   },
 };

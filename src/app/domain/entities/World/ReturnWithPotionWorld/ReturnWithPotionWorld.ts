@@ -10,8 +10,8 @@ export class ReturnWithPotionWorld extends AbstractWorld<ReturnWithPotionWorldDT
   potionType: PotionTypeEnum;
   cliffhanger = '';
 
-  constructor(id?: string) {
-    super(WorldEnum.ReturnWithPotionWorld, id ?? '');
+  constructor() {
+    super(WorldEnum.ReturnWithPotionWorld);
   }
 
   serialize(): ReturnWithPotionWorldDTO {

@@ -39,7 +39,9 @@ export class PlotsStore {
   async createPlot(name: string): Promise<string> {
     const plotId = await this.crud.savePlot({ id: '', name, status: StatusEnum.Draft });
 
-    this.plots.push({ id: plotId, name, status: StatusEnum.Draft });
+    runInAction(() => {
+      this.plots.push({ id: plotId, name, status: StatusEnum.Draft });
+    });
 
     return plotId;
   }

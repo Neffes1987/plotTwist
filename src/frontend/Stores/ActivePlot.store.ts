@@ -17,8 +17,6 @@ export class ActivePlotStore {
 
   constructor() {
     makeAutoObservable(this);
-
-    this.loadPlot();
   }
 
   get plot(): Nullable<ActivePlotDTO> {
@@ -66,13 +64,14 @@ export class ActivePlotStore {
 
       runInAction(() => {
         this._plot = plotInfo;
-        this._worlds = worldsStore.worlds.map(worldData => ({ worldData }));
+        this._worlds = worldsStore.worlds;
         this.getNextStep();
         this.isPlotLoaded = true;
       });
 
       return;
     } catch (e) {
+      console.log(e);
       runInAction(() => {
         this.isPlotLoaded = false;
       });

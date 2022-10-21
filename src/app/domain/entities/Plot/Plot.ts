@@ -10,8 +10,8 @@ export class Plot extends ActiveRecord<PlotDTO> {
   status: StatusEnum = StatusEnum.Draft;
   name: string;
 
-  constructor(id?: string) {
-    super(new AsyncStoreDataGateway<PlotDTO>('plot'), id ?? '');
+  constructor() {
+    super(new AsyncStoreDataGateway<PlotDTO>('plot'));
   }
 
   serialize(): PlotDTO {
