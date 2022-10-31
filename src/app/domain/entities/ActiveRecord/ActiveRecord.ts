@@ -24,7 +24,9 @@ export abstract class ActiveRecord<DTO extends CommonEntityDTO> implements IActi
     this.validate();
     const dto = this.serialize();
 
-    return this._gateway.save(dto);
+    this.id = await this._gateway.save(dto);
+
+    return this.id;
   }
 
   remove(): Promise<boolean> {

@@ -57,7 +57,7 @@ export const WORLD_EDITOR_TRANSLATION_SCHEMA = {
 
 export const worldListTranslations = new TranslationNamespace<typeof WORLD_EDITOR_TRANSLATION_SCHEMA>('pages.worldEditor', WORLD_EDITOR_TRANSLATION_SCHEMA);
 
-export const COMMON_WORLD_FIELDS_CONFIG: StepperFieldField<Omit<WorldDTO, 'laws' | 'waterholes'>>[] = [
+export const COMMON_WORLD_FIELDS_CONFIG: StepperFieldField<WorldDTO>[] = [
   { label: worldListTranslations.labels.name, name: 'name', maxValueLength: SHORT_VALUE_MAX_LENGTH, minValueLength: NAME_VALUE_MIN_LENGTH, type: 'text' },
   {
     label: worldListTranslations.labels.reference,

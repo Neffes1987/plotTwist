@@ -1,6 +1,9 @@
 import { StatusEnum } from '../../constants/status.enum';
 import { ChaseTypeEnum, FinalTypeEnum, HolidayGetSwordTypeEnum, HolidayTypeEnum, PotionTypeEnum, WorldEnum } from '../../constants/world.enum';
 
+import { CrossWorldEdgeDTO } from './cross';
+import { EdgeDTO } from './edge';
+
 interface WorldDTO extends CommonEntityDTO {
   name: string;
   type: WorldEnum;
@@ -42,4 +45,7 @@ interface ActivePlotWorld {
   worldData: WorldDTO;
   laws: LawInWorldDTO[];
   waterholes: WaterholeInWorldDTO[];
+  edge: ActiveWorldEdge;
 }
+
+type ActiveWorldEdge = EdgeDTO & Omit<CrossWorldEdgeDTO, 'id' | 'worldId', 'edgeId'>;

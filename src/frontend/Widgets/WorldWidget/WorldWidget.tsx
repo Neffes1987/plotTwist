@@ -80,7 +80,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
       )}
 
       <Drawer caption={t(worldWidgetInfoTranslations.lists.faq[type])} isOpen={isShowWorldFaqPopover} onClose={onCloseFaqHandler}>
-        <Faq worldInfo={worldInfo} />
+        <Faq worldData={worldData} />
       </Drawer>
     </Flex>
   );

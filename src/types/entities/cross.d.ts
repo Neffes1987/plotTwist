@@ -18,3 +18,9 @@ interface CrossWorldWaterholeDTO extends CommonEntityDTO {
   waterholeId: string;
   worldId: string;
 }
+
+interface CrossWorldEdgeDTO extends CommonEntityDTO {
+  edgeId: string;
+  worldId: string;
+  isSolved: boolean;
+}
