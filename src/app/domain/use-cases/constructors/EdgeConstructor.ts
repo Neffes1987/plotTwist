@@ -7,7 +7,11 @@ import { CrossWorldEdge } from '../../entities/Cross/CrossWorldEdge/CrossWorldEd
 export class EdgeConstructor implements IEdgeConstructor {
   async getByWorldId(worldId: string): Promise<ActiveWorldEdge> {
     const crossWorld = new CrossWorldEdge();
-    const crossWorldEdge = crossWorld.listByWorld([worldId]);
+    const crossWorldEdge = crossWorld.list({
+      query: {
+        worldId,
+      },
+    });
 
     const edge = new Edge();
 

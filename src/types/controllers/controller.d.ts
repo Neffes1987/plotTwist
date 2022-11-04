@@ -1,3 +1,4 @@
+import { IEdgeConstructor } from '../constructors/edge.constructor';
 import { ILawConstructor } from '../constructors/law.constructor';
 import { IPlotConstructor } from '../constructors/plot.constructor';
 import { IWaterholeConstructor } from '../constructors/waterhole.constructor';
@@ -34,4 +35,10 @@ interface IWaterholeController {
   deleteWaterhole: IWaterholeConstructor['delete'];
 }
 
-export type ICommonController = ILawController & IWorldController & IPlotController & IWaterholeController;
+interface IEdgeController {
+  getEdgeByWorldId: IEdgeConstructor['get'];
+  saveEdge: IEdgeConstructor['save'];
+  toggleEdgeStatus: IEdgeConstructor['toggleEdgeStatus'];
+}
+
+export type ICommonController = ILawController & IWorldController & IPlotController & IWaterholeController & IEdgeController;

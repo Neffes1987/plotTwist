@@ -45,7 +45,7 @@ interface ActivePlotWorld {
   worldData: WorldDTO;
   laws: LawInWorldDTO[];
   waterholes: WaterholeInWorldDTO[];
-  edge: ActiveWorldEdge;
+  edge?: ActiveWorldEdge;
 }
 
 type ActiveWorldEdge = EdgeDTO & Omit<CrossWorldEdgeDTO, 'id' | 'worldId', 'edgeId'>;

@@ -1,3 +1,4 @@
+import { MainEdgeType, ShadowEncounterType } from '../../../../constants/edge.enum';
 import { MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../frontend/constants';
 import { EdgeDTO } from '../../../../types/entities/edge';
 import { ValidationError } from '../../../errors/ValidationError';
@@ -6,17 +7,23 @@ import { DtoValidator } from '../../../infrastructure/validators/DtoValidator/Dt
 import { ActiveRecord } from '../ActiveRecord/ActiveRecord';
 
 export class Edge extends ActiveRecord<EdgeDTO> {
-  name = '';
-  description = '';
-  edgeImpact = '';
-  readonly type = 'edge';
+  readonly mainEdgeType: MainEdgeType;
+  description: string;
+  name: string;
+  edgeImpact: string;
+  readonly type;
+  shadowEncounterType: ShadowEncounterType;
 
-  constructor() {
+  constructor(type: EdgeDTO['type']) {
     super(new AsyncStoreDataGateway('edge'));
+
+    this.type = type;
   }
 
   serialize(): EdgeDTO {
     return {
+      mainEdgeType: this.mainEdgeType,
+      shadowEncounterType: this.shadowEncounterType,
       description: this.description,
       edgeImpact: this.edgeImpact,
       id: this.id,
@@ -30,7 +37,13 @@ export class Edge extends ActiveRecord<EdgeDTO> {
 
     const validator = new DtoValidator<Partial<EdgeDTO>>(this.serialize());
 
-    validator.checkRequiredFields(['type']);
+    if (this.type === 'mainEdge') {
+      validator.checkRequiredFields(['mainEdgeType']);
+
+      if (this.mainEdgeType === 'shadowEncounter') {
+        validator.checkRequiredFields(['shadowEncounterType']);
+      }
+    }
 
     try {
       validator.checkFieldRange([

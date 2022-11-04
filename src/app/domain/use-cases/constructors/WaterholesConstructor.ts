@@ -41,4 +41,17 @@ export class WaterholesConstructor implements IWaterholeConstructor {
 
     return waterhole.id;
   }
+
+  async getWorldWaterholes(worldId: string): Promise<WaterholeInWorldDTO[]> {
+    const crossWorldWaterhole = new CrossWorldWaterhole();
+    const waterhole = new Waterhole();
+
+    const crossWorldWaterholes = await crossWorldWaterhole.listByWorldId(worldId);
+
+    return waterhole.list({
+      query: {
+        id: crossWorldWaterholes.map(({ waterholeId }) => waterholeId),
+      },
+    });
+  }
 }

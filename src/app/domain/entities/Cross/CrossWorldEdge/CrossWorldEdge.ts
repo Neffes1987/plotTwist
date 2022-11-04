@@ -24,15 +24,7 @@ export class CrossWorldEdge extends ActiveRecord<CrossWorldEdgeDTO> {
     //
   }
 
-  listByIds(edgeIds: string[]): Promise<CrossWorldEdgeDTO[]> {
-    return this._gateway.list({
-      query: { edgeId: edgeIds },
-    });
-  }
-
-  listByWorld(worldIds: string[]): Promise<CrossWorldEdgeDTO[]> {
-    return this._gateway.list({
-      query: { worldId: worldIds },
-    });
+  list(params: ListParams<CrossWorldEdgeDTO>): Promise<CrossWorldEdgeDTO[]> {
+    return this._gateway.list(params);
   }
 }

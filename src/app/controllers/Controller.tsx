@@ -1,28 +1,45 @@
 import { WorldEnum } from '../../constants/world.enum';
+import { IEdgeConstructor } from '../../types/constructors/edge.constructor';
 import { ILawConstructor } from '../../types/constructors/law.constructor';
 import { IPlotConstructor } from '../../types/constructors/plot.constructor';
 import { IWaterholeConstructor } from '../../types/constructors/waterhole.constructor';
 import { IWorldConstructor } from '../../types/constructors/world.constructor';
 import { ICommonController } from '../../types/controllers/controller';
+import { EdgeDTO } from '../../types/entities/edge';
 import { PlotDTO } from '../../types/entities/plot';
-import { ActivePlotWorld, WorldDTO } from '../../types/entities/world';
+import { ActivePlotWorld, ActiveWorldEdge, WorldDTO } from '../../types/entities/world';
 
 export class Controller implements ICommonController {
   protected readonly plotConstructor: IPlotConstructor;
   protected readonly worldConstructor: IWorldConstructor;
   protected readonly lawsConstructor: ILawConstructor;
   protected readonly waterholesConstructor: IWaterholeConstructor;
+  protected readonly edgeConstructor: IEdgeConstructor;
 
   constructor(
     plotConstructor: IPlotConstructor,
     worldConstructor: IWorldConstructor,
     lawsConstructor: ILawConstructor,
     waterholesConstructor: IWaterholeConstructor,
+    edgeConstructor: IEdgeConstructor,
   ) {
     this.plotConstructor = plotConstructor;
     this.worldConstructor = worldConstructor;
     this.lawsConstructor = lawsConstructor;
     this.waterholesConstructor = waterholesConstructor;
+    this.edgeConstructor = edgeConstructor;
+  }
+
+  toggleEdgeStatus(edgeId: string, isSolved: boolean): Promise<boolean> {
+    return this.edgeConstructor.toggleEdgeStatus(edgeId, isSolved);
+  }
+
+  getEdgeByWorldId(id: string): Promise<Nullable<ActiveWorldEdge>> {
+    return this.edgeConstructor.getByWorldId(id);
+  }
+
+  saveEdge(data: EdgeDTO): Promise<string> {
+    return this.edgeConstructor.save(data);
   }
 
   getWaterhole(id: string): Promise<Nullable<WaterholeDTO>> {

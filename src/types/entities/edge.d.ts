@@ -5,10 +5,6 @@ interface EdgeDTO extends CommonEntityDTO {
   description: string;
   edgeImpact: string;
   type: 'edge' | 'mainEdge';
-}
-
-interface MainEdgeDTO extends EdgeDTO {
-  mainEdgeType: MainEdgeType;
-  edgeImpact: string;
-  shadowEncounterType: ShadowEncounterType;
+  mainEdgeType?: MainEdgeType;
+  shadowEncounterType?: ShadowEncounterType;
 }
