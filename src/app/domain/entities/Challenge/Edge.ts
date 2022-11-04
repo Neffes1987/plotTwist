@@ -11,13 +11,11 @@ export class Edge extends ActiveRecord<EdgeDTO> {
   description: string;
   name: string;
   edgeImpact: string;
-  readonly type;
+  type: EdgeDTO['type'] = 'edge';
   shadowEncounterType: ShadowEncounterType;
 
-  constructor(type: EdgeDTO['type']) {
+  constructor() {
     super(new AsyncStoreDataGateway('edge'));
-
-    this.type = type;
   }
 
   serialize(): EdgeDTO {
