@@ -80,7 +80,8 @@ export class ActivePlotStore {
 
   getNextStep(): void {
     const allWorlds = [WorldEnum.PlainWorld, WorldEnum.PrivateWorld, WorldEnum.HiddenCaveWorld, WorldEnum.HolidayWorld, WorldEnum.ReturnWithPotionWorld];
-    const currentActiveWorld = this._worlds[this._worlds.length - 1].worldData.type;
+
+    const currentActiveWorld = this._worlds[this._worlds.length - 1]?.worldData?.type;
 
     for (let i = 0; i < allWorlds.length; i++) {
       if (allWorlds[i] === currentActiveWorld) {

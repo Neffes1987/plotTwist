@@ -1,5 +1,6 @@
 import { StatusEnum } from '../constants/status.enum';
 import { FinalTypeEnum, HolidayTypeEnum, PotionTypeEnum, WorldEnum } from '../constants/world.enum';
+import { EdgeDTO } from '../types/entities/edge';
 import { HiddenCaveWorldDTO, HolidayWorldDTO, PlainWorldDTO, PrivateWorldDTO, ReturnWithPotionWorldDTO, WorldDTO } from '../types/entities/world';
 
 export const SHORT_VALUE_MAX_LENGTH = 25;
@@ -50,6 +51,14 @@ export const DEFAULT_RETURN_WORLD_FORM_STATE: ReturnWithPotionWorldDTO = {
   cliffhanger: '',
   potionType: PotionTypeEnum.Love,
   type: WorldEnum.ReturnWithPotionWorld,
+};
+
+export const EDGE_FORM_DEFAULT_STATE: EdgeDTO = {
+  description: '',
+  edgeImpact: '',
+  id: '',
+  name: '',
+  type: 'edge',
 };
 
 export const FORM_DEFAULT_STATE: Record<WorldDTO['type'], WorldDTO> = {

@@ -1,8 +1,10 @@
 import { IEdgeConstructor } from '../constructors/edge.constructor';
 import { ILawConstructor } from '../constructors/law.constructor';
 import { IPlotConstructor } from '../constructors/plot.constructor';
+import { IRewardConstructor } from '../constructors/reward.constructor';
 import { IWaterholeConstructor } from '../constructors/waterhole.constructor';
 import { IWorldConstructor } from '../constructors/world.constructor';
+import { EdgeDTO } from '../entities/edge';
 
 interface IPlotController {
   savePlot: IPlotConstructor['save'];
@@ -38,7 +40,15 @@ interface IWaterholeController {
 interface IEdgeController {
   getEdgeByWorldId: IEdgeConstructor['get'];
   saveEdge: IEdgeConstructor['save'];
+  createEdge: (worldId: string, dto: EdgeDTO) => Promise<string>;
   toggleEdgeStatus: IEdgeConstructor['toggleEdgeStatus'];
+  toggleRewardInEdge: IEdgeConstructor['toggleRewardInEdge'];
 }
 
-export type ICommonController = ILawController & IWorldController & IPlotController & IWaterholeController & IEdgeController;
+interface IRewardController {
+  getRewardByEdgeId: (id: string) => Promise<RewardInEdgeDTO[]>;
+  saveReward: IRewardConstructor['save'];
+  removeReward: IRewardConstructor['delete'];
+}
+
+export type ICommonController = ILawController & IWorldController & IPlotController & IWaterholeController & IEdgeController & IRewardController;

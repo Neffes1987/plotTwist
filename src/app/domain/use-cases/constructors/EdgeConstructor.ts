@@ -2,12 +2,13 @@ import { IEdgeConstructor } from '../../../../types/constructors/edge.constructo
 import { EdgeDTO } from '../../../../types/entities/edge';
 import { ActiveWorldEdge } from '../../../../types/entities/world';
 import { Edge } from '../../entities/Challenge/Edge';
+import { CrossEdgeReward } from '../../entities/Cross/CrossEdgeReward/CrossEdgeReward';
 import { CrossWorldEdge } from '../../entities/Cross/CrossWorldEdge/CrossWorldEdge';
 
 export class EdgeConstructor implements IEdgeConstructor {
   async getByWorldId(worldId: string): Promise<ActiveWorldEdge> {
     const crossWorld = new CrossWorldEdge();
-    const crossWorldEdge = crossWorld.list({
+    const crossWorldEdge = await crossWorld.list({
       query: {
         worldId,
       },
@@ -15,7 +16,7 @@ export class EdgeConstructor implements IEdgeConstructor {
 
     const edge = new Edge();
 
-    edge.id = crossWorldEdge[0].edgeId;
+    edge.id = crossWorldEdge?.[0]?.edgeId;
 
     await edge.load();
 
@@ -63,5 +64,23 @@ export class EdgeConstructor implements IEdgeConstructor {
     await edge.save();
 
     return edge.id;
+  }
+
+  async toggleRewardInEdge(edgeId: string, rewardId: string): Promise<boolean> {
+    const crossEdgeReward = new CrossEdgeReward();
+
+    await crossEdgeReward.loadByRewardId(rewardId);
+
+    if (crossEdgeReward.edgeId) {
+      await crossEdgeReward.remove();
+    } else {
+      crossEdgeReward.edgeId = edgeId;
+      crossEdgeReward.rewardId = rewardId;
+      crossEdgeReward.isAchieved = false;
+
+      await crossEdgeReward.save();
+    }
+
+    return true;
   }
 }

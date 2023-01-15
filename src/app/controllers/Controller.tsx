@@ -2,6 +2,7 @@ import { WorldEnum } from '../../constants/world.enum';
 import { IEdgeConstructor } from '../../types/constructors/edge.constructor';
 import { ILawConstructor } from '../../types/constructors/law.constructor';
 import { IPlotConstructor } from '../../types/constructors/plot.constructor';
+import { IRewardConstructor } from '../../types/constructors/reward.constructor';
 import { IWaterholeConstructor } from '../../types/constructors/waterhole.constructor';
 import { IWorldConstructor } from '../../types/constructors/world.constructor';
 import { ICommonController } from '../../types/controllers/controller';
@@ -15,6 +16,7 @@ export class Controller implements ICommonController {
   protected readonly lawsConstructor: ILawConstructor;
   protected readonly waterholesConstructor: IWaterholeConstructor;
   protected readonly edgeConstructor: IEdgeConstructor;
+  protected readonly rewardsConstructor: IRewardConstructor;
 
   constructor(
     plotConstructor: IPlotConstructor,
@@ -22,12 +24,14 @@ export class Controller implements ICommonController {
     lawsConstructor: ILawConstructor,
     waterholesConstructor: IWaterholeConstructor,
     edgeConstructor: IEdgeConstructor,
+    rewardsConstructor: IRewardConstructor,
   ) {
     this.plotConstructor = plotConstructor;
     this.worldConstructor = worldConstructor;
     this.lawsConstructor = lawsConstructor;
     this.waterholesConstructor = waterholesConstructor;
     this.edgeConstructor = edgeConstructor;
+    this.rewardsConstructor = rewardsConstructor;
   }
 
   toggleEdgeStatus(edgeId: string, isSolved: boolean): Promise<boolean> {
@@ -40,6 +44,10 @@ export class Controller implements ICommonController {
 
   saveEdge(data: EdgeDTO): Promise<string> {
     return this.edgeConstructor.save(data);
+  }
+
+  createEdge(worldId: string, dto: EdgeDTO): Promise<string> {
+    return this.edgeConstructor.create(worldId, dto);
   }
 
   getWaterhole(id: string): Promise<Nullable<WaterholeDTO>> {
@@ -116,5 +124,21 @@ export class Controller implements ICommonController {
 
   toggleWaterholeInWorld(waterholeId: string, worldId: string): Promise<boolean> {
     return this.worldConstructor.toggleWorldWaterholeRelation(waterholeId, worldId);
+  }
+
+  toggleRewardInEdge(edgeId: string, rewardId: string): Promise<boolean> {
+    return this.edgeConstructor.toggleRewardInEdge(edgeId, rewardId);
+  }
+
+  getRewardByEdgeId(id: string): Promise<RewardInEdgeDTO[]> {
+    return this.rewardsConstructor.getEdgeRewards(id);
+  }
+
+  removeReward(id: string): Promise<boolean> {
+    return this.rewardsConstructor.delete(id);
+  }
+
+  saveReward(dto: RewardDto): Promise<string> {
+    return this.rewardsConstructor.save(dto);
   }
 }

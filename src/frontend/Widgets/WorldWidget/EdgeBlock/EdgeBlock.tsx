@@ -14,32 +14,38 @@ export const EdgeBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWidgetPr
     onOpenWorldProperty(id, worldInfo.worldData.id);
   }
 
+  const { edge } = worldInfo;
+
   return (
     <Card title={t(worldWidgetEdgeTranslations.caption)} align="flex-start" fullWidth testID="edge-block">
-      <PropertyRow onPress={handlePressProperty} caption={t(worldWidgetEdgeTranslations.caption)} id={ROUTES.aboutEdge} />
+      <PropertyRow showAlert={!edge?.id} onPress={handlePressProperty} caption={t(worldWidgetEdgeTranslations.caption)} id={ROUTES.aboutEdge} />
 
-      <PropertyRow onPress={handlePressProperty} quantity={`${0}/${0}`} caption={t(worldWidgetEdgeTranslations.labels.rewards)} id={ROUTES.rewards} />
+      {!!edge?.id && (
+        <>
+          <PropertyRow onPress={handlePressProperty} quantity={`${0}/${0}`} caption={t(worldWidgetEdgeTranslations.labels.rewards)} id={ROUTES.rewards} />
 
-      <PropertyRow
-        onPress={handlePressProperty}
-        quantity={`${0}/${0}`}
-        caption={t(worldWidgetEdgeTranslations.labels.activeChallenges)}
-        id={ROUTES.activeChallenges}
-      />
+          <PropertyRow
+            onPress={handlePressProperty}
+            quantity={`${0}/${0}`}
+            caption={t(worldWidgetEdgeTranslations.labels.activeChallenges)}
+            id={ROUTES.activeChallenges}
+          />
 
-      <PropertyRow
-        onPress={handlePressProperty}
-        quantity={`${0}/${0}`}
-        caption={t(worldWidgetEdgeTranslations.labels.passedChallenges)}
-        id={ROUTES.passedChallenges}
-      />
+          <PropertyRow
+            onPress={handlePressProperty}
+            quantity={`${0}/${0}`}
+            caption={t(worldWidgetEdgeTranslations.labels.passedChallenges)}
+            id={ROUTES.passedChallenges}
+          />
 
-      <PropertyRow
-        onPress={handlePressProperty}
-        quantity={`${0}/${0}`}
-        caption={t(worldWidgetEdgeTranslations.labels.failedChallenges)}
-        id={ROUTES.failedChallenges}
-      />
+          <PropertyRow
+            onPress={handlePressProperty}
+            quantity={`${0}/${0}`}
+            caption={t(worldWidgetEdgeTranslations.labels.failedChallenges)}
+            id={ROUTES.failedChallenges}
+          />
+        </>
+      )}
     </Card>
   );
 };

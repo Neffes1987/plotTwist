@@ -16,5 +16,5 @@ export enum ShadowEncounterType {
   Demonization = 'demonization',
   DeathOfVillain = 'deathOfVillain',
   VillainGetaway = 'villainGetaway',
-  DhadowHeroOfHisStory = 'shadowHeroOfHisStory',
+  ShadowHeroOfHisStory = 'shadowHeroOfHisStory',
 }

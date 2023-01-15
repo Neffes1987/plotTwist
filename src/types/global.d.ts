@@ -10,6 +10,7 @@ interface SelectOption {
   id: string;
   name: string;
   isSelected?: boolean;
+  translate?: boolean;
 }
 
 interface SelectOptionTyped<T> {

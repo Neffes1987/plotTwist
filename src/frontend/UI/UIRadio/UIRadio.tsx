@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { UI_COLORS } from '../colors';
 import { Flex } from '../Flex/Flex';
@@ -17,13 +18,15 @@ export const UIRadio = ({ label, value, onChange, name, error, options }: UIRadi
     onChange(name, value);
   }
 
+  const { t } = useTranslation();
+
   return (
     <Flex fullWidth radius={8} marginY={4} direction="column" gap={8} backgroundColor="accentWhite" shadowType="l1">
       <Flex justify="space-between" align="flex-start" fullWidth>
         <Typography mode="caption-medium">{label}</Typography>
       </Flex>
 
-      {options.map(({ id, name }) => (
+      {options.map(({ id, name, translate = true }) => (
         <Flex key={id} onPress={(): void => onInputChanged(id)}>
           <Flex radius={100} width={16} />
 
@@ -32,7 +35,7 @@ export const UIRadio = ({ label, value, onChange, name, error, options }: UIRadi
           </Flex>
 
           <Flex justify="space-between" align="flex-start" fullWidth>
-            <Typography mode="caption-medium">{name}</Typography>
+            <Typography mode="caption-medium">{translate ? t(name) : name}</Typography>
           </Flex>
 
           {!!error && (

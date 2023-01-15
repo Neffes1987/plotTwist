@@ -24,3 +24,9 @@ interface CrossWorldEdgeDTO extends CommonEntityDTO {
   worldId: string;
   isSolved: boolean;
 }
+
+interface CrossEdgeRewardDTO extends CommonEntityDTO {
+  isAchieved: boolean;
+  edgeId: string;
+  rewardId: string;
+}

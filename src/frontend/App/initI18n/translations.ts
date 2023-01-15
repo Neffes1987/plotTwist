@@ -138,6 +138,46 @@ export const Translation: Dictionary = {
             description: 'Описание сюжета',
           },
         },
+        edgeEditor: {
+          caption: 'Преграда',
+          actions: {
+            create: 'Создать преграду',
+            update: 'Обновить преграду',
+          },
+          labels: {
+            mainEdgeType: 'Тип главного испытания',
+            shadowEncounterType: 'Тип схватки с тенью',
+            name: 'Название испытания',
+            description: 'Подробности',
+            type: 'Тип испытания',
+            edgeImpact: 'Какая цель у испытания?',
+          },
+          lists: {
+            edgeTypeOptions: {
+              plain: 'Обычное испытание',
+              main: 'Главное испытание',
+            },
+            shadowEncounterType: {
+              Demonization: 'Демонизация тени',
+              DeathOfVillain: 'Смерть злодея',
+              VillainGetaway: 'Побег злодея',
+              ShadowHeroOfHisStory: 'Тень - как герой своей истории',
+            },
+            mainEdgeTypeOptions: {
+              MeetingWithMainFear: 'Встреча с главным страхом',
+              AsDeathWitness: 'Свидетель преступления',
+              CauseOfDeath: 'Причина смерти',
+              Equilibrium: 'Равновесие',
+              FatherConfrontation: 'Дальнее противостояние',
+              ImaginaryHeroDeath: 'Мнимая смерть героя',
+              LoveThatKills: 'Любовь которая убивает',
+              SacredMarriage: 'Жертва во имя любви',
+              ThroughEyesOfPsychopath: 'Сквозь взгляд психопата',
+              YouthVersusOldAge: 'Молодость против старости',
+              ShadowEncounter: 'Встреча с тенью',
+            },
+          },
+        },
       },
       widget: {
         worldWidgetNPC: {

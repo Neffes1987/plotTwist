@@ -1,3 +1,4 @@
+import { EdgeEditor } from './EdgeEditor/EdgeEditor';
 import { Home } from './Home/Home';
 import { Laws } from './Laws/Laws';
 import { Loading } from './Loading/Loading';
@@ -13,5 +14,6 @@ export const components = {
   Home,
   PlotList,
   WorldEditor,
+  EdgeEditor,
   OopsErrorScreen,
 };
