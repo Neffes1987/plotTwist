@@ -8,7 +8,7 @@ export class CrossEdgeReward extends ActiveRecord<CrossEdgeRewardDTO> {
   edgeId: string;
 
   constructor() {
-    super(new AsyncStoreDataGateway('cross-world-law'));
+    super(new AsyncStoreDataGateway('cross-edge-reward'));
   }
 
   serialize(): CrossEdgeRewardDTO {

@@ -6,6 +6,7 @@ import { EdgeDTO } from '../../types/entities/edge';
 
 export class EdgeStore {
   edge: EdgeDTO;
+  selectedRewards: string[] = [];
   private readonly crud: IEdgeController;
 
   constructor() {
@@ -15,6 +16,21 @@ export class EdgeStore {
 
   async get(worldId: string): Promise<void> {
     this.edge = await this.crud.getEdgeByWorldId(worldId);
+  }
+
+  async toggleRewardInEdge(edgeId: string, rewardId: string): Promise<void> {
+    await this.crud.toggleRewardInEdge(edgeId, rewardId);
+
+    if (this.selectedRewards?.includes(rewardId)) {
+      this.selectedRewards = this.selectedRewards.filter(selectedReward => selectedReward !== rewardId);
+    } else {
+      this.selectedRewards = [...this.selectedRewards, rewardId];
+    }
+  }
+
+  async getSelectedRewardsByEdgeId(edgeId: string): Promise<void> {
+    console.log('selected', await this.crud.getRewardsByEdgeId(edgeId));
+    this.selectedRewards = (await this.crud.getRewardsByEdgeId(edgeId)) ?? [];
   }
 
   async save(worldId: string, dto: EdgeDTO): Promise<string> {

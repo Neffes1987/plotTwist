@@ -4,6 +4,7 @@ import { ActiveWorldEdge } from '../../../../types/entities/world';
 import { Edge } from '../../entities/Challenge/Edge';
 import { CrossEdgeReward } from '../../entities/Cross/CrossEdgeReward/CrossEdgeReward';
 import { CrossWorldEdge } from '../../entities/Cross/CrossWorldEdge/CrossWorldEdge';
+import { Reward } from '../../entities/Reward/Reward';
 
 export class EdgeConstructor implements IEdgeConstructor {
   async getByWorldId(worldId: string): Promise<ActiveWorldEdge> {
@@ -17,12 +18,24 @@ export class EdgeConstructor implements IEdgeConstructor {
     const edge = new Edge();
 
     edge.id = crossWorldEdge?.[0]?.edgeId;
-
     await edge.load();
+
+    const crossEdgeRewards = new CrossEdgeReward();
+    const rewards = new Reward();
+
+    const assignedRewards = await crossEdgeRewards.listByEdgeId(edge.id);
+    const assignedRewardsSet = {};
+
+    assignedRewards.forEach(({ rewardId, isAchieved }) => {
+      assignedRewardsSet[rewardId] = isAchieved;
+    });
+
+    const rewardsList = await rewards.list({ query: { id: Object.keys(assignedRewardsSet) } });
 
     return {
       ...edge.serialize(),
       isSolved: crossWorld.isSolved,
+      rewards: rewardsList.map(reward => ({ ...reward, isAchieved: assignedRewardsSet[reward.id] })),
     };
   }
 
@@ -82,5 +95,12 @@ export class EdgeConstructor implements IEdgeConstructor {
     }
 
     return true;
+  }
+
+  async getRewardsByEdgeId(edgeId: string): Promise<string[]> {
+    const crossEdgeReward = new CrossEdgeReward();
+    const list = await crossEdgeReward.listByEdgeId(edgeId);
+
+    return list.map(({ rewardId }) => rewardId);
   }
 }

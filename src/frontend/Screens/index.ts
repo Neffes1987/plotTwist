@@ -4,6 +4,7 @@ import { Laws } from './Laws/Laws';
 import { Loading } from './Loading/Loading';
 import { OopsErrorScreen } from './OopsErrorScreen/OopsErrorScreen';
 import { PlotList } from './PlotList/PlotList';
+import { Rewards } from './Rewards/Rewards';
 import { Waterholes } from './Waterholes/Waterholes';
 import { WorldEditor } from './WorldEditor/WorldEditor';
 
@@ -13,6 +14,7 @@ export const components = {
   Waterholes,
   Home,
   PlotList,
+  Rewards,
   WorldEditor,
   EdgeEditor,
   OopsErrorScreen,

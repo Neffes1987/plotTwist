@@ -41,24 +41,4 @@ export class RewardsConstructor implements IRewardConstructor {
 
     return reward.id;
   }
-
-  async getEdgeRewards(edgeId: string): Promise<RewardInEdgeDTO[]> {
-    const crossEdgeReward = new CrossEdgeReward();
-    const reward = new Reward();
-
-    const crossEdgeRewardDTOS = await crossEdgeReward.listByEdgeId(edgeId);
-    const rewardsAchieved: Record<string, boolean> = {};
-
-    crossEdgeRewardDTOS.forEach(({ rewardId, isAchieved }) => {
-      rewardsAchieved[rewardId] = isAchieved;
-    });
-
-    const commonRewards = await reward.list({
-      query: {
-        id: Object.keys(rewardsAchieved),
-      },
-    });
-
-    return commonRewards.map(law => ({ ...law, isAssigned: rewardsAchieved[law.id] }));
-  }
 }

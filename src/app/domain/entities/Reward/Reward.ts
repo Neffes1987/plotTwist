@@ -9,7 +9,7 @@ export class Reward extends ActiveRecord<RewardDto> implements Serialization<Rew
   description = '';
 
   constructor() {
-    super(new AsyncStoreDataGateway('law'));
+    super(new AsyncStoreDataGateway('Reward'));
   }
 
   serialize(): RewardDto {

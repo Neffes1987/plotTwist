@@ -43,10 +43,11 @@ interface IEdgeController {
   createEdge: (worldId: string, dto: EdgeDTO) => Promise<string>;
   toggleEdgeStatus: IEdgeConstructor['toggleEdgeStatus'];
   toggleRewardInEdge: IEdgeConstructor['toggleRewardInEdge'];
+  getRewardsByEdgeId: IEdgeConstructor['getRewardsByEdgeId'];
 }
 
 interface IRewardController {
-  getRewardByEdgeId: (id: string) => Promise<RewardInEdgeDTO[]>;
+  getRewards: IRewardConstructor['list'];
   saveReward: IRewardConstructor['save'];
   removeReward: IRewardConstructor['delete'];
 }

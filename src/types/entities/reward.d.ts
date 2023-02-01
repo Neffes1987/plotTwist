@@ -4,5 +4,5 @@ interface RewardDto extends CommonEntityDTO {
 }
 
 interface RewardInEdgeDTO extends RewardDto {
-  isAssigned: boolean;
+  isAssigned?: boolean;
 }

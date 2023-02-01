@@ -1,3 +1,1 @@
-export type IRewardConstructor = ICommonConstructor<RewardDto> & {
-  getEdgeRewards: (edgeId: string) => Promise<RewardInEdgeDTO[]>;
-};
+export type IRewardConstructor = ICommonConstructor<RewardDto>;

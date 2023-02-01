@@ -7,4 +7,5 @@ interface EdgeDTO extends CommonEntityDTO {
   type: 'edge' | 'mainEdge';
   mainEdgeType?: MainEdgeType;
   shadowEncounterType?: ShadowEncounterType;
+  rewards?: RewardInEdgeDTO[];
 }

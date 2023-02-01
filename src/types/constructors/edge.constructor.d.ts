@@ -6,4 +6,5 @@ export interface IEdgeConstructor extends Omit<ICommonConstructor<ActiveWorldEdg
   getByWorldId: (worldId: string) => ActiveWorldEdge;
   toggleEdgeStatus: (edgeId: string, isSolved: boolean) => Promise<boolean>;
   toggleRewardInEdge: (edgeId: string, rewardId: string) => Promise<boolean>;
+  getRewardsByEdgeId: (edgeId: string) => Promise<string[]>;
 }

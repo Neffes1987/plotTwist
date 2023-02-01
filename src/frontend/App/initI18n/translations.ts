@@ -120,6 +120,24 @@ export const Translation: Dictionary = {
             punishment: 'Что будет если его нарушить?',
           },
         },
+        rewardsList: {
+          caption: 'Список наград',
+          messages: {
+            wasCreated: 'Награда успешно создан!',
+            emptyList: 'Список наград пуст, давайте создадим новый?',
+          },
+          actions: {
+            addNew: 'Добавить новую награду',
+            update: 'Изменить награду',
+            delete: 'Удалить',
+            assign: 'Привязать к испытанию',
+            unAssign: 'Отвязать от испытания',
+          },
+          labels: {
+            name: 'Название награды',
+            description: 'Описание награды',
+          },
+        },
         plotList: {
           caption: 'Список сюжетов',
           messages: {

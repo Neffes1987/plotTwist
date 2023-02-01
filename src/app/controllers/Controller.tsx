@@ -130,15 +130,19 @@ export class Controller implements ICommonController {
     return this.edgeConstructor.toggleRewardInEdge(edgeId, rewardId);
   }
 
-  getRewardByEdgeId(id: string): Promise<RewardInEdgeDTO[]> {
-    return this.rewardsConstructor.getEdgeRewards(id);
-  }
-
   removeReward(id: string): Promise<boolean> {
     return this.rewardsConstructor.delete(id);
   }
 
+  getRewards(params: ListParams<RewardDto>): Promise<RewardDto[]> {
+    return this.rewardsConstructor.list(params);
+  }
+
   saveReward(dto: RewardDto): Promise<string> {
     return this.rewardsConstructor.save(dto);
+  }
+
+  getRewardsByEdgeId(edgeId: string): Promise<string[]> {
+    return this.edgeConstructor.getRewardsByEdgeId(edgeId);
   }
 }
