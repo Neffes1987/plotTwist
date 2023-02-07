@@ -21,7 +21,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
   const [isShowWorldFaqPopover, setIsShowWorldFaqPopover] = useState(false);
   const [isShowWorldBody, setIsShowWorldBody] = useState(false);
   const { worldInfo, onEditWorld, onOpenWorldProperty } = props;
-  const { worldData } = worldInfo;
+  const { worldData, characters } = worldInfo;
   const { type, id, status } = worldData;
   const isWorldReady = status === StatusEnum.Released;
 
@@ -75,7 +75,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
             <WorldInfoBlock worldInfo={worldInfo} onOpenWorldProperty={onClickPropertyHandler} />
           </Flex>
 
-          <EdgeBlock onOpenWorldProperty={onOpenWorldProperty} worldInfo={worldInfo} />
+          {!!characters?.length && <EdgeBlock onOpenWorldProperty={onOpenWorldProperty} worldInfo={worldInfo} />}
         </Flex>
       )}
 

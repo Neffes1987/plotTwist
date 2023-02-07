@@ -20,7 +20,7 @@ export const PropertyRow = (props: PropertyRowProps): ReactElement => {
         </Flex>
       </Flex>
 
-      {quantity && !showAlert && (
+      {!!quantity && !showAlert && (
         <Typography mode="caption-medium" {...rest}>
           {quantity}
         </Typography>

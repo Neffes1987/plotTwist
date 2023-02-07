@@ -1,3 +1,4 @@
+import { Characters } from './Characters/Characters';
 import { EdgeEditor } from './EdgeEditor/EdgeEditor';
 import { Home } from './Home/Home';
 import { Laws } from './Laws/Laws';
@@ -16,6 +17,7 @@ export const components = {
   PlotList,
   Rewards,
   WorldEditor,
+  Characters,
   EdgeEditor,
   OopsErrorScreen,
 };

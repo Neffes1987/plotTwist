@@ -29,7 +29,7 @@ export const EdgeEditor = (): JSX.Element | null => {
   const { state } = params;
   const worldId = state?.id;
   const { edge } = edgeStore;
-  const { form, setFormFieldData, formErrors, resetForm } = useForm<EdgeDTO>(EDGE_FORM_DEFAULT_STATE, EDGE_FORM_DEFAULT_STATE);
+  const { form, setFormFieldData, formErrors, resetForm } = useForm<Omit<EdgeDTO, 'rewards' | 'tasks'>>(EDGE_FORM_DEFAULT_STATE, EDGE_FORM_DEFAULT_STATE);
 
   const currentFirldsConfig = useMemo(() => {
     const { mainEdgeType, type } = form;

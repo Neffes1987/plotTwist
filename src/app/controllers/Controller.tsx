@@ -1,4 +1,5 @@
 import { WorldEnum } from '../../constants/world.enum';
+import { ICharacterConstructor } from '../../types/constructors/character.constructor';
 import { IEdgeConstructor } from '../../types/constructors/edge.constructor';
 import { ILawConstructor } from '../../types/constructors/law.constructor';
 import { IPlotConstructor } from '../../types/constructors/plot.constructor';
@@ -6,6 +7,7 @@ import { IRewardConstructor } from '../../types/constructors/reward.constructor'
 import { IWaterholeConstructor } from '../../types/constructors/waterhole.constructor';
 import { IWorldConstructor } from '../../types/constructors/world.constructor';
 import { ICommonController } from '../../types/controllers/controller';
+import { CharacterDTO } from '../../types/entities/character';
 import { EdgeDTO } from '../../types/entities/edge';
 import { PlotDTO } from '../../types/entities/plot';
 import { ActivePlotWorld, ActiveWorldEdge, WorldDTO } from '../../types/entities/world';
@@ -17,6 +19,7 @@ export class Controller implements ICommonController {
   protected readonly waterholesConstructor: IWaterholeConstructor;
   protected readonly edgeConstructor: IEdgeConstructor;
   protected readonly rewardsConstructor: IRewardConstructor;
+  protected readonly characterConstructor: ICharacterConstructor;
 
   constructor(
     plotConstructor: IPlotConstructor,
@@ -25,6 +28,7 @@ export class Controller implements ICommonController {
     waterholesConstructor: IWaterholeConstructor,
     edgeConstructor: IEdgeConstructor,
     rewardsConstructor: IRewardConstructor,
+    characterConstructor: ICharacterConstructor,
   ) {
     this.plotConstructor = plotConstructor;
     this.worldConstructor = worldConstructor;
@@ -32,6 +36,7 @@ export class Controller implements ICommonController {
     this.waterholesConstructor = waterholesConstructor;
     this.edgeConstructor = edgeConstructor;
     this.rewardsConstructor = rewardsConstructor;
+    this.characterConstructor = characterConstructor;
   }
 
   toggleEdgeStatus(edgeId: string, isSolved: boolean): Promise<boolean> {
@@ -144,5 +149,17 @@ export class Controller implements ICommonController {
 
   getRewardsByEdgeId(edgeId: string): Promise<string[]> {
     return this.edgeConstructor.getRewardsByEdgeId(edgeId);
+  }
+
+  getCharacters(params: ListParams<CharacterDTO>): Promise<CharacterDTO[]> {
+    return this.characterConstructor.list(params);
+  }
+
+  removeCharacter(id: string): Promise<boolean> {
+    return this.characterConstructor.delete(id);
+  }
+
+  saveCharacter(dto: CharacterDTO): Promise<string> {
+    return this.characterConstructor.save(dto);
   }
 }

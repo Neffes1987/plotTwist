@@ -59,6 +59,7 @@ export class WorldConstructor implements IWorldConstructor {
         laws,
         waterholes,
         edge,
+        characters: [],
       };
     });
 

@@ -31,31 +31,39 @@ export const EdgeBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWidgetPr
         <>
           <PropertyRow
             onPress={handleOpenRewardsProperty}
-            quantity={`${achievedRewards.length}/${listRewards.length}`}
+            quantity={`${achievedRewards?.length}/${listRewards?.length}`}
             caption={t(worldWidgetEdgeTranslations.labels.rewards)}
+            showAlert={!listRewards?.length}
             id={ROUTES.rewards}
           />
 
-          <PropertyRow
-            onPress={handleOpenRewardsProperty}
-            quantity={`${0}/${0}`}
-            caption={t(worldWidgetEdgeTranslations.labels.activeChallenges)}
-            id={ROUTES.activeChallenges}
-          />
+          {!!listRewards?.length && (
+            <PropertyRow
+              onPress={handleOpenRewardsProperty}
+              quantity={edge.tasks?.length ?? '0'}
+              caption={t(worldWidgetEdgeTranslations.labels.activeChallenges)}
+              showAlert={!edge.tasks?.length}
+              id={ROUTES.activeChallenges}
+            />
+          )}
 
-          <PropertyRow
-            onPress={handleOpenRewardsProperty}
-            quantity={`${0}/${0}`}
-            caption={t(worldWidgetEdgeTranslations.labels.passedChallenges)}
-            id={ROUTES.passedChallenges}
-          />
+          {!!edge.tasks?.length && (
+            <>
+              <PropertyRow
+                onPress={handleOpenRewardsProperty}
+                quantity={`${0}/${0}`}
+                caption={t(worldWidgetEdgeTranslations.labels.passedChallenges)}
+                id={ROUTES.passedChallenges}
+              />
 
-          <PropertyRow
-            onPress={handleOpenRewardsProperty}
-            quantity={`${0}/${0}`}
-            caption={t(worldWidgetEdgeTranslations.labels.failedChallenges)}
-            id={ROUTES.failedChallenges}
-          />
+              <PropertyRow
+                onPress={handleOpenRewardsProperty}
+                quantity={`${0}/${0}`}
+                caption={t(worldWidgetEdgeTranslations.labels.failedChallenges)}
+                id={ROUTES.failedChallenges}
+              />
+            </>
+          )}
         </>
       )}
     </Card>

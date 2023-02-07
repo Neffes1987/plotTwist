@@ -1,5 +1,7 @@
 import { MainEdgeType, ShadowEncounterType } from '../../constants/edge.enum';
 
+import { TaskInEdgeDTO } from './task';
+
 interface EdgeDTO extends CommonEntityDTO {
   name: string;
   description: string;
@@ -8,4 +10,5 @@ interface EdgeDTO extends CommonEntityDTO {
   mainEdgeType?: MainEdgeType;
   shadowEncounterType?: ShadowEncounterType;
   rewards?: RewardInEdgeDTO[];
+  tasks?: TaskInEdgeDTO[];
 }

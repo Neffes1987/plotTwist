@@ -1,3 +1,4 @@
+import { CharacterEnum } from '../../../constants/character.enum';
 import { WorldEnum } from '../../../constants/world.enum';
 import { TranslationNamespace } from '../../App/initI18n/translationsSchema';
 
@@ -20,12 +21,12 @@ export const worldWidgetEdgeTranslations = new TranslationNamespace<typeof WORLD
 export const WORLD_WIDGET_NPC_TRANSLATION_SCHEMA = {
   caption: 'caption',
   labels: {
-    ally: 'ally',
-    enemy: 'enemy',
-    guard: 'guard',
-    messenger: 'messenger',
-    mentor: 'mentor',
-    shadow: 'shadow',
+    [CharacterEnum.Ally]: 'ally',
+    [CharacterEnum.Enemy]: 'enemy',
+    [CharacterEnum.Guard]: 'guard',
+    [CharacterEnum.Messenger]: 'messenger',
+    [CharacterEnum.Mentor]: 'mentor',
+    [CharacterEnum.Shadow]: 'shadow',
   },
 };
 

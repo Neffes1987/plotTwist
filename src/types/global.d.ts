@@ -4,6 +4,7 @@ type ValueOf<T> = T[keyof T];
 
 interface Navigation {
   navigate: (route: string, options?: Record<string, unknown>) => void;
+  goBack: () => void;
 }
 
 interface SelectOption {

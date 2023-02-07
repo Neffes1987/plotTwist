@@ -40,6 +40,8 @@ const App = (): ReactElement => {
             <Stack.Screen name={ROUTES.waterholes} component={components.Waterholes} options={DEFAULT_ROUTE_OPTIONS} />
 
             <Stack.Screen name={ROUTES.aboutEdge} component={components.EdgeEditor} options={DEFAULT_ROUTE_OPTIONS} />
+
+            <Stack.Screen name={ROUTES.characters} component={components.Characters} options={DEFAULT_ROUTE_OPTIONS} />
           </Stack.Navigator>
         </NavigationContainer>
       </NotifierWrapper>

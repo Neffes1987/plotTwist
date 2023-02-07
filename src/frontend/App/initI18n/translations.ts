@@ -101,6 +101,30 @@ export const Translation: Dictionary = {
             description: 'Описание водопоя',
           },
         },
+        charactersList: {
+          caption: 'Список ',
+          messages: {
+            wasCreated: 'Персонаж успешно создан!',
+            emptyList: 'Список Персонажей пуст, давайте создадим новый?',
+          },
+          actions: {
+            addNew: 'Добавить нового персонажа',
+            update: 'Изменить персонажа',
+            delete: 'Удалить',
+            assign: 'Привязать к миру',
+            unAssign: 'Отвязать от мира',
+          },
+          labels: {
+            age: 'Возраст',
+            gender: 'Пол',
+            goal: 'Цель в сюжете',
+            group: 'Фракция',
+            name: 'Имя персонажа',
+            profession: 'Профессия',
+            race: 'Раса',
+            type: 'Тип персонажа',
+          },
+        },
         lawsList: {
           caption: 'Список законов',
           messages: {
@@ -239,7 +263,7 @@ export const Translation: Dictionary = {
           labels: {
             aboutEdge: 'Подробнее',
             rewards: 'Награды за задания',
-            activeChallenges: 'Активные задания',
+            activeChallenges: 'Всего заданий',
             passedChallenges: 'Пройденные задания',
             failedChallenges: 'Проваленные задания',
           },

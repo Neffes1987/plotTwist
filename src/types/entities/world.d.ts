@@ -1,6 +1,7 @@
 import { StatusEnum } from '../../constants/status.enum';
 import { ChaseTypeEnum, FinalTypeEnum, HolidayGetSwordTypeEnum, HolidayTypeEnum, PotionTypeEnum, WorldEnum } from '../../constants/world.enum';
 
+import { CharacterDTO, CharacterInWorldDTO } from './character';
 import { CrossWorldEdgeDTO } from './cross';
 import { EdgeDTO } from './edge';
 
@@ -44,6 +45,7 @@ interface ReturnWithPotionWorldDTO extends WorldDTO {
 interface ActivePlotWorld {
   worldData: WorldDTO;
   laws: LawInWorldDTO[];
+  characters: CharacterInWorldDTO[];
   waterholes: WaterholeInWorldDTO[];
   edge?: ActiveWorldEdge;
 }

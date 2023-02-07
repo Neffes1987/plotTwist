@@ -58,8 +58,8 @@ export interface IconButtonProps extends TouchableOpacityProps {
 
 export interface DrawerProps {
   caption: string | JSX.Element;
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 export interface DividerProps {

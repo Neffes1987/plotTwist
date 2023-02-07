@@ -5,15 +5,15 @@ import { CreateEntityWidget } from '../CreateEntityWidget/CreateEntityWidget';
 import { ScreenView } from '../ScreenView/ScreenView';
 
 interface CommonListViewProps {
-  isEditDrawerOpen: boolean;
-  onClosePopup: () => void;
-  popupTitle: string;
+  isEditDrawerOpen?: boolean;
+  onClosePopup?: () => void;
+  popupTitle?: string;
   onDelete?: () => void;
-  onApply: () => void;
+  onApply?: () => void;
   title: string;
   onBackClick: () => void;
   list: SelectOption[];
-  onEditHandler: (itemId: string) => void;
+  onEditHandler?: (itemId: string) => void;
   onAddToWorldHandler: (itemId: string) => void;
   onOpenPopoverHandler: () => void;
 }
@@ -43,9 +43,11 @@ export const CommonListView = (props: PropsWithChildren<CommonListViewProps>): R
     >
       <UIList list={list} onEdit={onEditHandler} onOpen={onAddToWorldHandler} onCreate={onOpenPopoverHandler} />
 
-      <CreateEntityWidget onApply={onApply} onDelete={onDelete} caption={popupTitle} isOpen={isEditDrawerOpen} onClose={onClosePopup}>
-        {children}
-      </CreateEntityWidget>
+      {!!popupTitle && onApply && (
+        <CreateEntityWidget onApply={onApply} onDelete={onDelete} caption={popupTitle} isOpen={isEditDrawerOpen} onClose={onClosePopup}>
+          {children}
+        </CreateEntityWidget>
+      )}
     </ScreenView>
   );
 };

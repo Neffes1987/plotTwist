@@ -1,3 +1,4 @@
+import { ICharacterConstructor } from '../constructors/character.constructor';
 import { IEdgeConstructor } from '../constructors/edge.constructor';
 import { ILawConstructor } from '../constructors/law.constructor';
 import { IPlotConstructor } from '../constructors/plot.constructor';
@@ -52,4 +53,16 @@ interface IRewardController {
   removeReward: IRewardConstructor['delete'];
 }
 
-export type ICommonController = ILawController & IWorldController & IPlotController & IWaterholeController & IEdgeController & IRewardController;
+interface ICharacterController {
+  getCharacters: ICharacterConstructor['list'];
+  saveCharacter: ICharacterConstructor['save'];
+  removeCharacter: ICharacterConstructor['delete'];
+}
+
+export type ICommonController = ILawController &
+  IWorldController &
+  IPlotController &
+  IWaterholeController &
+  IEdgeController &
+  IRewardController &
+  ICharacterController;
