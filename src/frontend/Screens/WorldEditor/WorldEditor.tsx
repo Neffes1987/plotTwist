@@ -1,147 +1,109 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { ValidationError } from '../../../app/errors/ValidationError';
+import { WorldEnum } from '../../../constants/world.enum';
 import { WorldDTO } from '../../../types/entities/world';
-import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
-import notify from '../../App/notify/notify';
-import { FORM_DEFAULT_STATE } from '../../constants';
-import activePlotStore from '../../Stores/ActivePlot.store';
-import activeWorldStore from '../../Stores/ActiveWorld.store';
+import {
+  COMMON_WORLD_FIELDS_CONFIG,
+  HIDDEN_CAVE_WORLD_FIELDS_CONFIG,
+  HOLIDAY_WORLD_FIELDS_CONFIG,
+  PLAIN_WORLD_FIELDS_CONFIG,
+  PRIVATE_WORLD_FIELDS_CONFIG,
+  RETURN_WITH_POTION_WORLD_FIELDS_CONFIG,
+} from '../../App/initI18n/schemas/worldTranslations';
+import { useStepperFinished } from '../../Hooks/useStepperFinished';
+import { worldsStore } from '../../Stores/Worlds.store';
 import { Flex } from '../../UI/Flex/Flex';
-import { UIStepper } from '../../UI/Stepper/Stepper';
+import { UIStepper } from '../../UI/Stepper/UiStepper';
 import { Typography } from '../../UI/Typography/Typography';
-import { UIInput } from '../../UI/UIInput/UIInput';
-import { UIRadio } from '../../UI/UIRadio/UIRadio';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 import { worldWidgetInfoTranslations } from '../../Widgets/WorldWidget/worldWidgetTranslations';
 import { RouteParams } from '../interface';
-import { ROUTES } from '../routes';
+
+import { DEFAULT_WORLD_FORM_STATE } from './constants';
 
 export const WorldEditor = observer(
   (): Nullable<JSX.Element> => {
     const { t } = useTranslation();
-    const { navigate } = useNavigation<Navigation>();
+    const { goBack } = useNavigation<Navigation>();
     const { params } = useRoute<RouteParams>();
-    const { updateContextErrors } = useErrorContext();
-    const { state } = params;
-    const plotId = activePlotStore.selectedPlotId;
-    const worldType = state?.caption as WorldDTO['type'];
-    const defaultFormData = FORM_DEFAULT_STATE[worldType];
-    const { firstErrorStep } = activeWorldStore;
-    const { form, setFormFieldData, formErrors, resetForm } = useForm<WorldDTO>(defaultFormData, defaultFormData);
+    const worldId = params?.state?.id ?? '';
+    const worldType = params?.state?.worldType ?? '';
+    const plotId = params?.state?.plotId ?? '';
+    const defaultFormData = DEFAULT_WORLD_FORM_STATE as WorldDTO;
+    const { form, setFormFieldData, formErrors, resetForm, formErrorsQuantity } = useForm<WorldDTO>(
+      { ...defaultFormData, type: worldType as WorldEnum },
+      defaultFormData,
+    );
+
+    const onStepperFinished = useStepperFinished<WorldDTO>(
+      async (data): Promise<string> => {
+        if (data.id) {
+          return worldsStore.updateWorld(data);
+        }
+
+        return worldsStore.createWorld(plotId, data);
+      },
+      () => resetForm(defaultFormData),
+    );
 
     useEffect(() => {
-      if (!worldType || !plotId) {
-        navigate(ROUTES.home);
-
-        return;
+      if (worldId) {
+        worldsStore.getWorld(worldId).then(() => {
+          if (worldsStore.selectedWorldDto) {
+            resetForm(worldsStore.selectedWorldDto);
+          }
+        });
       }
-
-      if (activeWorldStore.world) {
-        resetForm(activeWorldStore.world);
-      }
-
-      activeWorldStore.plotId = plotId;
-
-      activeWorldStore.setWorld({ ...defaultFormData, id: state.id ?? '' });
-      activeWorldStore.loadWorld().catch(updateContextErrors);
-    }, [plotId, worldType]);
+    }, []);
 
     function onNavigateToHomeHandler(): void {
-      navigate(ROUTES.home, {});
+      goBack();
     }
 
-    async function onStepperFinished(): Promise<void> {
-      const world: Omit<WorldDTO, 'laws' | 'waterholes'> = {
-        ...(activeWorldStore.world ?? {}),
-        ...form,
-        id: activeWorldStore.world?.id ?? state.id ?? '',
-      };
-
-      activeWorldStore.setWorld(world as WorldDTO);
-
-      try {
-        const isSuccess = await activeWorldStore.saveWorld();
-
-        if (isSuccess) {
-          notify.showMessage(t('messages.success'), '', false);
-          onNavigateToHomeHandler();
-        }
-      } catch (e) {
-        if (!(e instanceof ValidationError)) {
-          resetForm(defaultFormData);
-        }
-
-        updateContextErrors?.(e);
+    const worldConstructorSteps = useMemo(() => {
+      if (form.type === 'PlainWorld') {
+        return PLAIN_WORLD_FIELDS_CONFIG;
       }
-    }
 
-    if (!worldType) {
-      return null;
-    }
+      if (form.type === 'PrivateWorld') {
+        return PRIVATE_WORLD_FIELDS_CONFIG;
+      }
 
-    const errorsQuantity = Object.keys(formErrors)?.length;
-    const worldConstructorSteps = activeWorldStore.getStepperConfig();
+      if (form.type === 'HiddenCaveWorld') {
+        return HIDDEN_CAVE_WORLD_FIELDS_CONFIG;
+      }
+
+      if (form.type === 'HolidayWorld') {
+        return HOLIDAY_WORLD_FIELDS_CONFIG;
+      }
+
+      if (form.type === 'ReturnWithPotionWorld') {
+        return RETURN_WITH_POTION_WORLD_FIELDS_CONFIG;
+      }
+
+      return COMMON_WORLD_FIELDS_CONFIG;
+    }, [form.type]);
 
     return (
       <ScreenView
         header={{
-          title: t(worldWidgetInfoTranslations.lists.captions[worldType]),
+          title: t(worldWidgetInfoTranslations.lists.captions[form.type]),
           onBackClick: onNavigateToHomeHandler,
           rightIconType: 'tick',
-          onRightIconClick: onStepperFinished,
+          onRightIconClick: () => onStepperFinished(form),
         }}
       >
-        {!!errorsQuantity && (
+        {!!formErrorsQuantity && (
           <Typography color="neutralRed" mode="caption-medium">
-            {t('errors.quantity', { quantity: errorsQuantity })}
+            {t('errors.quantity', { quantity: formErrorsQuantity })}
           </Typography>
         )}
 
-        <UIStepper
-          currentStep={firstErrorStep}
-          invalidPoints={worldConstructorSteps.map(({ name }) => !!formErrors?.[name])}
-          content={[
-            ...worldConstructorSteps.map(config => {
-              const { type, name, label } = config;
-
-              switch (type) {
-                case 'text':
-                  return (
-                    <Flex key={name} align="flex-start">
-                      <UIInput
-                        autoFocus
-                        label={t(label)}
-                        error={formErrors?.[name]}
-                        value={form?.[name] ?? ''}
-                        onChange={setFormFieldData}
-                        name={name}
-                        maxValueLength={config.maxValueLength}
-                        minValueLength={config.minValueLength}
-                      />
-                    </Flex>
-                  );
-                case 'list':
-                  return (
-                    <Flex key={name} align="flex-start">
-                      <UIRadio
-                        options={config.options}
-                        label={label}
-                        name={name}
-                        error={formErrors?.[name]}
-                        value={form?.[name] ?? ''}
-                        onChange={setFormFieldData}
-                      />
-                    </Flex>
-                  );
-              }
-            }),
-          ]}
-        />
+        <UIStepper<WorldDTO> isError={!!formErrorsQuantity} errors={formErrors} onChangeValue={setFormFieldData} values={form} list={worldConstructorSteps} />
 
         <Flex height={100} />
       </ScreenView>

@@ -1,38 +1,36 @@
 import { appController } from 'backend';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { CharacterEnum } from '../../constants/character.enum';
 import { ICharacterController } from '../../types/controllers/controller';
-import { CharacterDTO, CharacterInWorldDTO } from '../../types/entities/character';
+import { CharacterDTO } from '../../types/entities/character';
 
 export class CharactersStore {
   characters: CharacterDTO[] = [];
-  private readonly crud: ICharacterController;
-  private readonly type: CharacterEnum;
+  activeCharacter: Nullable<CharacterDTO> = null;
 
-  constructor(type: CharacterEnum) {
+  private readonly crud: ICharacterController;
+
+  constructor() {
     makeAutoObservable(this);
     this.crud = appController;
-    this.type = type;
   }
 
-  async list(params?: ListParams<CharacterInWorldDTO>): Promise<void> {
-    const data = await this.crud.getCharacters({
-      ...params,
-      query: {
-        ...(params?.query ?? {}),
-        type: this.type,
-      },
-    });
+  async list(params?: ListParams<CharacterDTO>): Promise<void> {
+    const data = await this.crud.getCharacters(params ?? {});
 
     runInAction(() => {
       this.characters = data;
     });
   }
 
-  async update(dto: CharacterInWorldDTO): Promise<void> {
-    await this.crud.saveCharacter(dto);
-    await this.list({});
+  async get(id: string): Promise<void> {
+    const [character] = await this.crud.getCharacters({
+      query: {
+        id,
+      },
+    });
+
+    this.activeCharacter = character;
   }
 
   async delete(id?: string): Promise<void> {
@@ -44,7 +42,7 @@ export class CharactersStore {
     await this.list({});
   }
 
-  async create(dto: CharacterInWorldDTO): Promise<string> {
+  async save(dto: CharacterDTO): Promise<string> {
     const id = await this.crud.saveCharacter(dto);
 
     runInAction(() => {
@@ -55,11 +53,4 @@ export class CharactersStore {
   }
 }
 
-export const charactersStore = {
-  [CharacterEnum.Ally]: new CharactersStore(CharacterEnum.Ally),
-  [CharacterEnum.Enemy]: new CharactersStore(CharacterEnum.Enemy),
-  [CharacterEnum.Guard]: new CharactersStore(CharacterEnum.Guard),
-  [CharacterEnum.Mentor]: new CharactersStore(CharacterEnum.Mentor),
-  [CharacterEnum.Shadow]: new CharactersStore(CharacterEnum.Shadow),
-  [CharacterEnum.Messenger]: new CharactersStore(CharacterEnum.Messenger),
-};
+export const charactersStore = new CharactersStore();

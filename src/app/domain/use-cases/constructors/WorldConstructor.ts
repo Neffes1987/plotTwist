@@ -1,5 +1,3 @@
-import { WorldEnum } from '../../../../constants/world.enum';
-import { IEdgeConstructor } from '../../../../types/constructors/edge.constructor';
 import { ILawConstructor } from '../../../../types/constructors/law.constructor';
 import { IWaterholeConstructor } from '../../../../types/constructors/waterhole.constructor';
 import { IWorldConstructor } from '../../../../types/constructors/world.constructor';
@@ -7,21 +5,19 @@ import { ActivePlotWorld, WorldDTO } from '../../../../types/entities/world';
 import { CrossWorldLaw } from '../../entities/Cross/CrossWorldLaw/CrossWorldLaw';
 import { CrossWorldPlot } from '../../entities/Cross/CrossWorldPlot/CrossWorldPlot';
 import { CrossWorldWaterhole } from '../../entities/Cross/CrossWorldWaterhole/CrossWorldWaterhole';
-import { createWorld } from '../../entities/World/WorldFactory/createWorld';
+import { World } from '../../entities/World/World';
 
 export class WorldConstructor implements IWorldConstructor {
   private readonly lawConstructor: ILawConstructor;
   private readonly waterholeConstructor: IWaterholeConstructor;
-  private readonly edgeConstructor: IEdgeConstructor;
 
-  constructor(lawConstructor: ILawConstructor, waterholeConstructor: IWaterholeConstructor, edgeConstructor: IEdgeConstructor) {
+  constructor(lawConstructor: ILawConstructor, waterholeConstructor: IWaterholeConstructor) {
     this.lawConstructor = lawConstructor;
     this.waterholeConstructor = waterholeConstructor;
-    this.edgeConstructor = edgeConstructor;
   }
 
   async create(plotId: string, dto: WorldDTO): Promise<string> {
-    const world = createWorld(dto.type);
+    const world = new World();
 
     world.unSerialize(dto);
     const worldId = await world.save();
@@ -42,8 +38,8 @@ export class WorldConstructor implements IWorldConstructor {
 
     const plotWorlds = await crossWorlds.getWorldListByPlotId(plotId);
 
-    const worlds = plotWorlds.map(async ({ worldId, type, status }) => {
-      const world = createWorld(type);
+    const worlds = plotWorlds.map(async ({ worldId, status }) => {
+      const world = new World();
 
       world.id = worldId;
 
@@ -52,13 +48,12 @@ export class WorldConstructor implements IWorldConstructor {
 
       const laws = await this.lawConstructor.getWorldLaws(world.id);
       const waterholes = await this.waterholeConstructor.getWorldWaterholes(world.id);
-      const edge = await this.edgeConstructor.getByWorldId(worldId);
 
       return {
         worldData: world.serialize(),
         laws,
         waterholes,
-        edge,
+        edge: null,
         characters: [],
       };
     });
@@ -67,7 +62,7 @@ export class WorldConstructor implements IWorldConstructor {
   }
 
   async save(dto: WorldDTO): Promise<string> {
-    const world = createWorld(dto.type);
+    const world = new World();
 
     world.unSerialize(dto);
     world.id = await world.save();
@@ -75,8 +70,8 @@ export class WorldConstructor implements IWorldConstructor {
     return world.id;
   }
 
-  async get(id: string, type: WorldEnum): Promise<WorldDTO> {
-    const world = createWorld(type);
+  async get(id: string): Promise<WorldDTO> {
+    const world = new World();
 
     world.id = id;
 

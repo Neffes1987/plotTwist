@@ -1,4 +1,4 @@
-import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../frontend/constants';
+import { NAME_VALUE_MIN_LENGTH } from '../../../../frontend/Screens/Tasks/constants';
 import { ValidationError } from '../../../errors/ValidationError';
 import { AsyncStoreDataGateway } from '../../../infrastructure/gateways/AsyncStoreDataGateway/AsyncStoreDataGateway';
 import { DtoValidator } from '../../../infrastructure/validators/DtoValidator/DtoValidator';
@@ -34,7 +34,7 @@ export class Reward extends ActiveRecord<RewardDto> implements Serialization<Rew
     const validator = new DtoValidator<Partial<LawDTO>>(this.serialize());
 
     try {
-      validator.checkFieldRange([{ propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: SHORT_VALUE_MAX_LENGTH }]);
+      validator.checkFieldRange([{ propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: null }]);
     } catch (e) {
       error.merge(e);
     }

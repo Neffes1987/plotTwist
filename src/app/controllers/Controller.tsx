@@ -1,58 +1,62 @@
-import { WorldEnum } from '../../constants/world.enum';
+import { ICallConstructor } from '../../types/constructors/call.constructor';
 import { ICharacterConstructor } from '../../types/constructors/character.constructor';
-import { IEdgeConstructor } from '../../types/constructors/edge.constructor';
 import { ILawConstructor } from '../../types/constructors/law.constructor';
 import { IPlotConstructor } from '../../types/constructors/plot.constructor';
 import { IRewardConstructor } from '../../types/constructors/reward.constructor';
+import { ITaskConstructor } from '../../types/constructors/task.constructor';
 import { IWaterholeConstructor } from '../../types/constructors/waterhole.constructor';
 import { IWorldConstructor } from '../../types/constructors/world.constructor';
 import { ICommonController } from '../../types/controllers/controller';
+import { CallDTO } from '../../types/entities/call';
 import { CharacterDTO } from '../../types/entities/character';
-import { EdgeDTO } from '../../types/entities/edge';
 import { PlotDTO } from '../../types/entities/plot';
-import { ActivePlotWorld, ActiveWorldEdge, WorldDTO } from '../../types/entities/world';
+import { TaskDTO } from '../../types/entities/task';
+import { ActivePlotWorld, WorldDTO } from '../../types/entities/world';
 
 export class Controller implements ICommonController {
   protected readonly plotConstructor: IPlotConstructor;
   protected readonly worldConstructor: IWorldConstructor;
   protected readonly lawsConstructor: ILawConstructor;
   protected readonly waterholesConstructor: IWaterholeConstructor;
-  protected readonly edgeConstructor: IEdgeConstructor;
+  protected readonly taskConstructor: ITaskConstructor;
   protected readonly rewardsConstructor: IRewardConstructor;
   protected readonly characterConstructor: ICharacterConstructor;
+  protected readonly callsConstructor: ICallConstructor;
 
   constructor(
     plotConstructor: IPlotConstructor,
     worldConstructor: IWorldConstructor,
     lawsConstructor: ILawConstructor,
     waterholesConstructor: IWaterholeConstructor,
-    edgeConstructor: IEdgeConstructor,
+    edgeConstructor: ITaskConstructor,
     rewardsConstructor: IRewardConstructor,
     characterConstructor: ICharacterConstructor,
+    callsConstructor: ICallConstructor,
   ) {
     this.plotConstructor = plotConstructor;
     this.worldConstructor = worldConstructor;
     this.lawsConstructor = lawsConstructor;
     this.waterholesConstructor = waterholesConstructor;
-    this.edgeConstructor = edgeConstructor;
+    this.taskConstructor = edgeConstructor;
     this.rewardsConstructor = rewardsConstructor;
     this.characterConstructor = characterConstructor;
+    this.callsConstructor = callsConstructor;
   }
 
-  toggleEdgeStatus(edgeId: string, isSolved: boolean): Promise<boolean> {
-    return this.edgeConstructor.toggleEdgeStatus(edgeId, isSolved);
+  getTasks(params: ListParams<TaskDTO>): Promise<TaskDTO[]> {
+    return this.taskConstructor.list(params);
   }
 
-  getEdgeByWorldId(id: string): Promise<Nullable<ActiveWorldEdge>> {
-    return this.edgeConstructor.getByWorldId(id);
+  getTask(id: string): Promise<Nullable<TaskDTO>> {
+    return this.taskConstructor.get(id);
   }
 
-  saveEdge(data: EdgeDTO): Promise<string> {
-    return this.edgeConstructor.save(data);
+  removeTask(id: string): Promise<boolean> {
+    return this.taskConstructor.delete(id);
   }
 
-  createEdge(worldId: string, dto: EdgeDTO): Promise<string> {
-    return this.edgeConstructor.create(worldId, dto);
+  saveTask(data: TaskDTO): Promise<string> {
+    return this.taskConstructor.save(data);
   }
 
   getWaterhole(id: string): Promise<Nullable<WaterholeDTO>> {
@@ -99,8 +103,8 @@ export class Controller implements ICommonController {
     return this.worldConstructor.save(dto);
   }
 
-  getWorld(id: string, type: WorldEnum): Promise<WorldDTO> {
-    return this.worldConstructor.get(id, type);
+  getWorld(id: string): Promise<Nullable<WorldDTO>> {
+    return this.worldConstructor.get(id);
   }
 
   deleteLaw(id: string): Promise<boolean> {
@@ -131,10 +135,6 @@ export class Controller implements ICommonController {
     return this.worldConstructor.toggleWorldWaterholeRelation(waterholeId, worldId);
   }
 
-  toggleRewardInEdge(edgeId: string, rewardId: string): Promise<boolean> {
-    return this.edgeConstructor.toggleRewardInEdge(edgeId, rewardId);
-  }
-
   removeReward(id: string): Promise<boolean> {
     return this.rewardsConstructor.delete(id);
   }
@@ -147,10 +147,6 @@ export class Controller implements ICommonController {
     return this.rewardsConstructor.save(dto);
   }
 
-  getRewardsByEdgeId(edgeId: string): Promise<string[]> {
-    return this.edgeConstructor.getRewardsByEdgeId(edgeId);
-  }
-
   getCharacters(params: ListParams<CharacterDTO>): Promise<CharacterDTO[]> {
     return this.characterConstructor.list(params);
   }
@@ -161,5 +157,21 @@ export class Controller implements ICommonController {
 
   saveCharacter(dto: CharacterDTO): Promise<string> {
     return this.characterConstructor.save(dto);
+  }
+
+  getCalls(params: ListParams<CallDTO>): Promise<CallDTO[]> {
+    return this.callsConstructor.list(params);
+  }
+
+  removeCall(id: string): Promise<boolean> {
+    return this.callsConstructor.delete(id);
+  }
+
+  saveCall(dto: CallDTO): Promise<string> {
+    return this.callsConstructor.save(dto);
+  }
+
+  getCall(id: string): Promise<Nullable<CallDTO>> {
+    return this.callsConstructor.get(id);
   }
 }

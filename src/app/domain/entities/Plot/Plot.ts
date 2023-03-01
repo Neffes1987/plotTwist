@@ -1,5 +1,5 @@
 import { StatusEnum } from '../../../../constants/status.enum';
-import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../frontend/constants';
+import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../frontend/Screens/Tasks/constants';
 import { PlotDTO } from '../../../../types/entities/plot';
 import { AsyncStoreDataGateway } from '../../../infrastructure/gateways/AsyncStoreDataGateway/AsyncStoreDataGateway';
 import { DtoValidator } from '../../../infrastructure/validators/DtoValidator/DtoValidator';

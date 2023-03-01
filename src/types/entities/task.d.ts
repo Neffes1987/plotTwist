@@ -1,13 +1,10 @@
-import { TaskStatus } from '../../constants/status.enum';
+import { MainEdgeType, ShadowEncounterType } from '../../constants/edge.enum';
 
-interface TaskDTO extends CommonEntityDTO {
+type TaskDTO = CommonEntityDTO & {
   name: string;
   description: string;
-  plotGoal: string;
-}
-
-interface TaskInEdgeDTO extends TaskDTO {
-  isAssigned?: boolean;
-  weight?: number;
-  status?: TaskStatus;
-}
+  edgeImpact: string;
+  type: 'edge' | 'mainEdge' | 'task';
+  mainEdgeType?: MainEdgeType;
+  shadowEncounterType?: ShadowEncounterType;
+};

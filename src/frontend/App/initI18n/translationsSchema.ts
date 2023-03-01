@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+
 import { TranslationPage } from './interface';
 
 export class TranslationNamespace<Type extends TranslationPage> {
@@ -6,7 +8,7 @@ export class TranslationNamespace<Type extends TranslationPage> {
 
   constructor(translationNamespace: string, schema: Type) {
     this.translationNamespace = translationNamespace;
-    this.schema = schema;
+    this.schema = cloneDeep(schema);
     this.mergeNamespaceWithSchemaRecords();
   }
 

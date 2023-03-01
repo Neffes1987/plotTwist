@@ -7,12 +7,10 @@ import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorCo
 import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
 import notifier from '../../App/notify/notify';
-import { BIG_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../constants';
-import { useSelectedIdWorldId } from '../../Hooks/useSelectedIdWorldId';
 import { waterholeList } from '../../Stores/Waterholes.store';
-import { worldsStore } from '../../Stores/Worlds.store';
 import { UIInput } from '../../UI/UIInput/UIInput';
 import { CommonListView } from '../../Widgets/CommonListView/CommonListView';
+import { BIG_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../Tasks/constants';
 
 import { DEFAULT_FORM_VALUES, waterholesListTranslations } from './constants';
 
@@ -23,8 +21,6 @@ export const Waterholes = observer(
     const { updateContextErrors } = useErrorContext();
     const { isEditDrawerOpen, onOpenPopoverHandler, onClosePopoverHandler } = useTogglePopover();
     const { form, setFormFieldData, formErrors, resetForm } = useForm<WaterholeInWorldDTO>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
-    const selectedIds = worldsStore.getSelectedWaterholesIds();
-    const selectedWorld = useSelectedIdWorldId();
 
     useEffect(() => {
       waterholeList.list().catch(updateContextErrors);
@@ -82,28 +78,14 @@ export const Waterholes = observer(
       onOpenPopoverHandler();
     }
 
-    async function onAddToWorldHandler(itemId: string): Promise<void> {
-      if (!selectedWorld) {
-        return;
-      }
-
-      const waterhole = waterholeList.waterholes.find(({ id }) => id === itemId);
-
-      if (!waterhole) {
-        return;
-      }
-
-      await worldsStore.toggleWorldWaterhole(waterhole);
-    }
-
     return (
       <CommonListView
         title={t(waterholesListTranslations.caption)}
         onBackClick={goBack}
-        list={waterholeList.waterholes.map(waterhole => ({ ...waterhole, isSelected: selectedIds.includes(waterhole.id) }))}
+        list={waterholeList.waterholes}
         onEditHandler={onEditHandler}
-        onAddToWorldHandler={onAddToWorldHandler}
-        onOpenPopoverHandler={onOpenPopoverHandler}
+        onOpen={onEditHandler}
+        onCreate={onOpenPopoverHandler}
         onApply={!form.id ? onCreateHandler : onUpdateHandler}
         onDelete={form.id ? onDeleteHandler : undefined}
         popupTitle={t(!form.id ? waterholesListTranslations.actions.addNew : waterholesListTranslations.actions.update)}

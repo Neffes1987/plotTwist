@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, ReactElement } from 'react';
-import { Modal, Pressable, View } from 'react-native';
+import { Modal, View } from 'react-native';
 
 import { Divider } from '../Divider/Divider';
 import { Flex } from '../Flex/Flex';
@@ -14,15 +14,13 @@ export const Drawer = (props: PropsWithChildren<DrawerProps>): ReactElement => {
 
   return (
     <Modal onDismiss={onClose} animationType="slide" visible={isOpen} transparent>
-      <Pressable onPress={onClose} testID="drawer-close-section" style={DRAWER_OVERLAY}>
-        <Divider verticalGap={20} />
-      </Pressable>
+      <Flex grow={33} onPress={onClose} testID="drawer-close-section" styles={DRAWER_OVERLAY} />
 
-      <Flex styles={DRAWER_STYLES.barContainer} justify="center">
-        <View style={DRAWER_STYLES.divider} />
-      </Flex>
+      <Flex shrink={1} direction="column" styles={DRAWER_STYLES.body}>
+        <Flex styles={DRAWER_STYLES.barContainer} justify="center">
+          <View style={DRAWER_STYLES.divider} />
+        </Flex>
 
-      <Flex grow={1} direction="column" styles={DRAWER_STYLES.body}>
         <Divider verticalGap={2} />
 
         {typeof caption === 'string' ? (
@@ -38,6 +36,8 @@ export const Drawer = (props: PropsWithChildren<DrawerProps>): ReactElement => {
         <Flex marginX="1%" width="98%" direction="column">
           {children}
         </Flex>
+
+        <Divider verticalGap={DRAWER_CAPTION_MARGIN} />
       </Flex>
     </Modal>
   );

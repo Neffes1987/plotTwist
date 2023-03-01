@@ -1,10 +1,10 @@
 import { generateString } from '@mocks/functions';
 
-import { MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../frontend/constants';
+import { MIDDLE_VALUE_MAX_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../../frontend/Screens/Tasks/constants';
 import { ValidationError } from '../../../../errors/ValidationError';
 import { Law } from '../Law';
 
-describe('WHEN "Law" is created', () => {
+describe('WHEN "Call" is created', () => {
   const lawDTO: LawDTO = {
     description: 'description',
     id: 'test-law',

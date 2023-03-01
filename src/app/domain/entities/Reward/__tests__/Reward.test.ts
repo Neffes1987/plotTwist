@@ -1,7 +1,7 @@
 import { ValidationError } from '../../../../errors/ValidationError';
 import { Reward } from '../Reward';
 
-describe('WHEN "Law" is created', () => {
+describe('WHEN "Call" is created', () => {
   const rewardDto: RewardDto = {
     description: 'description',
     id: 'test-reward',

@@ -1,8 +1,11 @@
-import { ReactElement } from 'react';
+import { StepperFieldField } from '../../../types/editor';
 
-export interface UIStepperProps {
+export interface UIStepperProps<T> {
   currentStep?: number;
-  content: ReactElement[];
-  onValidateNext?: () => boolean;
-  invalidPoints?: boolean[];
+  isLastStep?: boolean;
+  list: StepperFieldField<T>[];
+  isError: boolean;
+  values: Partial<Record<keyof T, unknown>>;
+  errors: Partial<Record<keyof T, unknown>>;
+  onChangeValue: (name: string, value: string) => void;
 }

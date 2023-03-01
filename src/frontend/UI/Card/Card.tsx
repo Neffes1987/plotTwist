@@ -26,11 +26,11 @@ export const Card = ({ children, title, color, bordered = true, ...rest }: Props
       align="flex-start"
       direction="column"
       styles={bordered ? BorderedPropertyGroupStyle : DefaultPropertyGroupStyle}
-      gap={4}
+      pad={4}
       backgroundColor={color}
     >
       {title && (
-        <Flex gapY={4}>
+        <Flex padY={4}>
           <Typography mode="caption-bold" color="accentGray">
             {title}
           </Typography>

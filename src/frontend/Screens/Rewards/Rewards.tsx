@@ -2,20 +2,16 @@ import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { CommonListView } from 'src/frontend/Widgets/CommonListView/CommonListView';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
+import { DEFAULT_FORM_VALUES, rewardsListTranslations } from '../../App/initI18n/schemas/rewardsListTranslation';
 import notifier from '../../App/notify/notify';
-import { MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../constants';
-import { useSelectedIdWorldId } from '../../Hooks/useSelectedIdWorldId';
-import { edgeStore } from '../../Stores/Edge.store';
 import { rewardsStore } from '../../Stores/Rewards.store';
 import { UIInput } from '../../UI/UIInput/UIInput';
-import { RouteParams } from '../interface';
-
-import { DEFAULT_FORM_VALUES, lawListTranslations } from './constants';
+import { MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../Tasks/constants';
 
 export const Rewards = observer(
   (): ReactElement => {
@@ -24,16 +20,10 @@ export const Rewards = observer(
     const { updateContextErrors } = useErrorContext();
     const { isEditDrawerOpen, onOpenPopoverHandler, onClosePopoverHandler } = useTogglePopover();
     const { form, setFormFieldData, formErrors, resetForm } = useForm<RewardInEdgeDTO>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
-    const selectedWorld = useSelectedIdWorldId();
-    const { params } = useRoute<RouteParams>();
-    const edgeId = params.state.id;
 
     useEffect(() => {
-      if (edgeId) {
-        rewardsStore.list().catch(updateContextErrors);
-        edgeStore.getSelectedRewardsByEdgeId(edgeId).catch(updateContextErrors);
-      }
-    }, [edgeId]);
+      rewardsStore.list().catch(updateContextErrors);
+    }, []);
 
     async function onUpdateHandler(): Promise<void> {
       try {
@@ -64,7 +54,7 @@ export const Rewards = observer(
         if (rewardId) {
           onClosePopoverHandler();
           resetForm();
-          notifier.showMessage(t('messages.success'), t(lawListTranslations.messages.wasCreated), false);
+          notifier.showMessage(t('messages.success'), t(rewardsListTranslations.messages.wasCreated), false);
         }
       } catch (e) {
         updateContextErrors?.(e);
@@ -88,33 +78,17 @@ export const Rewards = observer(
       onOpenPopoverHandler();
     }
 
-    async function onAddToEdgeHandler(itemId: string): Promise<void> {
-      if (!selectedWorld) {
-        return;
-      }
-
-      const reward = rewardsStore.rewards.find(({ id }) => id === itemId);
-
-      if (!reward?.id) {
-        return;
-      }
-
-      await edgeStore.toggleRewardInEdge(edgeId ?? '', reward.id);
-    }
-
-    const selectedIds = edgeStore.selectedRewards;
-
     return (
       <CommonListView
-        title={t(lawListTranslations.caption)}
+        title={t(rewardsListTranslations.caption)}
         onBackClick={goBack}
-        list={rewardsStore.rewards.map(reward => ({ ...reward, isSelected: selectedIds.includes(reward.id) }))}
+        list={rewardsStore.rewards}
         onEditHandler={onEditHandler}
-        onAddToWorldHandler={onAddToEdgeHandler}
-        onOpenPopoverHandler={onOpenPopoverHandler}
+        onOpen={onEditHandler}
+        onCreate={onOpenPopoverHandler}
         onApply={!form.id ? onCreateHandler : onUpdateHandler}
         onDelete={form.id ? onDeleteHandler : undefined}
-        popupTitle={t(!form.id ? lawListTranslations.actions.addNew : lawListTranslations.actions.update)}
+        popupTitle={t(!form.id ? rewardsListTranslations.actions.addNew : rewardsListTranslations.actions.update)}
         isEditDrawerOpen={isEditDrawerOpen}
         onClosePopup={onClosePopoverHandler}
       >
@@ -124,7 +98,7 @@ export const Rewards = observer(
           name="name"
           value={form.name}
           onChange={setFormFieldData}
-          label={t(lawListTranslations.labels.name)}
+          label={t(rewardsListTranslations.labels.name)}
           minValueLength={NAME_VALUE_MIN_LENGTH}
         />
 
@@ -136,7 +110,7 @@ export const Rewards = observer(
           name="description"
           value={form.description}
           onChange={setFormFieldData}
-          label={t(lawListTranslations.labels.description)}
+          label={t(rewardsListTranslations.labels.description)}
         />
       </CommonListView>
     );

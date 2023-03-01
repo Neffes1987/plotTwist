@@ -49,7 +49,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
 
   return (
     <Flex direction="column" fullWidth marginY={4} radius={8}>
-      <Flex direction="row" justify="space-between" backgroundColor="accentGray" gap={4}>
+      <Flex direction="row" justify="space-between" backgroundColor="accentGray" pad={4}>
         <IconButton color="neutralGreen" iconType="faq" onPress={(): void => setIsShowWorldFaqPopover(true)} />
 
         <Flex justify="center" onPress={onToggleWorldBody} flex={1}>

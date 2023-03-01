@@ -1,11 +1,38 @@
 import { StatusEnum } from '../../constants/status.enum';
 import { ChaseTypeEnum, FinalTypeEnum, HolidayGetSwordTypeEnum, HolidayTypeEnum, PotionTypeEnum, WorldEnum } from '../../constants/world.enum';
 
-import { CharacterDTO, CharacterInWorldDTO } from './character';
+import { CharacterInWorldDTO } from './character';
 import { CrossWorldEdgeDTO } from './cross';
 import { EdgeDTO } from './edge';
 
-interface WorldDTO extends CommonEntityDTO {
+interface PlainWorldDTO {
+  introduction: string;
+}
+
+interface PrivateWorldDTO {
+  contrast: string;
+}
+
+interface HiddenCaveWorldDTO {
+  mainEdgeInformation: string;
+  shadowIntroduction: string;
+  partyPlan: string;
+}
+
+interface HolidayWorldDTO {
+  shadowRevenge: string;
+  holidayType: HolidayTypeEnum;
+  holidayGetSwordType?: HolidayGetSwordTypeEnum;
+  chase?: ChaseTypeEnum;
+}
+
+interface ReturnWithPotionWorldDTO {
+  finalType: FinalTypeEnum;
+  potionType: PotionTypeEnum;
+  cliffhanger: string;
+}
+
+interface WorldDTO extends CommonEntityDTO, PlainWorldDTO, PrivateWorldDTO, HiddenCaveWorldDTO, HolidayWorldDTO, ReturnWithPotionWorldDTO {
   name: string;
   type: WorldEnum;
   status?: StatusEnum;
@@ -13,33 +40,6 @@ interface WorldDTO extends CommonEntityDTO {
   reference: string;
   timeline: string;
   failPrice: string;
-}
-
-interface PlainWorldDTO extends WorldDTO {
-  introduction: string;
-}
-
-interface PrivateWorldDTO extends WorldDTO {
-  contrast: string;
-}
-
-interface HiddenCaveWorldDTO extends WorldDTO {
-  mainEdgeInformation: string;
-  shadowIntroduction: string;
-  partyPlan: string;
-}
-
-interface HolidayWorldDTO extends WorldDTO {
-  shadowRevenge: string;
-  holidayType: HolidayTypeEnum;
-  holidayGetSwordType?: HolidayGetSwordTypeEnum;
-  chase?: ChaseTypeEnum;
-}
-
-interface ReturnWithPotionWorldDTO extends WorldDTO {
-  finalType: FinalTypeEnum;
-  potionType: PotionTypeEnum;
-  cliffhanger: string;
 }
 
 interface ActivePlotWorld {

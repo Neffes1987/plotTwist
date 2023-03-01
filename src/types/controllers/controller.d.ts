@@ -1,11 +1,11 @@
+import { ICallConstructor } from '../constructors/call.constructor';
 import { ICharacterConstructor } from '../constructors/character.constructor';
-import { IEdgeConstructor } from '../constructors/edge.constructor';
 import { ILawConstructor } from '../constructors/law.constructor';
 import { IPlotConstructor } from '../constructors/plot.constructor';
 import { IRewardConstructor } from '../constructors/reward.constructor';
+import { ITaskConstructor } from '../constructors/task.constructor';
 import { IWaterholeConstructor } from '../constructors/waterhole.constructor';
 import { IWorldConstructor } from '../constructors/world.constructor';
-import { EdgeDTO } from '../entities/edge';
 
 interface IPlotController {
   savePlot: IPlotConstructor['save'];
@@ -38,13 +38,11 @@ interface IWaterholeController {
   deleteWaterhole: IWaterholeConstructor['delete'];
 }
 
-interface IEdgeController {
-  getEdgeByWorldId: IEdgeConstructor['get'];
-  saveEdge: IEdgeConstructor['save'];
-  createEdge: (worldId: string, dto: EdgeDTO) => Promise<string>;
-  toggleEdgeStatus: IEdgeConstructor['toggleEdgeStatus'];
-  toggleRewardInEdge: IEdgeConstructor['toggleRewardInEdge'];
-  getRewardsByEdgeId: IEdgeConstructor['getRewardsByEdgeId'];
+interface ITaskController {
+  saveTask: ITaskConstructor['save'];
+  getTasks: ITaskConstructor['list'];
+  getTask: ITaskConstructor['get'];
+  removeTask: ITaskConstructor['delete'];
 }
 
 interface IRewardController {
@@ -59,10 +57,18 @@ interface ICharacterController {
   removeCharacter: ICharacterConstructor['delete'];
 }
 
+interface ICallController {
+  getCalls: ICallConstructor['list'];
+  saveCall: ICallConstructor['save'];
+  removeCall: ICallConstructor['delete'];
+  getCall: ICallConstructor['get'];
+}
+
 export type ICommonController = ILawController &
   IWorldController &
   IPlotController &
   IWaterholeController &
-  IEdgeController &
+  ITaskController &
   IRewardController &
-  ICharacterController;
+  ICharacterController &
+  ICallController;

@@ -26,6 +26,7 @@ export class RewardsStore {
 
   async delete(id: string): Promise<void> {
     await this.crud.removeReward(id);
+    await this.list();
   }
 
   async create(dto: RewardInEdgeDTO): Promise<string> {

@@ -23,7 +23,7 @@ export const TextArea = (props: TextAreaProps): ReactElement => {
   }
 
   return (
-    <Flex direction="column" gap={8} backgroundColor="accentLightGray" styles={styles.container}>
+    <Flex direction="column" pad={8} backgroundColor="accentLightGray" styles={styles.container}>
       <Flex justify="space-between">
         <Flex>
           <Typography mode="caption-bold" color="accentGray">

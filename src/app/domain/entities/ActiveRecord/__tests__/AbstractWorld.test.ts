@@ -34,7 +34,7 @@ class TestClass extends ActiveRecord<PlotDTO> {
 
 const testActiveRecord = new TestClass() as Plot;
 
-describe('WHEN "AbstractWorld" is created', () => {
+describe('WHEN "World" is created', () => {
   const testData = {
     id: 'id',
     status: StatusEnum.Released,

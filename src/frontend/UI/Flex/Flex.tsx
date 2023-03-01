@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, ReactElement } from 'react';
-import { Dimensions, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { UI_COLORS } from '../colors';
 import { FlexProps } from '../interface';
@@ -20,9 +20,9 @@ export const Flex = (props: PropsWithChildren<FlexProps>): ReactElement => {
     align = 'center',
     wrap,
     styles,
-    gapY,
-    gapX,
-    gap,
+    padY,
+    padX,
+    pad,
     width,
     flex,
     height,
@@ -43,18 +43,19 @@ export const Flex = (props: PropsWithChildren<FlexProps>): ReactElement => {
     backgroundColor: backgroundColor ? UI_COLORS[backgroundColor] : undefined,
     flexDirection: direction,
     justifyContent: justify,
-    flexGrow: grow,
+    flexGrow: fullHeight ? 99 : grow,
     flexShrink: shrink,
     alignItems: align,
     flexWrap: wrap,
     marginHorizontal: marginX,
     marginVertical: marginY,
     flex,
-    height: fullHeight ? Dimensions.get('window').height : height,
+    height,
     borderRadius: radius,
-    paddingVertical: gapY ?? gap,
-    paddingHorizontal: gapX ?? gap,
-    width: fullWidth ? '100%' : width,
+    paddingVertical: padY ?? pad,
+    paddingHorizontal: padX ?? pad,
+    width,
+    alignSelf: fullWidth ? 'stretch' : null,
     // @ts-ignore
     ...styles,
 

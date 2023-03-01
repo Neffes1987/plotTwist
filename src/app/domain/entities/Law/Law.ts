@@ -1,4 +1,4 @@
-import { MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../frontend/constants';
+import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../frontend/Screens/Tasks/constants';
 import { ValidationError } from '../../../errors/ValidationError';
 import { AsyncStoreDataGateway } from '../../../infrastructure/gateways/AsyncStoreDataGateway/AsyncStoreDataGateway';
 import { DtoValidator } from '../../../infrastructure/validators/DtoValidator/DtoValidator';
@@ -38,8 +38,8 @@ export class Law extends ActiveRecord<LawDTO> implements Serialization<LawDTO> {
 
     try {
       validator.checkFieldRange([
-        { propertyName: 'punishment', min: SHORT_VALUE_MAX_LENGTH, max: MIDDLE_VALUE_MAX_LENGTH },
-        { propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: SHORT_VALUE_MAX_LENGTH },
+        { propertyName: 'punishment', min: SHORT_VALUE_MAX_LENGTH, max: null },
+        { propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: null },
       ]);
     } catch (e) {
       error.merge(e);

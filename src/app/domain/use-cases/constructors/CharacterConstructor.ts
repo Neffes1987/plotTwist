@@ -1,10 +1,10 @@
 import { ICharacterConstructor } from '../../../../types/constructors/character.constructor';
 import { CharacterDTO } from '../../../../types/entities/character';
-import { characterFactory } from '../../entities/Character/CharacterFactory/CharacterFactory';
+import { Character } from '../../entities/Character/Character';
 
 export class CharacterConstructor implements ICharacterConstructor {
   async delete(id: string): Promise<boolean> {
-    const character = characterFactory();
+    const character = new Character();
 
     character.id = id;
 
@@ -12,32 +12,22 @@ export class CharacterConstructor implements ICharacterConstructor {
   }
 
   async get(id: string): Promise<Nullable<CharacterDTO>> {
-    const emptyCharacter = characterFactory();
+    const character = new Character();
 
-    const [characterDto] = await emptyCharacter.list({ query: { id } });
-
-    if (!characterDto) {
-      return null;
-    }
-
-    const character = characterFactory(characterDto.type);
-
-    character.unSerialize(characterDto);
+    character.id = id;
     await character.load();
 
     return character;
   }
 
   async list(params: ListParams<CharacterDTO>): Promise<CharacterDTO[]> {
-    const character = characterFactory();
+    const character = new Character();
 
-    await character.list(params);
-
-    return Promise.resolve([]);
+    return character.list(params);
   }
 
   async save(dto: CharacterDTO): Promise<string> {
-    const character = characterFactory(dto.type);
+    const character = new Character();
 
     character.unSerialize(dto);
 

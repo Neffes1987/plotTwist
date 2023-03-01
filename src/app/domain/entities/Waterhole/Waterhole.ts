@@ -1,4 +1,4 @@
-import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../../../frontend/constants';
+import { NAME_VALUE_MIN_LENGTH } from '../../../../frontend/Screens/Tasks/constants';
 import { AsyncStoreDataGateway } from '../../../infrastructure/gateways/AsyncStoreDataGateway/AsyncStoreDataGateway';
 import { DtoValidator } from '../../../infrastructure/validators/DtoValidator/DtoValidator';
 import { ActiveRecord } from '../ActiveRecord/ActiveRecord';
@@ -22,7 +22,7 @@ export class Waterhole extends ActiveRecord<WaterholeDTO> {
   validate(): void {
     const validator = new DtoValidator(this.serialize());
 
-    validator.checkFieldRange([{ propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: SHORT_VALUE_MAX_LENGTH }]);
+    validator.checkFieldRange([{ propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: null }]);
   }
 
   list(params: ListParams<WaterholeDTO>): Promise<WaterholeDTO[]> {

@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { IconButton } from '../../../UI/Buttons/IconButton';
 import { Flex } from '../../../UI/Flex/Flex';
@@ -9,15 +10,16 @@ import { ScreenHeaderProps } from './interface';
 
 export const ScreenHeader = (props: ScreenHeaderProps): ReactElement => {
   const { onBackClick, title, subtitle, onRightIconClick, rightIconType } = props;
+  const { t } = useTranslation();
 
   return (
-    <Flex shadowType="l1" fullWidth align="flex-start" justify="center" gapX={8} direction="column" backgroundColor="accentWhite" styles={{ minHeight: 30 }}>
-      <Flex justify="space-between">
+    <Flex shadowType="l1" align="flex-start" justify="center" padX={8} direction="column" backgroundColor="accentWhite" styles={{ minHeight: 30 }}>
+      <Flex justify="space-between" fullWidth>
         {onBackClick ? <IconButton iconType="chevron" color="accentDarkBlue" onPress={onBackClick} size={ICON_SIZE_DPI} /> : null}
 
-        <Flex gapX={4} grow={1}>
+        <Flex padX={4}>
           <Typography mode="title" color="accentDarkBlue">
-            {title}
+            {t(title)}
           </Typography>
         </Flex>
 
@@ -27,8 +29,8 @@ export const ScreenHeader = (props: ScreenHeaderProps): ReactElement => {
       </Flex>
 
       {subtitle && (
-        <Flex gapX={ICON_SIZE_DPI + TITLE_GAP_DPI}>
-          <Typography>{subtitle}</Typography>
+        <Flex padX={ICON_SIZE_DPI + TITLE_GAP_DPI}>
+          <Typography>{t(subtitle)}</Typography>
         </Flex>
       )}
     </Flex>

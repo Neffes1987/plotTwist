@@ -9,7 +9,7 @@ export const PropertyRow = (props: PropertyRowProps): ReactElement => {
   const { caption, onPress, quantity, id, showAlert, ...rest } = props;
 
   return (
-    <Flex gapY={2} justify="space-between">
+    <Flex padY={2} justify="space-between">
       <Flex justify="flex-start" flex={1}>
         <Icon type="chevron" rotate={180} />
 

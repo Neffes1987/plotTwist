@@ -7,14 +7,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
+import { DEFAULT_FORM_VALUES, lawListTranslations } from '../../App/initI18n/schemas/lawsTranslationSchema';
 import notifier from '../../App/notify/notify';
-import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../../constants';
-import { useSelectedIdWorldId } from '../../Hooks/useSelectedIdWorldId';
 import { lawsStore } from '../../Stores/Laws.store';
-import { worldsStore } from '../../Stores/Worlds.store';
 import { UIInput } from '../../UI/UIInput/UIInput';
-
-import { DEFAULT_FORM_VALUES, lawListTranslations } from './constants';
+import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../Tasks/constants';
 
 export const Laws = observer(
   (): ReactElement => {
@@ -23,8 +20,6 @@ export const Laws = observer(
     const { updateContextErrors } = useErrorContext();
     const { isEditDrawerOpen, onOpenPopoverHandler, onClosePopoverHandler } = useTogglePopover();
     const { form, setFormFieldData, formErrors, resetForm } = useForm<LawInWorldDTO>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
-    const selectedIds = worldsStore.getSelectedLawsIds();
-    const selectedWorld = useSelectedIdWorldId();
 
     useEffect(() => {
       lawsStore.list().catch(updateContextErrors);
@@ -54,9 +49,9 @@ export const Laws = observer(
 
     async function onCreateHandler(): Promise<void> {
       try {
-        const plotId = await lawsStore.create(form);
+        const lawId = await lawsStore.create(form);
 
-        if (plotId) {
+        if (lawId) {
           onClosePopoverHandler();
           resetForm();
           notifier.showMessage(t('messages.success'), t(lawListTranslations.messages.wasCreated), false);
@@ -84,28 +79,14 @@ export const Laws = observer(
       onOpenPopoverHandler();
     }
 
-    async function onAddToWorldHandler(itemId: string): Promise<void> {
-      if (!selectedWorld) {
-        return;
-      }
-
-      const law = lawsStore.laws.find(({ id }) => id === itemId);
-
-      if (!law) {
-        return;
-      }
-
-      await worldsStore.toggleWorldLaw(law);
-    }
-
     return (
       <CommonListView
         title={t(lawListTranslations.caption)}
         onBackClick={goBack}
-        list={lawsStore.laws.map(law => ({ ...law, isSelected: selectedIds.includes(law.id) }))}
+        list={lawsStore.laws}
         onEditHandler={onEditHandler}
-        onAddToWorldHandler={onAddToWorldHandler}
-        onOpenPopoverHandler={onOpenPopoverHandler}
+        onOpen={onEditHandler}
+        onCreate={onOpenPopoverHandler}
         onApply={!form.id ? onCreateHandler : onUpdateHandler}
         onDelete={form.id ? onDeleteHandler : undefined}
         popupTitle={t(!form.id ? lawListTranslations.actions.addNew : lawListTranslations.actions.update)}

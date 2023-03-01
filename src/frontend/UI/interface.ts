@@ -18,9 +18,9 @@ export interface FlexProps {
   fullWidth?: boolean;
   fullHeight?: boolean;
   backgroundColor?: ColorType;
-  gapY?: number;
-  gapX?: number;
-  gap?: number;
+  padY?: number;
+  padX?: number;
+  pad?: number;
   shadowType?: 'l1' | 'l2' | 'l3';
   styles?: StyleProp<unknown>;
   onPress?: PressableProps['onPress'];
@@ -35,7 +35,26 @@ export interface TypographyProps {
   align?: TextStyle['textAlign'];
 }
 
-export type IconType = 'logo' | 'chevron' | 'faq' | 'pencil' | 'plus' | 'close' | 'gear' | 'tick' | 'search' | 'attention' | 'flame';
+export type IconType =
+  | 'events'
+  | 'chat'
+  | 'active-plot'
+  | 'plot'
+  | 'logo'
+  | 'chevron'
+  | 'faq'
+  | 'pencil'
+  | 'plus'
+  | 'close'
+  | 'gear'
+  | 'tick'
+  | 'search'
+  | 'attention'
+  | 'place'
+  | 'person'
+  | 'list'
+  | 'gavel'
+  | 'flame';
 export interface IconProps {
   type: IconType;
   rotate?: number;
@@ -44,7 +63,7 @@ export interface IconProps {
 }
 
 export type UIButtonPropsType = 'primary' | 'secondary' | 'round';
-export interface UIButtonProps extends TouchableOpacityProps {
+export interface UIButtonProps extends TouchableOpacityProps, Omit<FlexProps, 'onPress'> {
   type?: 'primary' | 'secondary';
   fullWidth?: boolean;
 }
@@ -58,6 +77,7 @@ export interface IconButtonProps extends TouchableOpacityProps {
 
 export interface DrawerProps {
   caption: string | JSX.Element;
+  size?: 'full' | 'half' | 'small';
   isOpen?: boolean;
   onClose?: () => void;
 }

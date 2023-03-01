@@ -1,50 +1,27 @@
 import React, { ReactElement } from 'react';
-import { useTranslation } from 'react-i18next';
 
-import { UI_COLORS } from '../colors';
 import { Flex } from '../Flex/Flex';
 import { Typography } from '../Typography/Typography';
+import { UIList } from '../UIList/UIList';
 
 import { UIRadioProps } from './interface';
-
-const InputStyles = {
-  borderWidth: 1,
-  borderStyle: 'solid',
-  borderColor: UI_COLORS.accentDarkBlue,
-};
 
 export const UIRadio = ({ label, value, onChange, name, error, options }: UIRadioProps): ReactElement => {
   function onInputChanged(value: string): void {
     onChange(name, value);
   }
 
-  const { t } = useTranslation();
-
   return (
-    <Flex fullWidth radius={8} marginY={4} direction="column" gap={8} backgroundColor="accentWhite" shadowType="l1">
-      <Flex justify="space-between" align="flex-start" fullWidth>
-        <Typography mode="caption-medium">{label}</Typography>
-      </Flex>
+    <Flex align="flex-start" direction="column" pad={8} fullWidth>
+      <Typography mode="caption-medium">{label}</Typography>
 
-      {options.map(({ id, name, translate = true }) => (
-        <Flex key={id} onPress={(): void => onInputChanged(id)}>
-          <Flex radius={100} width={16} />
+      <UIList selected={value} list={options} onOpen={onInputChanged} />
 
-          <Flex radius={100} styles={InputStyles} width={16} height={16} marginX={4} marginY={4}>
-            {value === id && <Flex width={12} height={12} backgroundColor="accentDarkBlue" radius={100} marginX={1} marginY={1} />}
-          </Flex>
-
-          <Flex justify="space-between" align="flex-start" fullWidth>
-            <Typography mode="caption-medium">{translate ? t(name) : name}</Typography>
-          </Flex>
-
-          {!!error && (
-            <Typography color="neutralRed" mode="caption-medium">
-              {error}
-            </Typography>
-          )}
-        </Flex>
-      ))}
+      {!!error && (
+        <Typography color="neutralRed" mode="caption-medium">
+          {error}
+        </Typography>
+      )}
     </Flex>
   );
 };

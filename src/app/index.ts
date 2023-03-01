@@ -1,26 +1,29 @@
 import { Controller } from './controllers/Controller';
+import { CallsConstructor } from './domain/use-cases/constructors/CallsConstructor';
 import { CharacterConstructor } from './domain/use-cases/constructors/CharacterConstructor';
-import { EdgeConstructor } from './domain/use-cases/constructors/EdgeConstructor';
 import { LawsConstructor } from './domain/use-cases/constructors/LawsConstructor';
 import { PlotConstructor } from './domain/use-cases/constructors/PlotConstructor';
 import { RewardsConstructor } from './domain/use-cases/constructors/RewardsConstructor';
+import { TaskConstructor } from './domain/use-cases/constructors/TaskConstructor';
 import { WaterholesConstructor } from './domain/use-cases/constructors/WaterholesConstructor';
 import { WorldConstructor } from './domain/use-cases/constructors/WorldConstructor';
 
 const plotConstructor = new PlotConstructor();
 const lawConstructor = new LawsConstructor();
 const waterholesConstructor = new WaterholesConstructor();
-const edgeConstructor = new EdgeConstructor();
+const taskConstructor = new TaskConstructor();
 const rewardsConstructor = new RewardsConstructor();
 const charactersConstructor = new CharacterConstructor();
-const worldConstructor = new WorldConstructor(lawConstructor, waterholesConstructor, edgeConstructor);
+const callsConstructor = new CallsConstructor();
+const worldConstructor = new WorldConstructor(lawConstructor, waterholesConstructor);
 
 export const appController = new Controller(
   plotConstructor,
   worldConstructor,
   lawConstructor,
   waterholesConstructor,
-  edgeConstructor,
+  taskConstructor,
   rewardsConstructor,
   charactersConstructor,
+  callsConstructor,
 );

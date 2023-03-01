@@ -8,10 +8,11 @@ interface Navigation {
 }
 
 interface SelectOption {
-  id: string;
+  id: string | number | boolean;
   name: string;
   isSelected?: boolean;
   translate?: boolean;
+  icon?: string;
 }
 
 interface SelectOptionTyped<T> {

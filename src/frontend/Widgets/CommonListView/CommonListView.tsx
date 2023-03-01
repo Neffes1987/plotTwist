@@ -11,28 +11,15 @@ interface CommonListViewProps {
   onDelete?: () => void;
   onApply?: () => void;
   title: string;
-  onBackClick: () => void;
-  list: SelectOption[];
+  onBackClick?: () => void;
+  list: SelectOption[] | JSX.Element[];
   onEditHandler?: (itemId: string) => void;
-  onAddToWorldHandler: (itemId: string) => void;
-  onOpenPopoverHandler: () => void;
+  onOpen?: (itemId: string) => void;
+  onCreate?: () => void;
 }
 
 export const CommonListView = (props: PropsWithChildren<CommonListViewProps>): ReactElement => {
-  const {
-    isEditDrawerOpen,
-    children,
-    onClosePopup,
-    popupTitle,
-    onDelete,
-    onApply,
-    title,
-    onBackClick,
-    list,
-    onEditHandler,
-    onAddToWorldHandler,
-    onOpenPopoverHandler,
-  } = props;
+  const { isEditDrawerOpen, children, onClosePopup, popupTitle, onDelete, onApply, title, onBackClick, list, onEditHandler, onOpen, onCreate } = props;
 
   return (
     <ScreenView
@@ -41,7 +28,7 @@ export const CommonListView = (props: PropsWithChildren<CommonListViewProps>): R
         onBackClick,
       }}
     >
-      <UIList list={list} onEdit={onEditHandler} onOpen={onAddToWorldHandler} onCreate={onOpenPopoverHandler} />
+      <UIList list={list} onEdit={onEditHandler} onOpen={onOpen} onCreate={onCreate} />
 
       {!!popupTitle && onApply && (
         <CreateEntityWidget onApply={onApply} onDelete={onDelete} caption={popupTitle} isOpen={isEditDrawerOpen} onClose={onClosePopup}>

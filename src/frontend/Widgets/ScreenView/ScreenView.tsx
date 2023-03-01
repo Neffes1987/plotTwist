@@ -13,18 +13,17 @@ export const ScreenView = (props: PropsWithChildren<ScreenViewProps>): ReactElem
   const backgroundStyle = {
     backgroundColor: bgColor ? UI_COLORS[bgColor] : UI_COLORS.accentLightGray,
     height: Dimensions.get('window').height,
+    width: '100%',
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
       {header && <ScreenHeader {...header} />}
 
-      <ScrollView {...rest} contentInsetAdjustmentBehavior={rest.contentInsetAdjustmentBehavior ?? 'automatic'} style={backgroundStyle}>
-        <Flex direction="column" fullWidth gapX={8}>
-          {children}
-        </Flex>
+      <Flex height={1} />
 
-        <Flex height={40} />
+      <ScrollView {...rest} contentInsetAdjustmentBehavior={rest.contentInsetAdjustmentBehavior ?? 'automatic'} style={backgroundStyle}>
+        <Flex direction="column">{children}</Flex>
       </ScrollView>
     </SafeAreaView>
   );

@@ -27,6 +27,8 @@ const App = (): ReactElement => {
 
             <Stack.Screen name={ROUTES.home} component={components.Home} options={DEFAULT_ROUTE_OPTIONS} />
 
+            <Stack.Screen name={ROUTES.activePlot} component={components.ActivePlot} options={DEFAULT_ROUTE_OPTIONS} />
+
             <Stack.Screen name={ROUTES.plotList} component={components.PlotList} options={DEFAULT_ROUTE_OPTIONS} />
 
             <Stack.Screen name={ROUTES.worldConstructor} component={components.WorldEditor} options={DEFAULT_ROUTE_OPTIONS} />
@@ -39,9 +41,17 @@ const App = (): ReactElement => {
 
             <Stack.Screen name={ROUTES.waterholes} component={components.Waterholes} options={DEFAULT_ROUTE_OPTIONS} />
 
-            <Stack.Screen name={ROUTES.aboutEdge} component={components.EdgeEditor} options={DEFAULT_ROUTE_OPTIONS} />
-
             <Stack.Screen name={ROUTES.characters} component={components.Characters} options={DEFAULT_ROUTE_OPTIONS} />
+
+            <Stack.Screen name={ROUTES.charactersConstructor} component={components.CharacterEditor} options={DEFAULT_ROUTE_OPTIONS} />
+
+            <Stack.Screen name={ROUTES.activeCalls} component={components.Calls} options={DEFAULT_ROUTE_OPTIONS} />
+
+            <Stack.Screen name={ROUTES.activeCall} component={components.CallEditor} options={DEFAULT_ROUTE_OPTIONS} />
+
+            <Stack.Screen name={ROUTES.taskConstructor} component={components.TaskEditor} options={DEFAULT_ROUTE_OPTIONS} />
+
+            <Stack.Screen name={ROUTES.tasks} component={components.TaskList} options={DEFAULT_ROUTE_OPTIONS} />
           </Stack.Navigator>
         </NavigationContainer>
       </NotifierWrapper>

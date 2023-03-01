@@ -43,6 +43,10 @@ export abstract class ActiveRecord<DTO extends CommonEntityDTO> implements IActi
     });
   }
 
+  list(params: ListParams<DTO>): Promise<DTO[]> {
+    return this._gateway.list(params);
+  }
+
   abstract validate(): void;
 
   abstract serialize(): DTO;

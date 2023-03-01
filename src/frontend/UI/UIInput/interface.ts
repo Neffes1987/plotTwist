@@ -1,6 +1,8 @@
+import { TextInputProps } from 'react-native';
+
 export interface UIInputProps {
   label: string;
-  value: string;
+  value: unknown;
   onChange: (name: string, value: string) => void;
   name: string;
   multiline?: boolean;
@@ -8,4 +10,5 @@ export interface UIInputProps {
   error?: string;
   maxValueLength?: number;
   minValueLength?: number;
+  keyboardType?: TextInputProps['keyboardType'];
 }

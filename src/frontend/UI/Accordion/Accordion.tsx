@@ -8,11 +8,11 @@ import { Typography } from '../Typography/Typography';
 import { AccordionProps } from './interface';
 
 export const Accordion = (props: PropsWithChildren<AccordionProps>): ReactElement => {
-  const { caption, expanded = false, children } = props;
+  const { caption, expanded = false, children, bordered = true } = props;
   const [isOpen, setIsOpen] = useState(expanded);
 
   return (
-    <Card>
+    <Card bordered={bordered} fullWidth>
       <Flex onPress={(): void => setIsOpen((prevState: boolean) => !prevState)}>
         <Flex>
           <Typography mode="caption-bold" color="accentGray">
