@@ -2,11 +2,6 @@ type Nullable<T> = T | null;
 
 type ValueOf<T> = T[keyof T];
 
-interface Navigation {
-  navigate: (route: string, options?: Record<string, unknown>) => void;
-  goBack: () => void;
-}
-
 interface SelectOption {
   id: string | number | boolean;
   name: string;

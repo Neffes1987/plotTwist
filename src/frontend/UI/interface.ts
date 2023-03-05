@@ -18,6 +18,7 @@ export interface FlexProps {
   fullWidth?: boolean;
   fullHeight?: boolean;
   backgroundColor?: ColorType;
+  borderColor?: ColorType;
   padY?: number;
   padX?: number;
   pad?: number;

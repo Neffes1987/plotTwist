@@ -16,16 +16,32 @@ interface CommonListViewProps {
   onEditHandler?: (itemId: string) => void;
   onOpen?: (itemId: string) => void;
   onCreate?: () => void;
+  onSelect?: () => void;
 }
 
 export const CommonListView = (props: PropsWithChildren<CommonListViewProps>): ReactElement => {
-  const { isEditDrawerOpen, children, onClosePopup, popupTitle, onDelete, onApply, title, onBackClick, list, onEditHandler, onOpen, onCreate } = props;
+  const {
+    onSelect,
+    isEditDrawerOpen,
+    children,
+    onClosePopup,
+    popupTitle,
+    onDelete,
+    onApply,
+    title,
+    onBackClick,
+    list,
+    onEditHandler,
+    onOpen,
+    onCreate,
+  } = props;
 
   return (
     <ScreenView
       header={{
         title,
         onBackClick,
+        onRightIconClick: onSelect,
       }}
     >
       <UIList list={list} onEdit={onEditHandler} onOpen={onOpen} onCreate={onCreate} />

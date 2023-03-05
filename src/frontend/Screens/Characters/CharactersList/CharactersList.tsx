@@ -1,11 +1,13 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { CommonListView } from 'src/frontend/Widgets/CommonListView/CommonListView';
-import { useNavigation } from '@react-navigation/native';
 
 import { useErrorContext } from '../../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { charactersTranslations } from '../../../App/initI18n/schemas/characterTranslation';
+import { useAppNavigation } from '../../../Hooks/useAppNavigation';
+import { useDeleteConfirm } from '../../../Hooks/useDeleteConfirm';
+import { useSelectItems } from '../../../Hooks/useSelectItems';
 import { charactersStore } from '../../../Stores/Characters.store';
 import { ConfirmDrawer } from '../../../UI/ConfirmDrower';
 import { CharacterWidget } from '../../../Widgets/EntityListWidget/CharacterWidget';
@@ -13,30 +15,39 @@ import { ROUTES } from '../../routes';
 
 export const CharactersList = observer(
   (): ReactElement => {
-    const { goBack, navigate } = useNavigation<Navigation>();
+    const { goBack, navigate, state } = useAppNavigation();
     const { t } = useTranslation();
     const { updateContextErrors } = useErrorContext();
-    const [selectedItem, setSelectedItem] = useState<string>();
+    const { deletedItemId, setDeletedItemId, clearDeleteItemId } = useDeleteConfirm();
+    const { sendBack, toggleItem, selectedItems } = useSelectItems('character');
+    const characterType = state?.characterType;
+    const selectable = state?.selectable;
 
     useEffect(() => {
-      charactersStore.list().catch(updateContextErrors);
-    }, []);
+      charactersStore
+        .list(
+          characterType
+            ? {
+                query: {
+                  type: characterType,
+                },
+              }
+            : undefined,
+        )
+        .catch(updateContextErrors);
+    }, [characterType]);
 
     function onCreateHandler(): void {
-      navigate(ROUTES.charactersConstructor);
+      navigate(ROUTES.charactersConstructor, { state: { characterType } });
     }
 
     function onEditHandler(id: string): void {
-      navigate(ROUTES.charactersConstructor, { state: { id } });
+      navigate(ROUTES.charactersConstructor, { state: { id, characterType } });
     }
 
     function onDeleteHandler(): void {
-      charactersStore.delete(selectedItem);
-      onCloseDeleteConfirmHandler();
-    }
-
-    function onCloseDeleteConfirmHandler(): void {
-      setSelectedItem('');
+      charactersStore.delete(deletedItemId);
+      clearDeleteItemId();
     }
 
     return (
@@ -44,13 +55,21 @@ export const CharactersList = observer(
         <CommonListView
           title={t(charactersTranslations.caption)}
           onBackClick={goBack}
+          onSelect={selectable ? sendBack : undefined}
           list={charactersStore.characters.map(character => (
-            <CharacterWidget onDelete={setSelectedItem} onSelect={onEditHandler} data={character} key={character.id} />
+            <CharacterWidget
+              isSelect={selectedItems.includes(character.id)}
+              onEdit={onEditHandler}
+              onDelete={setDeletedItemId}
+              onSelect={selectable ? toggleItem : undefined}
+              data={character}
+              key={character.id}
+            />
           ))}
           onCreate={onCreateHandler}
         />
 
-        <ConfirmDrawer onConfirm={onDeleteHandler} onClose={onCloseDeleteConfirmHandler} isOpen={!!selectedItem} />
+        <ConfirmDrawer onConfirm={onDeleteHandler} onClose={clearDeleteItemId} isOpen={!!deletedItemId} />
       </>
     );
   },

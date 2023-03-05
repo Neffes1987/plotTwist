@@ -11,6 +11,7 @@ export interface ListItemConstructorProps<T extends CommonEntityDTO> {
   onSelect?: (id: string) => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+  isSelect?: boolean;
 }
 
 export interface ItemRowProps {

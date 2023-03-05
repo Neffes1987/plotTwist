@@ -10,7 +10,7 @@ import { ListItemConstructorConfig } from '../../UI/ListItemConstructor/interfac
 import { CharacterWidgetProps } from './interface';
 
 export const CharacterWidget = (props: CharacterWidgetProps): JSX.Element => {
-  const { data, onSelect, onEdit, onDelete } = props;
+  const { data, onSelect, onEdit, onDelete, isSelect } = props;
 
   const config = useMemo((): ListItemConstructorConfig<CharacterDTO>[] => {
     const result: ListItemConstructorConfig<CharacterDTO>[] = [
@@ -78,5 +78,15 @@ export const CharacterWidget = (props: CharacterWidgetProps): JSX.Element => {
     return result;
   }, [data]);
 
-  return <ListItemConstructor<CharacterDTO> onSelect={onSelect} onDelete={onDelete} onEdit={onEdit} data={data} captionFieldName="name" config={config} />;
+  return (
+    <ListItemConstructor<CharacterDTO>
+      isSelect={isSelect}
+      onSelect={onSelect}
+      onDelete={onDelete}
+      onEdit={onEdit}
+      data={data}
+      captionFieldName="name"
+      config={config}
+    />
+  );
 };

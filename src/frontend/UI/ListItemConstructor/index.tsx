@@ -13,7 +13,7 @@ import { ListItemConstructorProps } from './interface';
 import { ItemRow } from './ItemRow';
 
 export function ListItemConstructor<T extends CommonEntityDTO>(props: ListItemConstructorProps<T>): Nullable<JSX.Element> {
-  const { data, captionFieldName, config, onSelect, onEdit, onDelete } = props;
+  const { data, captionFieldName, config, onSelect, onEdit, onDelete, isSelect } = props;
   const { t } = useTranslation();
 
   const handleSelectCard = (): void => {
@@ -88,7 +88,7 @@ export function ListItemConstructor<T extends CommonEntityDTO>(props: ListItemCo
   }
 
   return (
-    <Card onPress={handleSelectCard} fullWidth>
+    <Card onPress={handleSelectCard} fullWidth borderColor={isSelect ? 'neutralYellow' : undefined}>
       <Flex justify="space-between" fullWidth marginX={4} backgroundColor="accentWhite">
         {onDelete && <IconButton iconType="flame" onPress={handleDeleteCard} />}
 

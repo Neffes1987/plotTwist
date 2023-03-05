@@ -15,7 +15,11 @@ export const WorldInfoBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWid
   const waterholesQuantity = waterholes?.length ?? 0;
 
   function handlePressProperty(id: string): void {
-    onOpenWorldProperty(id, worldData.id);
+    onOpenWorldProperty({
+      id,
+      parentId: worldData.id,
+      type: 'world',
+    });
   }
 
   return (

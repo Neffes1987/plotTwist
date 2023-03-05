@@ -2,10 +2,10 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { CommonListView } from 'src/frontend/Widgets/CommonListView/CommonListView';
-import { useNavigation } from '@react-navigation/native';
 
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { callsListTranslations } from '../../App/initI18n/schemas/callsTranslationSchema';
+import { useAppNavigation } from '../../Hooks/useAppNavigation';
 import { callsStore } from '../../Stores/Calls.store';
 import { ConfirmDrawer } from '../../UI/ConfirmDrower';
 import { CallsWidget } from '../../Widgets/EntityListWidget/CallsWidget';
@@ -14,7 +14,7 @@ import { ROUTES } from '../routes';
 export const Calls = observer(
   (): ReactElement => {
     const { t } = useTranslation();
-    const { goBack, navigate } = useNavigation<Navigation>();
+    const { goBack, navigate } = useAppNavigation();
     const { updateContextErrors } = useErrorContext();
     const [selectedItem, setSelectedItem] = useState<string>();
 

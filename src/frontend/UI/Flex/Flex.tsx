@@ -31,6 +31,7 @@ export const Flex = (props: PropsWithChildren<FlexProps>): ReactElement => {
     shadowType,
     marginX,
     marginY,
+    borderColor,
   } = props;
 
   let shadowConfig = {};
@@ -40,6 +41,7 @@ export const Flex = (props: PropsWithChildren<FlexProps>): ReactElement => {
   }
 
   const customStyles = {
+    borderColor: borderColor ? UI_COLORS[borderColor] : undefined,
     backgroundColor: backgroundColor ? UI_COLORS[backgroundColor] : undefined,
     flexDirection: direction,
     justifyContent: justify,

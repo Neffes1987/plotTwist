@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect } from 'react';
 import { observer } from 'mobx-react';
-import { useNavigation } from '@react-navigation/native';
 
+import { useAppNavigation } from '../../Hooks/useAppNavigation';
 import { Flex } from '../../UI/Flex/Flex';
 import { Icon } from '../../UI/Icon/Icon';
 import { Spinner } from '../../UI/Spinner/Spinner';
@@ -12,7 +12,7 @@ import { LOGO_CONTAINER_STYLES, LOGO_SIZE } from './constants';
 
 export const Loading = observer(
   (): ReactElement => {
-    const { navigate } = useNavigation<Navigation>();
+    const { navigate } = useAppNavigation();
 
     useEffect(() => {
       navigate(ROUTES.home);

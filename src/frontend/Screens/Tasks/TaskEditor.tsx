@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { ValidationError } from '../../../app/errors/ValidationError';
 import { TaskDTO } from '../../../types/entities/task';
@@ -8,21 +7,20 @@ import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorCo
 import { useForm } from '../../App/hooks/useForm';
 import { EDGE_FIELDS_CONFIG, EDGE_OPTIONS_FIELDS_CONFIG, SHADOW_ENCOUNTER_FIELDS_CONFIG, taskTranslations } from '../../App/initI18n/schemas/taskTranslations';
 import notify from '../../App/notify/notify';
+import { useAppNavigation } from '../../Hooks/useAppNavigation';
 import { taskStore } from '../../Stores/TaskStore';
 import { Flex } from '../../UI/Flex/Flex';
 import { UIStepper } from '../../UI/Stepper/UiStepper';
 import { Typography } from '../../UI/Typography/Typography';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
-import { RouteParams } from '../interface';
 
 import { TASK_FORM_DEFAULT_STATE } from './constants';
 
 export const TaskEditor = (): JSX.Element | null => {
   const { t } = useTranslation();
-  const { goBack } = useNavigation<Navigation>();
-  const { params } = useRoute<RouteParams>();
+  const { goBack, state } = useAppNavigation();
   const { updateContextErrors } = useErrorContext();
-  const taskId = params?.state?.id;
+  const taskId = state?.id;
   const { form, setFormFieldData, formErrors, resetForm, formErrorsQuantity } = useForm<Partial<TaskDTO>>(TASK_FORM_DEFAULT_STATE, TASK_FORM_DEFAULT_STATE);
 
   const currentFieldsConfig = useMemo(() => {

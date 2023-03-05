@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { WorldEnum } from '../../../constants/world.enum';
 import { WorldDTO } from '../../../types/entities/world';
@@ -14,6 +13,7 @@ import {
   PRIVATE_WORLD_FIELDS_CONFIG,
   RETURN_WITH_POTION_WORLD_FIELDS_CONFIG,
 } from '../../App/initI18n/schemas/worldTranslations';
+import { useAppNavigation } from '../../Hooks/useAppNavigation';
 import { useStepperFinished } from '../../Hooks/useStepperFinished';
 import { worldsStore } from '../../Stores/Worlds.store';
 import { Flex } from '../../UI/Flex/Flex';
@@ -21,18 +21,16 @@ import { UIStepper } from '../../UI/Stepper/UiStepper';
 import { Typography } from '../../UI/Typography/Typography';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 import { worldWidgetInfoTranslations } from '../../Widgets/WorldWidget/worldWidgetTranslations';
-import { RouteParams } from '../interface';
 
 import { DEFAULT_WORLD_FORM_STATE } from './constants';
 
 export const WorldEditor = observer(
   (): Nullable<JSX.Element> => {
     const { t } = useTranslation();
-    const { goBack } = useNavigation<Navigation>();
-    const { params } = useRoute<RouteParams>();
-    const worldId = params?.state?.id ?? '';
-    const worldType = params?.state?.worldType ?? '';
-    const plotId = params?.state?.plotId ?? '';
+    const { goBack, state } = useAppNavigation();
+    const worldId = state?.id ?? '';
+    const worldType = state?.worldType ?? '';
+    const plotId = state?.plotId ?? '';
     const defaultFormData = DEFAULT_WORLD_FORM_STATE as WorldDTO;
     const { form, setFormFieldData, formErrors, resetForm, formErrorsQuantity } = useForm<WorldDTO>(
       { ...defaultFormData, type: worldType as WorldEnum },

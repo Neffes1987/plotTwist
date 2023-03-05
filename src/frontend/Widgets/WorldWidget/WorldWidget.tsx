@@ -11,7 +11,7 @@ import { Typography } from '../../UI/Typography/Typography';
 
 import { EdgeBlock } from './EdgeBlock/EdgeBlock';
 import { Faq } from './Faq/Faq';
-import { WorldWidgetProps } from './interface';
+import { PropertyProps, WorldWidgetProps } from './interface';
 import { NPCBlock } from './NPCBlock/NPCBlock';
 import { WorldInfoBlock } from './WorldInfoBlock/WorldInfoBlock';
 import { worldWidgetInfoTranslations } from './worldWidgetTranslations';
@@ -37,14 +37,14 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
     setIsShowWorldFaqPopover(false);
   }
 
-  function onClickPropertyHandler(propertyType: string): void {
-    if (propertyType === ROUTES.aboutWorld) {
+  function onClickPropertyHandler(options: PropertyProps): void {
+    if (options.id === ROUTES.aboutWorld) {
       setIsShowWorldFaqPopover(true);
 
       return;
     }
 
-    onOpenWorldProperty(propertyType, id);
+    onOpenWorldProperty(options);
   }
 
   return (

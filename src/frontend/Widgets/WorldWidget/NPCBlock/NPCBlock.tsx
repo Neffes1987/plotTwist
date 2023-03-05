@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CharacterEnum } from '../../../../constants/character.enum';
-import { ROUTES } from '../../../Screens/routes';
 import { Card } from '../../../UI/Card/Card';
 import { WorldWidgetProps } from '../interface';
 import { PropertyRow } from '../parts/PropertyRow/PropertyRow';
@@ -28,7 +27,11 @@ export const NPCBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWidgetPro
   }, [worldInfo.characters]);
 
   function handlePressProperty(id: string): void {
-    onOpenWorldProperty(ROUTES.characters, `${id}_${worldInfo.worldData.id}`);
+    onOpenWorldProperty({
+      type: 'npc',
+      id,
+      parentId: worldInfo.worldData.id,
+    });
   }
 
   return (

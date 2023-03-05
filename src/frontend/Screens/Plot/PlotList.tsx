@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import { useNavigation } from '@react-navigation/native';
 
 import { PlotDTO } from '../../../types/entities/plot';
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
@@ -9,6 +8,7 @@ import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
 import { DEFAULT_FORM_VALUES, plotListTranslations } from '../../App/initI18n/schemas/plotListTranslations';
 import notifier from '../../App/notify/notify';
+import { useAppNavigation } from '../../Hooks/useAppNavigation';
 import activePlotStore from '../../Stores/ActivePlot.store';
 import { plotsStore } from '../../Stores/Plots.store';
 import { UIInput } from '../../UI/UIInput/UIInput';
@@ -22,7 +22,7 @@ export const PlotList = observer(
   (): ReactElement => {
     const { t } = useTranslation();
     const { updateContextErrors } = useErrorContext();
-    const { navigate } = useNavigation<Navigation>();
+    const { navigate } = useAppNavigation();
     const { isEditDrawerOpen, onOpenPopoverHandler, onClosePopoverHandler } = useTogglePopover();
     const { form, setFormFieldData, formErrors, resetForm } = useForm<Omit<PlotDTO, 'worlds'>>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
 

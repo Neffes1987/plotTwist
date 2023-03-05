@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { CharacterEnum } from '../../../../constants/character.enum';
 import { CharacterDTO } from '../../../../types/entities/character';
@@ -14,22 +13,21 @@ import {
   MESSENGER_SHADOW_FIELDS,
 } from '../../../App/initI18n/schemas/characterTranslation';
 import { optionsListTranslations } from '../../../App/initI18n/schemas/common-options';
+import { useAppNavigation } from '../../../Hooks/useAppNavigation';
 import { useStepperFinished } from '../../../Hooks/useStepperFinished';
 import { charactersStore } from '../../../Stores/Characters.store';
 import { Flex } from '../../../UI/Flex/Flex';
 import { UIStepper } from '../../../UI/Stepper/UiStepper';
 import { Typography } from '../../../UI/Typography/Typography';
 import { ScreenView } from '../../../Widgets/ScreenView/ScreenView';
-import { RouteParams } from '../../interface';
 import { CHARACTER_FORM_DEFAULTS } from '../characterDefaults';
 
 export const CharacterEditor = observer(
   (): Nullable<JSX.Element> => {
     const { t } = useTranslation();
-    const { params } = useRoute<RouteParams>();
-    const characterId = params?.state.id;
 
-    const { goBack } = useNavigation<Navigation>();
+    const { goBack, state } = useAppNavigation();
+    const characterId = state?.id;
     const store = charactersStore;
     const { form, setFormFieldData, formErrors, resetForm, setFormErrors, formErrorsQuantity } = useForm<Partial<CharacterDTO>>(
       CHARACTER_FORM_DEFAULTS,

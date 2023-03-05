@@ -2,10 +2,10 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { CommonListView } from 'src/frontend/Widgets/CommonListView/CommonListView';
-import { useNavigation } from '@react-navigation/native';
 
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { taskTranslations } from '../../App/initI18n/schemas/taskTranslations';
+import { useAppNavigation } from '../../Hooks/useAppNavigation';
 import { taskStore } from '../../Stores/TaskStore';
 import { ConfirmDrawer } from '../../UI/ConfirmDrower';
 import { TaskWidget } from '../../Widgets/EntityListWidget/TaskWidget';
@@ -13,7 +13,7 @@ import { ROUTES } from '../routes';
 
 export const TaskList = observer(
   (): ReactElement => {
-    const { goBack, navigate } = useNavigation<Navigation>();
+    const { goBack, navigate } = useAppNavigation();
     const { t } = useTranslation();
     const { updateContextErrors } = useErrorContext();
     const [selectedItem, setSelectedItem] = useState<string>();

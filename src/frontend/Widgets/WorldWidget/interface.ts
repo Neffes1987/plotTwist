@@ -1,10 +1,16 @@
 import { ActivePlotWorld, WorldDTO } from '../../../types/entities/world';
 import { TypographyProps } from '../../UI/interface';
 
+export interface PropertyProps {
+  type: 'npc' | 'edge' | 'world' | 'reward';
+  id: string;
+  parentId: string;
+}
+
 export interface WorldWidgetProps {
   worldInfo: ActivePlotWorld;
   onEditWorld: (type: WorldDTO['type'], id: string) => void;
-  onOpenWorldProperty: (propertyType: string, worldId: string) => void;
+  onOpenWorldProperty: (options: PropertyProps) => void;
 }
 
 export interface PropertyRowProps extends TypographyProps {

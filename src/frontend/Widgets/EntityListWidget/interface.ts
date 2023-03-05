@@ -7,6 +7,7 @@ export interface CommonEntityWidgetProps<T extends CommonEntityDTO> {
   onSelect?: (id: string) => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+  isSelect?: boolean;
 }
 
 export type CharacterWidgetProps = CommonEntityWidgetProps<CharacterDTO>;

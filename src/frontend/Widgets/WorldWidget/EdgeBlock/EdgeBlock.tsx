@@ -11,11 +11,19 @@ export const EdgeBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWidgetPr
   const { t } = useTranslation();
 
   function handleOpenAboutProperty(id: string): void {
-    onOpenWorldProperty(id, worldInfo.worldData.id);
+    onOpenWorldProperty({
+      parentId: edge.id,
+      id,
+      type: 'edge',
+    });
   }
 
   function handleOpenRewardsProperty(id: string): void {
-    onOpenWorldProperty(id, edge.id);
+    onOpenWorldProperty({
+      parentId: edge.id,
+      id,
+      type: 'reward',
+    });
   }
 
   const { edge } = worldInfo;
