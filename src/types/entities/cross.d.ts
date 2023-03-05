@@ -14,6 +14,12 @@ interface CrossWorldLawDTO extends CommonEntityDTO {
   worldId: string;
 }
 
+interface CrossWorldCharacterDTO extends CommonEntityDTO {
+  isAlive: boolean;
+  characterId: string;
+  worldId: string;
+}
+
 interface CrossWorldWaterholeDTO extends CommonEntityDTO {
   waterholeId: string;
   worldId: string;

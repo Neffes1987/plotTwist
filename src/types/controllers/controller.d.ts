@@ -5,7 +5,7 @@ import { IPlotConstructor } from '../constructors/plot.constructor';
 import { IRewardConstructor } from '../constructors/reward.constructor';
 import { ITaskConstructor } from '../constructors/task.constructor';
 import { IWaterholeConstructor } from '../constructors/waterhole.constructor';
-import { IWorldConstructor } from '../constructors/world.constructor';
+import { IWorldCharacterConstructor, IWorldConstructor } from '../constructors/world.constructor';
 
 interface IPlotController {
   savePlot: IPlotConstructor['save'];
@@ -64,6 +64,11 @@ interface ICallController {
   getCall: ICallConstructor['get'];
 }
 
+interface IWorldCharacterController {
+  getWorldCharacters: IWorldCharacterConstructor['getCharactersInWorld'];
+  toggleWorldCharacters: IWorldCharacterConstructor['toggleCharactersInWorld'];
+}
+
 export type ICommonController = ILawController &
   IWorldController &
   IPlotController &
@@ -71,4 +76,5 @@ export type ICommonController = ILawController &
   ITaskController &
   IRewardController &
   ICharacterController &
-  ICallController;
+  ICallController &
+  IWorldCharacterController;

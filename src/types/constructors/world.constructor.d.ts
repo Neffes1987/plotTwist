@@ -1,3 +1,4 @@
+import { InWorldCharacterDTO } from '../entities/character';
 import { ActivePlotWorld, WorldDTO } from '../entities/world';
 
 export interface IWorldConstructor extends Omit<ICommonConstructor<WorldDTO>, 'list' | 'delete' | 'create'> {
@@ -6,4 +7,9 @@ export interface IWorldConstructor extends Omit<ICommonConstructor<WorldDTO>, 'l
   toggleWorldLawRelation: (lawId: string, worldId: string) => Promise<boolean>;
   toggleWorldWaterholeRelation: (waterholeId: string, worldId: string) => Promise<boolean>;
   toggleWorldLawStatus: (lawId: string, isBroken: boolean) => Promise<boolean>;
+}
+
+export interface IWorldCharacterConstructor {
+  toggleCharactersInWorld: (characters: string[], worldId: string) => Promise<InWorldCharacterDTO[]>;
+  getCharactersInWorld: (worldId: string) => Promise<InWorldCharacterDTO[]>;
 }

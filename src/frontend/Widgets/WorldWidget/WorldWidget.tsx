@@ -20,8 +20,8 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
   const { t } = useTranslation();
   const [isShowWorldFaqPopover, setIsShowWorldFaqPopover] = useState(false);
   const [isShowWorldBody, setIsShowWorldBody] = useState(false);
-  const { worldInfo, onEditWorld, onOpenWorldProperty } = props;
-  const { worldData, characters } = worldInfo;
+  const { worldInfo, onEditWorld, onOpenWorldProperty, characters } = props;
+  const { worldData } = worldInfo;
   const { type, id, status } = worldData;
   const isWorldReady = status === StatusEnum.Released;
 
@@ -70,7 +70,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
           )}
 
           <Flex align="flex-start" marginY={4}>
-            <NPCBlock onOpenWorldProperty={onOpenWorldProperty} worldInfo={worldInfo} />
+            <NPCBlock onOpenWorldProperty={onOpenWorldProperty} worldId={worldInfo?.worldData.id} characters={characters} />
 
             <WorldInfoBlock worldInfo={worldInfo} onOpenWorldProperty={onClickPropertyHandler} />
           </Flex>

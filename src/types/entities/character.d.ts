@@ -32,6 +32,6 @@ interface CharacterDTO extends CommonEntityDTO {
   knowledgeType?: KnowledgeTypeEnum;
 }
 
-interface InWorldOptions {
+interface InWorldCharacterDTO extends CharacterDTO {
   isAlive?: boolean;
 }

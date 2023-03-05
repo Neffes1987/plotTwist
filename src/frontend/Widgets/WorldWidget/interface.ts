@@ -1,3 +1,4 @@
+import { InWorldCharacterDTO } from '../../../types/entities/character';
 import { ActivePlotWorld, WorldDTO } from '../../../types/entities/world';
 import { TypographyProps } from '../../UI/interface';
 
@@ -9,6 +10,7 @@ export interface PropertyProps {
 
 export interface WorldWidgetProps {
   worldInfo: ActivePlotWorld;
+  characters: InWorldCharacterDTO[];
   onEditWorld: (type: WorldDTO['type'], id: string) => void;
   onOpenWorldProperty: (options: PropertyProps) => void;
 }

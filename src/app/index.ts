@@ -1,6 +1,7 @@
 import { Controller } from './controllers/Controller';
 import { CallsConstructor } from './domain/use-cases/constructors/CallsConstructor';
 import { CharacterConstructor } from './domain/use-cases/constructors/CharacterConstructor';
+import { CrossWorldCharacterConstructor } from './domain/use-cases/constructors/cross/CrossWorldCharacterConstructor';
 import { LawsConstructor } from './domain/use-cases/constructors/LawsConstructor';
 import { PlotConstructor } from './domain/use-cases/constructors/PlotConstructor';
 import { RewardsConstructor } from './domain/use-cases/constructors/RewardsConstructor';
@@ -16,6 +17,7 @@ const rewardsConstructor = new RewardsConstructor();
 const charactersConstructor = new CharacterConstructor();
 const callsConstructor = new CallsConstructor();
 const worldConstructor = new WorldConstructor(lawConstructor, waterholesConstructor);
+const crossWorldCharactersConstructor = new CrossWorldCharacterConstructor(charactersConstructor);
 
 export const appController = new Controller(
   plotConstructor,
@@ -26,4 +28,5 @@ export const appController = new Controller(
   rewardsConstructor,
   charactersConstructor,
   callsConstructor,
+  crossWorldCharactersConstructor,
 );

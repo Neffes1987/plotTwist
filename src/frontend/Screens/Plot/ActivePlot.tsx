@@ -8,6 +8,8 @@ import { WorldEnum } from '../../../constants/world.enum';
 import { WorldDTO } from '../../../types/entities/world';
 import { useAppNavigation } from '../../Hooks/useAppNavigation';
 import activePlotStore from '../../Stores/ActivePlot.store';
+import { worldsCharactersStore } from '../../Stores/cross/WorldCharacters.store';
+import { worldsStore } from '../../Stores/Worlds.store';
 import { UIButton } from '../../UI/Buttons/UIButton';
 import { Flex } from '../../UI/Flex/Flex';
 import { Typography } from '../../UI/Typography/Typography';
@@ -22,13 +24,19 @@ export const ActivePlot = observer(
     const { navigate, state } = useAppNavigation();
     const isFocused = useIsFocused();
 
-    console.log(state);
-
     function getPlot(): void {
       activePlotStore.loadPlot().catch(() => {
         navigate(ROUTES.oops, { state: { error: { key: 'pages.home.errors.cantGetWorlds' } } });
       });
     }
+
+    useEffect(() => {
+      if (state?.selectedItems) {
+        if (state?.selectedItems.type === 'character') {
+          worldsCharactersStore.toggleWorldCharacters(state.selectedItems.ids, worldsStore.selectedWorld);
+        }
+      }
+    }, [state]);
 
     useEffect(() => {
       if (!isFocused) {
@@ -80,6 +88,10 @@ export const ActivePlot = observer(
           state: {
             characterType: id as CharacterEnum,
             selectable: true,
+            selectedItems: {
+              ids: worldsCharactersStore.characters.map(({ id }) => id),
+              type: 'character',
+            },
           },
         });
       }
@@ -123,7 +135,13 @@ export const ActivePlot = observer(
           ) : (
             <Flex direction="column" fullWidth>
               {activePlotStore?.plot?.worlds?.map(world => (
-                <WorldWidget key={world.worldData.id} worldInfo={world} onEditWorld={onEditWorldHandler} onOpenWorldProperty={onOpenPropertyHandler} />
+                <WorldWidget
+                  characters={worldsCharactersStore.characters}
+                  key={world.worldData.id}
+                  worldInfo={world}
+                  onEditWorld={onEditWorldHandler}
+                  onOpenWorldProperty={onOpenPropertyHandler}
+                />
               ))}
 
               {activePlotStore.nextStep && <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.actions.createNextWorld')}</UIButton>}

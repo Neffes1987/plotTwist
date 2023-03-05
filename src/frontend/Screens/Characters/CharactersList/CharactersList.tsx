@@ -19,8 +19,11 @@ export const CharactersList = observer(
     const { t } = useTranslation();
     const { updateContextErrors } = useErrorContext();
     const { deletedItemId, setDeletedItemId, clearDeleteItemId } = useDeleteConfirm();
-    const { sendBack, toggleItem, selectedItems } = useSelectItems('character');
     const characterType = state?.characterType;
+    const selectedItemIds = state?.selectedItems?.ids;
+
+    const { sendBack, toggleItem, selectedItems } = useSelectItems('character', selectedItemIds);
+
     const selectable = state?.selectable;
 
     useEffect(() => {

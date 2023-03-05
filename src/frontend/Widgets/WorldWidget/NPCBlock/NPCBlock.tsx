@@ -7,9 +7,13 @@ import { WorldWidgetProps } from '../interface';
 import { PropertyRow } from '../parts/PropertyRow/PropertyRow';
 import { worldWidgetNPCTranslations } from '../worldWidgetTranslations';
 
-export const NPCBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWidgetProps, 'onOpenWorldProperty' | 'worldInfo'>): JSX.Element => {
+export const NPCBlock = ({
+  onOpenWorldProperty,
+  characters,
+  worldId,
+}: Pick<WorldWidgetProps, 'onOpenWorldProperty' | 'characters'> & { worldId: string }): JSX.Element => {
   const { t } = useTranslation();
-  const characters = useMemo(() => {
+  const charactersList = useMemo(() => {
     const result = {
       [CharacterEnum.Ally]: 0,
       [CharacterEnum.Mentor]: 0,
@@ -19,30 +23,30 @@ export const NPCBlock = ({ onOpenWorldProperty, worldInfo }: Pick<WorldWidgetPro
       [CharacterEnum.Messenger]: 0,
     };
 
-    worldInfo?.characters?.forEach(character => {
+    characters?.forEach(character => {
       result[character.type] += 1;
     });
 
     return result;
-  }, [worldInfo.characters]);
+  }, [characters]);
 
   function handlePressProperty(id: string): void {
     onOpenWorldProperty({
       type: 'npc',
       id,
-      parentId: worldInfo.worldData.id,
+      parentId: worldId,
     });
   }
 
   return (
     <Card title={t(worldWidgetNPCTranslations.caption)} flex={1} height="100%" align="flex-start" testID="npc-block">
-      {Object.keys(characters).map((type: string) => (
+      {Object.keys(charactersList).map((type: string) => (
         <PropertyRow
           key={type}
-          showAlert={!characters[type]}
+          showAlert={!charactersList[type]}
           onPress={handlePressProperty}
           caption={t(worldWidgetNPCTranslations.labels[type])}
-          quantity={characters[type]}
+          quantity={charactersList[type]}
           id={type}
         />
       ))}

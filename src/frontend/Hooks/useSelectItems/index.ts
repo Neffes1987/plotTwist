@@ -9,8 +9,8 @@ interface UseSelectItemsProps {
   sendBack: () => void;
 }
 
-export function useSelectItems(type: SelectedItemsType): UseSelectItemsProps {
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+export function useSelectItems(type: SelectedItemsType, selectedIds?: string[]): UseSelectItemsProps {
+  const [selectedItems, setSelectedItems] = useState<string[]>(selectedIds ?? []);
   const { goBack } = useAppNavigation();
 
   function toggleItem(id: string): void {

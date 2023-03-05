@@ -5,10 +5,10 @@ import { IPlotConstructor } from '../../types/constructors/plot.constructor';
 import { IRewardConstructor } from '../../types/constructors/reward.constructor';
 import { ITaskConstructor } from '../../types/constructors/task.constructor';
 import { IWaterholeConstructor } from '../../types/constructors/waterhole.constructor';
-import { IWorldConstructor } from '../../types/constructors/world.constructor';
+import { IWorldCharacterConstructor, IWorldConstructor } from '../../types/constructors/world.constructor';
 import { ICommonController } from '../../types/controllers/controller';
 import { CallDTO } from '../../types/entities/call';
-import { CharacterDTO } from '../../types/entities/character';
+import { CharacterDTO, InWorldCharacterDTO } from '../../types/entities/character';
 import { PlotDTO } from '../../types/entities/plot';
 import { TaskDTO } from '../../types/entities/task';
 import { ActivePlotWorld, WorldDTO } from '../../types/entities/world';
@@ -22,6 +22,7 @@ export class Controller implements ICommonController {
   protected readonly rewardsConstructor: IRewardConstructor;
   protected readonly characterConstructor: ICharacterConstructor;
   protected readonly callsConstructor: ICallConstructor;
+  protected readonly crossWorldCharacterConstructor: IWorldCharacterConstructor;
 
   constructor(
     plotConstructor: IPlotConstructor,
@@ -32,6 +33,7 @@ export class Controller implements ICommonController {
     rewardsConstructor: IRewardConstructor,
     characterConstructor: ICharacterConstructor,
     callsConstructor: ICallConstructor,
+    crossWorldCharacterConstructor: IWorldCharacterConstructor,
   ) {
     this.plotConstructor = plotConstructor;
     this.worldConstructor = worldConstructor;
@@ -41,6 +43,7 @@ export class Controller implements ICommonController {
     this.rewardsConstructor = rewardsConstructor;
     this.characterConstructor = characterConstructor;
     this.callsConstructor = callsConstructor;
+    this.crossWorldCharacterConstructor = crossWorldCharacterConstructor;
   }
 
   getTasks(params: ListParams<TaskDTO>): Promise<TaskDTO[]> {
@@ -173,5 +176,13 @@ export class Controller implements ICommonController {
 
   getCall(id: string): Promise<Nullable<CallDTO>> {
     return this.callsConstructor.get(id);
+  }
+
+  getWorldCharacters(worldId: string): Promise<InWorldCharacterDTO[]> {
+    return this.crossWorldCharacterConstructor.getCharactersInWorld(worldId);
+  }
+
+  toggleWorldCharacters(characters: string[], worldId: string): Promise<InWorldCharacterDTO[]> {
+    return this.crossWorldCharacterConstructor.toggleCharactersInWorld(characters, worldId);
   }
 }
