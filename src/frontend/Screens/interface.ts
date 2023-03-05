@@ -15,8 +15,11 @@ export interface RouteParams extends RouteProp<ParamListBase> {
       characterType?: CharacterEnum;
       edgeType?: string;
       selectable?: boolean;
-      selectedItems?: string[];
-      selectedItemsType?: SelectedItemsType;
+      selectedItems?: {
+        ids: string[];
+        type?: SelectedItemsType;
+      };
+
       error?:
         | Error
         | {
@@ -29,5 +32,5 @@ export interface RouteParams extends RouteProp<ParamListBase> {
 
 export interface Navigation {
   navigate: (route: string | number, options?: RouteParams['params']) => void;
-  goBack: () => void;
+  goBack: (options?: RouteParams['params']) => void;
 }

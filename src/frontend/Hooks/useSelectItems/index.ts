@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 
-import { Navigation, SelectedItemsType } from '../../Screens/interface';
+import { SelectedItemsType } from '../../Screens/interface';
+import { useAppNavigation } from '../useAppNavigation';
 
 interface UseSelectItemsProps {
   selectedItems: string[];
@@ -11,7 +11,7 @@ interface UseSelectItemsProps {
 
 export function useSelectItems(type: SelectedItemsType): UseSelectItemsProps {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const { navigate } = useNavigation<Navigation>();
+  const { goBack } = useAppNavigation();
 
   function toggleItem(id: string): void {
     if (selectedItems?.includes(id)) {
@@ -24,10 +24,12 @@ export function useSelectItems(type: SelectedItemsType): UseSelectItemsProps {
   }
 
   function sendBack(): void {
-    navigate(-1, {
+    goBack({
       state: {
-        selectedItems,
-        selectedItemsType: type,
+        selectedItems: {
+          type,
+          ids: selectedItems,
+        },
       },
     });
   }

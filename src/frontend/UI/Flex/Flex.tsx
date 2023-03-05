@@ -41,7 +41,6 @@ export const Flex = (props: PropsWithChildren<FlexProps>): ReactElement => {
   }
 
   const customStyles = {
-    borderColor: borderColor ? UI_COLORS[borderColor] : undefined,
     backgroundColor: backgroundColor ? UI_COLORS[backgroundColor] : undefined,
     flexDirection: direction,
     justifyContent: justify,
@@ -62,6 +61,7 @@ export const Flex = (props: PropsWithChildren<FlexProps>): ReactElement => {
     ...styles,
 
     ...shadowConfig,
+    borderColor: borderColor ? UI_COLORS[borderColor] : undefined,
   };
 
   if (!onPress) {

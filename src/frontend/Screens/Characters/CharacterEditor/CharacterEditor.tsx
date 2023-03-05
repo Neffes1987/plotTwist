@@ -7,6 +7,7 @@ import { CharacterDTO } from '../../../../types/entities/character';
 import { useForm } from '../../../App/hooks/useForm';
 import {
   ALLY_FIELDS,
+  charactersTranslations,
   COMMON_CHARACTER_FIELDS_CONFIG,
   GUARD_FIELDS,
   MENTORS_FIELDS,
@@ -28,9 +29,10 @@ export const CharacterEditor = observer(
 
     const { goBack, state } = useAppNavigation();
     const characterId = state?.id;
+    const characterType = state?.characterType;
     const store = charactersStore;
     const { form, setFormFieldData, formErrors, resetForm, setFormErrors, formErrorsQuantity } = useForm<Partial<CharacterDTO>>(
-      CHARACTER_FORM_DEFAULTS,
+      { ...CHARACTER_FORM_DEFAULTS, type: characterType },
       CHARACTER_FORM_DEFAULTS,
     );
 
@@ -40,7 +42,11 @@ export const CharacterEditor = observer(
     );
 
     const currentList = useMemo(() => {
-      const listConfig = [...COMMON_CHARACTER_FIELDS_CONFIG];
+      let listConfig = [...COMMON_CHARACTER_FIELDS_CONFIG];
+
+      if (characterType) {
+        listConfig = listConfig.filter(({ name }) => name !== 'type');
+      }
 
       switch (form.type) {
         case CharacterEnum.Ally:
@@ -87,7 +93,9 @@ export const CharacterEditor = observer(
     return (
       <ScreenView
         header={{
-          title: characterId ? t(optionsListTranslations.lists.actions.edit) : t(optionsListTranslations.lists.actions.create),
+          title: `${characterId ? t(optionsListTranslations.lists.actions.edit) : t(optionsListTranslations.lists.actions.create)} (${
+            form?.type ? t(charactersTranslations.lists.types[form?.type.toLowerCase()]) : ''
+          })`,
           onBackClick: onNavigateToHomeHandler,
           rightIconType: 'tick',
           onRightIconClick: () => onStepperFinished(form as CharacterDTO),

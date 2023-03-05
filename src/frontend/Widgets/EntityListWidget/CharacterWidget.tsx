@@ -16,8 +16,8 @@ export const CharacterWidget = (props: CharacterWidgetProps): JSX.Element => {
     const result: ListItemConstructorConfig<CharacterDTO>[] = [
       { fieldName: 'age', type: 'main', label: charactersTranslations.labels.age },
       { fieldName: 'race', type: 'main', label: charactersTranslations.labels.race },
-      { fieldName: 'race', type: 'tag', label: charactersTranslations.lists.types[data.type.toLowerCase()] },
-      { fieldName: 'race', type: 'tag', label: optionsListTranslations.lists.gender[data.gender.toLowerCase()] },
+      { fieldName: 'type', type: 'tag', label: charactersTranslations.lists.types[data.type.toLowerCase()] },
+      { fieldName: 'gender', type: 'tag', label: optionsListTranslations.lists.gender[data.gender.toLowerCase()] },
       { fieldName: 'group', type: 'additional', label: charactersTranslations.labels.group },
       { fieldName: 'goal', type: 'additional', label: charactersTranslations.labels.goal },
       { fieldName: 'profession', type: 'main', label: charactersTranslations.labels.profession },

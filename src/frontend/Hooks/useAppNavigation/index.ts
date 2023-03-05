@@ -1,16 +1,24 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { Navigation, RouteParams } from '../../Screens/interface';
+import navigationStore from '../../Stores/Navigation.store';
 
-export type UseAppNavigationProps = Navigation & RouteParams['params'];
+export type UseAppNavigationProps = Navigation & {
+  state: Nullable<RouteParams['params']['state']>;
+};
 
 export const useAppNavigation = (): UseAppNavigationProps => {
   const { navigate, goBack } = useNavigation<Navigation>();
-  const { params } = useRoute<RouteParams>();
 
   return {
-    navigate,
-    goBack,
-    state: params?.state,
+    navigate: (route, options): void => {
+      navigate(route);
+      navigationStore.set(options?.state ?? null);
+    },
+    goBack: (options): void => {
+      goBack();
+      navigationStore.set(options?.state ?? null);
+    },
+    state: navigationStore.get(),
   };
 };

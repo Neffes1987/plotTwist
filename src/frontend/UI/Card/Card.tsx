@@ -19,7 +19,7 @@ const BorderedPropertyGroupStyle: ViewStyle = {
   borderWidth: 1,
 };
 
-export const Card = ({ children, title, color, bordered = true, ...rest }: PropsWithChildren<CardProps>): ReactElement => {
+export const Card = ({ children, title, color, bordered = true, borderColor, ...rest }: PropsWithChildren<CardProps>): ReactElement => {
   return (
     <Flex
       {...rest}
@@ -28,6 +28,7 @@ export const Card = ({ children, title, color, bordered = true, ...rest }: Props
       styles={bordered ? BorderedPropertyGroupStyle : DefaultPropertyGroupStyle}
       pad={4}
       backgroundColor={color}
+      borderColor={borderColor}
     >
       {title && (
         <Flex padY={4}>

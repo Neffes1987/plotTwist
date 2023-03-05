@@ -42,6 +42,7 @@ export const CommonListView = (props: PropsWithChildren<CommonListViewProps>): R
         title,
         onBackClick,
         onRightIconClick: onSelect,
+        rightIconType: onSelect ? 'tick' : undefined,
       }}
     >
       <UIList list={list} onEdit={onEditHandler} onOpen={onOpen} onCreate={onCreate} />

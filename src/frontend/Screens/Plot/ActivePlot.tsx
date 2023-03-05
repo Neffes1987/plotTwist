@@ -19,8 +19,10 @@ import { ROUTES } from '../routes';
 export const ActivePlot = observer(
   (): ReactElement => {
     const { t } = useTranslation();
-    const { navigate } = useAppNavigation();
+    const { navigate, state } = useAppNavigation();
     const isFocused = useIsFocused();
+
+    console.log(state);
 
     function getPlot(): void {
       activePlotStore.loadPlot().catch(() => {
@@ -121,7 +123,7 @@ export const ActivePlot = observer(
           ) : (
             <Flex direction="column" fullWidth>
               {activePlotStore?.plot?.worlds?.map(world => (
-                <WorldWidget key={world.worldData.type} worldInfo={world} onEditWorld={onEditWorldHandler} onOpenWorldProperty={onOpenPropertyHandler} />
+                <WorldWidget key={world.worldData.id} worldInfo={world} onEditWorld={onEditWorldHandler} onOpenWorldProperty={onOpenPropertyHandler} />
               ))}
 
               {activePlotStore.nextStep && <UIButton onPress={onCreateNewWorldHandler}>{t('pages.home.actions.createNextWorld')}</UIButton>}
