@@ -2,17 +2,17 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CharacterEnum } from '../../../../constants/character.enum';
+import { useAppNavigation } from '../../../Hooks/useAppNavigation';
+import { worldsCharactersStore } from '../../../Screens/Characters/stores/WorldCharacters.store';
+import { ROUTES } from '../../../Screens/routes';
 import { Card } from '../../../UI/Card/Card';
 import { WorldWidgetProps } from '../interface';
 import { PropertyRow } from '../parts/PropertyRow/PropertyRow';
 import { worldWidgetNPCTranslations } from '../worldWidgetTranslations';
 
-export const NPCBlock = ({
-  onOpenWorldProperty,
-  characters,
-  worldId,
-}: Pick<WorldWidgetProps, 'onOpenWorldProperty' | 'characters'> & { worldId: string }): JSX.Element => {
+export const NPCBlock = ({ characters }: Pick<WorldWidgetProps, 'characters'>): JSX.Element => {
   const { t } = useTranslation();
+  const { navigate } = useAppNavigation();
   const charactersList = useMemo(() => {
     const result = {
       [CharacterEnum.Ally]: 0,
@@ -31,10 +31,15 @@ export const NPCBlock = ({
   }, [characters]);
 
   function handlePressProperty(id: string): void {
-    onOpenWorldProperty({
-      type: 'npc',
-      id,
-      parentId: worldId,
+    navigate(ROUTES.characters, {
+      state: {
+        characterType: id as CharacterEnum,
+        selectable: true,
+        selectedItems: {
+          ids: worldsCharactersStore.characters.map(({ id }) => id),
+          type: 'character',
+        },
+      },
     });
   }
 

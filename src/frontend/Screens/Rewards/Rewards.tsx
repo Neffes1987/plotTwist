@@ -2,22 +2,28 @@ import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { CommonListView } from 'src/frontend/Widgets/CommonListView/CommonListView';
-import { useNavigation } from '@react-navigation/native';
 
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
-import { DEFAULT_FORM_VALUES, rewardsListTranslations } from '../../App/initI18n/schemas/rewardsListTranslation';
 import notifier from '../../App/notify/notify';
-import { rewardsStore } from '../../Stores/Rewards.store';
+import { useAppNavigation } from '../../Hooks/useAppNavigation';
+import { useSelectItems } from '../../Hooks/useSelectItems';
 import { UIInput } from '../../UI/UIInput/UIInput';
 import { MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../Tasks/constants';
+
+import { RewardWidget } from './RewardWidget';
+import { rewardsStore } from './stores/Rewards.store';
+import { DEFAULT_FORM_VALUES, rewardsListTranslations } from './translation/rewardsListTranslation';
 
 export const Rewards = observer(
   (): ReactElement => {
     const { t } = useTranslation();
-    const { goBack } = useNavigation();
+    const { goBackSameState, state } = useAppNavigation();
     const { updateContextErrors } = useErrorContext();
+    const isSelectable = state?.selectable;
+    const selectedItem = state?.selectedItems;
+    const { selectedItems, toggleItem, sendBack } = useSelectItems('reward', selectedItem?.ids);
     const { isEditDrawerOpen, onOpenPopoverHandler, onClosePopoverHandler } = useTogglePopover();
     const { form, setFormFieldData, formErrors, resetForm } = useForm<RewardInEdgeDTO>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
 
@@ -72,7 +78,7 @@ export const Rewards = observer(
         description: rewardInEdgeDTO.description ?? '',
         id: rewardInEdgeDTO.id,
         name: rewardInEdgeDTO.name,
-        isAssigned: rewardInEdgeDTO.isAssigned,
+        isAchieved: rewardInEdgeDTO.isAchieved,
       });
 
       onOpenPopoverHandler();
@@ -80,14 +86,21 @@ export const Rewards = observer(
 
     return (
       <CommonListView
+        onSelect={isSelectable ? sendBack : undefined}
         title={t(rewardsListTranslations.caption)}
-        onBackClick={goBack}
-        list={rewardsStore.rewards}
-        onEditHandler={onEditHandler}
-        onOpen={onEditHandler}
+        onBackClick={goBackSameState}
+        list={rewardsStore.rewards.map(item => (
+          <RewardWidget
+            onDelete={onDeleteHandler}
+            data={item}
+            key={item.id}
+            onEdit={onEditHandler}
+            onSelect={toggleItem}
+            isSelect={selectedItems.includes(item.id)}
+          />
+        ))}
         onCreate={onOpenPopoverHandler}
         onApply={!form.id ? onCreateHandler : onUpdateHandler}
-        onDelete={form.id ? onDeleteHandler : undefined}
         popupTitle={t(!form.id ? rewardsListTranslations.actions.addNew : rewardsListTranslations.actions.update)}
         isEditDrawerOpen={isEditDrawerOpen}
         onClosePopup={onClosePopoverHandler}

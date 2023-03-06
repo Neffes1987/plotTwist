@@ -58,7 +58,7 @@ export class Task extends ActiveRecord<TaskDTO> {
 
     try {
       validator.checkFieldRange([
-        { propertyName: 'edgeImpact', min: SHORT_VALUE_MAX_LENGTH, max: SHORT_VALUE_MAX_LENGTH },
+        { propertyName: 'edgeImpact', min: null, max: SHORT_VALUE_MAX_LENGTH },
         { propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: null },
       ]);
     } catch (e) {

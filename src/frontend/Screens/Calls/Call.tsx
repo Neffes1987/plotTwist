@@ -6,15 +6,16 @@ import { ValidationError } from '../../../app/errors/ValidationError';
 import { CallDTO } from '../../../types/entities/call';
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
-import { CALL_FIELDS_CONFIG, DEFAULT_FORM_VALUES } from '../../App/initI18n/schemas/callsTranslationSchema';
 import { optionsListTranslations } from '../../App/initI18n/schemas/common-options';
 import notify from '../../App/notify/notify';
 import { useAppNavigation } from '../../Hooks/useAppNavigation';
-import { callsStore } from '../../Stores/Calls.store';
 import { Flex } from '../../UI/Flex/Flex';
 import { UIStepper } from '../../UI/Stepper/UiStepper';
 import { Typography } from '../../UI/Typography/Typography';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
+
+import { callsStore } from './stores/Calls.store';
+import { CALL_FIELDS_CONFIG, DEFAULT_FORM_VALUES } from './translation/callsTranslationSchema';
 
 export const CallEditor = observer(
   (): Nullable<JSX.Element> => {

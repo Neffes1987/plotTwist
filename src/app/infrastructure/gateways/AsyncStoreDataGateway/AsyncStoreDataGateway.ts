@@ -23,10 +23,38 @@ export class AsyncStoreDataGateway<DTO extends CommonEntityDTO> implements DataS
     return entity.id;
   }
 
-  async delete(entityId: string): Promise<boolean> {
+  async saveInBatch(entities: DTO[]): Promise<boolean> {
     await this.readFromStore();
 
+    entities.forEach(entity => {
+      if (!entity.id) {
+        entity.id = uuid.v4().toString();
+      }
+
+      this.data[entity.id] = entity;
+    });
+
+    await this.writeToStore();
+
+    return true;
+  }
+
+  async delete(entityId: string): Promise<boolean> {
+    await this.readFromStore();
     this.data = { ...this.data, [entityId]: undefined } as Record<string, DTO>;
+
+    await this.writeToStore();
+
+    return true;
+  }
+
+  async deleteButch(entityIds: string[]): Promise<boolean> {
+    await this.readFromStore();
+
+    entityIds.forEach(entityId => {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.data[entityId];
+    });
 
     await this.writeToStore();
 

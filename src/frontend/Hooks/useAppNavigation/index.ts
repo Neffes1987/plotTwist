@@ -5,6 +5,7 @@ import navigationStore from '../../Stores/Navigation.store';
 
 export type UseAppNavigationProps = Navigation & {
   state: Nullable<RouteParams['params']['state']>;
+  goBackSameState: () => void;
 };
 
 export const useAppNavigation = (): UseAppNavigationProps => {
@@ -13,12 +14,23 @@ export const useAppNavigation = (): UseAppNavigationProps => {
   return {
     navigate: (route, options): void => {
       navigate(route);
-      navigationStore.set(options?.state ?? null);
+      const state = options?.state ?? {};
+
+      navigationStore.set({
+        ...state,
+        isBack: false,
+      });
     },
     goBack: (options): void => {
       goBack();
-      navigationStore.set(options?.state ?? null);
+      const state = options?.state ?? {};
+
+      navigationStore.set({
+        ...state,
+        isBack: true,
+      });
     },
+    goBackSameState: goBack,
     state: navigationStore.get(),
   };
 };

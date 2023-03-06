@@ -19,3 +19,11 @@ export interface OptionsStepperField<RecordType> extends CommonStepperField<Reco
 }
 
 export type StepperFieldField<Type> = TextStepperField<Type> | OptionsStepperField<Type>;
+
+export interface CommonEntityWidgetProps<T extends CommonEntityDTO> {
+  data: T;
+  onSelect?: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+  isSelect?: boolean;
+}

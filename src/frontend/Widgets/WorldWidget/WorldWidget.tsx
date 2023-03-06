@@ -2,7 +2,6 @@ import React, { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StatusEnum } from '../../../constants/status.enum';
-import { ROUTES } from '../../Screens/routes';
 import { IconButton } from '../../UI/Buttons/IconButton';
 import { Drawer } from '../../UI/Drawer/Drawer';
 import { Flex } from '../../UI/Flex/Flex';
@@ -11,7 +10,7 @@ import { Typography } from '../../UI/Typography/Typography';
 
 import { EdgeBlock } from './EdgeBlock/EdgeBlock';
 import { Faq } from './Faq/Faq';
-import { PropertyProps, WorldWidgetProps } from './interface';
+import { WorldWidgetProps } from './interface';
 import { NPCBlock } from './NPCBlock/NPCBlock';
 import { WorldInfoBlock } from './WorldInfoBlock/WorldInfoBlock';
 import { worldWidgetInfoTranslations } from './worldWidgetTranslations';
@@ -19,8 +18,7 @@ import { worldWidgetInfoTranslations } from './worldWidgetTranslations';
 export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => {
   const { t } = useTranslation();
   const [isShowWorldFaqPopover, setIsShowWorldFaqPopover] = useState(false);
-  const [isShowWorldBody, setIsShowWorldBody] = useState(false);
-  const { worldInfo, onEditWorld, onOpenWorldProperty, characters } = props;
+  const { worldInfo, onEditWorld, characters, laws, onToggleWorld, isOpenWorld, waterholes, edge, rewards, tasks } = props;
   const { worldData } = worldInfo;
   const { type, id, status } = worldData;
   const isWorldReady = status === StatusEnum.Released;
@@ -30,21 +28,11 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
   }
 
   function onToggleWorldBody(): void {
-    setIsShowWorldBody((prevState: boolean) => !prevState);
+    onToggleWorld(id);
   }
 
   function onCloseFaqHandler(): void {
     setIsShowWorldFaqPopover(false);
-  }
-
-  function onClickPropertyHandler(options: PropertyProps): void {
-    if (options.id === ROUTES.aboutWorld) {
-      setIsShowWorldFaqPopover(true);
-
-      return;
-    }
-
-    onOpenWorldProperty(options);
   }
 
   return (
@@ -61,7 +49,7 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
         <IconButton color="neutralGreen" iconType="pencil" onPress={(): void => onEditWorld(type, id)} />
       </Flex>
 
-      {isShowWorldBody && (
+      {isOpenWorld && (
         <Flex backgroundColor="accentWhite" direction="column" align="flex-start">
           {!isWorldReady && (
             <Typography mode="error" color="neutralRed">
@@ -70,12 +58,12 @@ export const WorldWidget = (props: WorldWidgetProps): Nullable<ReactElement> => 
           )}
 
           <Flex align="flex-start" marginY={4}>
-            <NPCBlock onOpenWorldProperty={onOpenWorldProperty} worldId={worldInfo?.worldData.id} characters={characters} />
+            <NPCBlock characters={characters} />
 
-            <WorldInfoBlock worldInfo={worldInfo} onOpenWorldProperty={onClickPropertyHandler} />
+            <WorldInfoBlock waterholes={waterholes} laws={laws} worldInfo={worldInfo} />
           </Flex>
 
-          {!!characters?.length && <EdgeBlock onOpenWorldProperty={onOpenWorldProperty} worldInfo={worldInfo} />}
+          {!!characters?.length && <EdgeBlock tasks={tasks} rewards={rewards} worldType={worldData?.type} edge={edge} />}
         </Flex>
       )}
 

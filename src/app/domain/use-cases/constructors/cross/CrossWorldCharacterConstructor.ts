@@ -1,17 +1,26 @@
 import { ICharacterConstructor } from '../../../../../types/constructors/character.constructor';
 import { IWorldCharacterConstructor } from '../../../../../types/constructors/world.constructor';
 import { InWorldCharacterDTO } from '../../../../../types/entities/character';
+import { CrossWorldCharacterDTO } from '../../../../../types/entities/cross';
+import { ActiveRecord } from '../../../entities/ActiveRecord/ActiveRecord';
 import { CrossWorldCharacter } from '../../../entities/Cross/CrossWorldCharacter/CrossWorldCharacter';
 
-export class CrossWorldCharacterConstructor implements IWorldCharacterConstructor {
+import { CommonCrossConstructor } from './CommonCrossConstructor';
+
+export class CrossWorldCharacterConstructor extends CommonCrossConstructor<CrossWorldCharacterDTO> implements IWorldCharacterConstructor {
   characterConstructor: ICharacterConstructor;
 
   constructor(characterConstructor: ICharacterConstructor) {
+    super();
     this.characterConstructor = characterConstructor;
   }
 
-  async getCharactersInWorld(worldId: string): Promise<InWorldCharacterDTO[]> {
-    const worldCharacters = new CrossWorldCharacter();
+  getModel(): ActiveRecord<CrossWorldCharacterDTO> {
+    return new CrossWorldCharacter();
+  }
+
+  async assignedList(worldId: string): Promise<InWorldCharacterDTO[]> {
+    const worldCharacters = this.getModel();
 
     const availableCharacters = await worldCharacters.list({
       query: {
@@ -33,7 +42,7 @@ export class CrossWorldCharacterConstructor implements IWorldCharacterConstructo
     })) as InWorldCharacterDTO[];
   }
 
-  async toggleCharactersInWorld(charactersIds: string[], worldId: string): Promise<InWorldCharacterDTO[]> {
+  async toggle(charactersIds: string[], worldId: string): Promise<InWorldCharacterDTO[]> {
     const worldCharacters = new CrossWorldCharacter();
 
     const availableCharacters = await worldCharacters.list({
@@ -42,39 +51,17 @@ export class CrossWorldCharacterConstructor implements IWorldCharacterConstructo
       },
     });
 
-    const existed: string[] = [];
+    await this.upsertBunch(worldId, availableCharacters, charactersIds, 'characterId');
 
-    availableCharacters.forEach(({ characterId, id }) => {
-      if (!charactersIds.includes(characterId)) {
-        const cross = new CrossWorldCharacter();
+    return this.assignedList(worldId);
+  }
 
-        cross.id = id;
-
-        cross.remove();
-
-        return;
-      }
-
-      existed.push(characterId);
-    });
-
-    charactersIds.forEach(characterId => {
-      if (!existed.includes(characterId)) {
-        const cross = new CrossWorldCharacter();
-
-        cross.unSerialize({
-          isAlive: true,
-          worldId,
-          characterId,
-          id: '',
-        });
-
-        cross.save();
-
-        existed.push(characterId);
-      }
-    });
-
-    return this.getCharactersInWorld(worldId);
+  getModelDTO(parentID: string): CrossWorldCharacterDTO {
+    return {
+      worldId: parentID,
+      characterId: '',
+      id: '',
+      isAlive: false,
+    };
   }
 }

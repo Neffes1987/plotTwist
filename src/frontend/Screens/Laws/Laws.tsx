@@ -2,21 +2,27 @@ import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { CommonListView } from 'src/frontend/Widgets/CommonListView/CommonListView';
-import { useNavigation } from '@react-navigation/native';
 
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
-import { DEFAULT_FORM_VALUES, lawListTranslations } from '../../App/initI18n/schemas/lawsTranslationSchema';
 import notifier from '../../App/notify/notify';
-import { lawsStore } from '../../Stores/Laws.store';
+import { useAppNavigation } from '../../Hooks/useAppNavigation';
+import { useSelectItems } from '../../Hooks/useSelectItems';
 import { UIInput } from '../../UI/UIInput/UIInput';
 import { BIG_VALUE_MAX_LENGTH, MIDDLE_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../Tasks/constants';
+
+import { LawsWidget } from './LawsWidget';
+import { lawsStore } from './stores/Laws.store';
+import { DEFAULT_FORM_VALUES, lawListTranslations } from './translation/lawsTranslationSchema';
 
 export const Laws = observer(
   (): ReactElement => {
     const { t } = useTranslation();
-    const { goBack } = useNavigation();
+    const { state, goBackSameState } = useAppNavigation();
+    const isSelectable = state?.selectable;
+    const selectedItem = state?.selectedItems;
+    const { selectedItems, toggleItem, sendBack } = useSelectItems('law', selectedItem?.ids);
     const { updateContextErrors } = useErrorContext();
     const { isEditDrawerOpen, onOpenPopoverHandler, onClosePopoverHandler } = useTogglePopover();
     const { form, setFormFieldData, formErrors, resetForm } = useForm<LawInWorldDTO>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
@@ -82,13 +88,20 @@ export const Laws = observer(
     return (
       <CommonListView
         title={t(lawListTranslations.caption)}
-        onBackClick={goBack}
-        list={lawsStore.laws}
-        onEditHandler={onEditHandler}
-        onOpen={onEditHandler}
+        onBackClick={goBackSameState}
+        onSelect={isSelectable ? sendBack : undefined}
+        list={lawsStore.laws.map(law => (
+          <LawsWidget
+            key={law.id}
+            onDelete={onDeleteHandler}
+            data={law}
+            onEdit={onEditHandler}
+            onSelect={toggleItem}
+            isSelect={selectedItems.includes(law.id)}
+          />
+        ))}
         onCreate={onOpenPopoverHandler}
         onApply={!form.id ? onCreateHandler : onUpdateHandler}
-        onDelete={form.id ? onDeleteHandler : undefined}
         popupTitle={t(!form.id ? lawListTranslations.actions.addNew : lawListTranslations.actions.update)}
         isEditDrawerOpen={isEditDrawerOpen}
         onClosePopup={onClosePopoverHandler}
@@ -106,7 +119,6 @@ export const Laws = observer(
         <UIInput
           error={formErrors.punishment}
           multiline
-          minValueLength={SHORT_VALUE_MAX_LENGTH}
           maxValueLength={MIDDLE_VALUE_MAX_LENGTH}
           name="punishment"
           value={form.punishment}

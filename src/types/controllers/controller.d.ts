@@ -5,7 +5,15 @@ import { IPlotConstructor } from '../constructors/plot.constructor';
 import { IRewardConstructor } from '../constructors/reward.constructor';
 import { ITaskConstructor } from '../constructors/task.constructor';
 import { IWaterholeConstructor } from '../constructors/waterhole.constructor';
-import { IWorldCharacterConstructor, IWorldConstructor } from '../constructors/world.constructor';
+import {
+  IEdgeRewardConstructor,
+  IEdgeTaskConstructor,
+  IWorldCharacterConstructor,
+  IWorldConstructor,
+  IWorldLawConstructor,
+  IWorldTaskConstructor,
+  IWorldWaterholeConstructor,
+} from '../constructors/world.constructor';
 
 interface IPlotController {
   savePlot: IPlotConstructor['save'];
@@ -19,9 +27,6 @@ interface IWorldController {
   getWorld: IWorldConstructor['get'];
   saveWorld: IWorldConstructor['save'];
   worldList: IWorldConstructor['list'];
-  toggleLawInWorld: IWorldConstructor['toggleWorldLawRelation'];
-  toggleWaterholeInWorld: IWorldConstructor['toggleWorldWaterholeRelation'];
-  toggleLawStatus: IWorldConstructor['toggleWorldLawStatus'];
 }
 
 interface ILawController {
@@ -65,8 +70,35 @@ interface ICallController {
 }
 
 interface IWorldCharacterController {
-  getWorldCharacters: IWorldCharacterConstructor['getCharactersInWorld'];
-  toggleWorldCharacters: IWorldCharacterConstructor['toggleCharactersInWorld'];
+  getWorldCharacters: IWorldCharacterConstructor['assignedList'];
+  toggleWorldCharacters: IWorldCharacterConstructor['toggle'];
+}
+
+interface IWorldLawsController {
+  getLawsInWorld: IWorldLawConstructor['assignedList'];
+  toggleWorldLawsStatus: IWorldLawConstructor['toggleWorldLawsStatus'];
+  toggleWorldLaws: IWorldLawConstructor['toggle'];
+}
+
+interface IWorldWaterholesController {
+  getWaterholesInWorld: IWorldWaterholeConstructor['assignedList'];
+  toggleWorldWaterholes: IWorldWaterholeConstructor['toggle'];
+}
+
+interface IWorldEdgeController {
+  getEdgesInWorld: IWorldTaskConstructor['assignedList'];
+  toggleWorldEdges: IWorldTaskConstructor['toggle'];
+}
+
+interface IEdgeRewardController {
+  getRewardsInEdge: IEdgeRewardConstructor['assignedList'];
+  toggleEdgeRewards: IEdgeRewardConstructor['toggle'];
+}
+
+interface IEdgeTaskController {
+  getTasksInEdge: IEdgeTaskConstructor['assignedList'];
+  toggleEdgeTasks: IEdgeTaskConstructor['toggle'];
+  toggleRewardInTask: IEdgeTaskConstructor['toggleRewardInTask'];
 }
 
 export type ICommonController = ILawController &
@@ -77,4 +109,9 @@ export type ICommonController = ILawController &
   IRewardController &
   ICharacterController &
   ICallController &
-  IWorldCharacterController;
+  IWorldCharacterController &
+  IWorldLawsController &
+  IWorldWaterholesController &
+  IWorldEdgeController &
+  IEdgeRewardController &
+  IEdgeTaskController;

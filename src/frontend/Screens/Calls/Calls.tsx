@@ -4,12 +4,13 @@ import { observer } from 'mobx-react';
 import { CommonListView } from 'src/frontend/Widgets/CommonListView/CommonListView';
 
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
-import { callsListTranslations } from '../../App/initI18n/schemas/callsTranslationSchema';
 import { useAppNavigation } from '../../Hooks/useAppNavigation';
-import { callsStore } from '../../Stores/Calls.store';
 import { ConfirmDrawer } from '../../UI/ConfirmDrower';
-import { CallsWidget } from '../../Widgets/EntityListWidget/CallsWidget';
 import { ROUTES } from '../routes';
+
+import { CallsWidget } from './CallsWidget';
+import { callsStore } from './stores/Calls.store';
+import { callsListTranslations } from './translation/callsTranslationSchema';
 
 export const Calls = observer(
   (): ReactElement => {

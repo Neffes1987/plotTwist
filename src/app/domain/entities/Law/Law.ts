@@ -38,7 +38,7 @@ export class Law extends ActiveRecord<LawDTO> implements Serialization<LawDTO> {
 
     try {
       validator.checkFieldRange([
-        { propertyName: 'punishment', min: SHORT_VALUE_MAX_LENGTH, max: null },
+        { propertyName: 'punishment', min: null, max: SHORT_VALUE_MAX_LENGTH },
         { propertyName: 'name', min: NAME_VALUE_MIN_LENGTH, max: null },
       ]);
     } catch (e) {

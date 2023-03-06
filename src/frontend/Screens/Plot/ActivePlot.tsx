@@ -3,20 +3,24 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { useIsFocused } from '@react-navigation/native';
 
-import { CharacterEnum } from '../../../constants/character.enum';
 import { WorldEnum } from '../../../constants/world.enum';
 import { WorldDTO } from '../../../types/entities/world';
 import { useAppNavigation } from '../../Hooks/useAppNavigation';
-import activePlotStore from '../../Stores/ActivePlot.store';
-import { worldsCharactersStore } from '../../Stores/cross/WorldCharacters.store';
-import { worldsStore } from '../../Stores/Worlds.store';
 import { UIButton } from '../../UI/Buttons/UIButton';
 import { Flex } from '../../UI/Flex/Flex';
 import { Typography } from '../../UI/Typography/Typography';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
-import { PropertyProps } from '../../Widgets/WorldWidget/interface';
 import { WorldWidget } from '../../Widgets/WorldWidget/WorldWidget';
+import { worldsCharactersStore } from '../Characters/stores/WorldCharacters.store';
+import { worldLawsStore } from '../Laws/stores/WorldLaws.store';
+import { edgeRewardsStore } from '../Rewards/stores/EdgeRewards.store';
 import { ROUTES } from '../routes';
+import { edgeTasksStore } from '../Tasks/stores/EdgeTask.store';
+import { worldEdgeStore } from '../Tasks/stores/WorldEdge.store';
+import { worldWaterholesStore } from '../Waterholes/stores/WorldWaterholes.store';
+import { worldsStore } from '../WorldEditor/stores/Worlds.store';
+
+import activePlotStore from './stores/ActivePlot.store';
 
 export const ActivePlot = observer(
   (): ReactElement => {
@@ -31,9 +35,55 @@ export const ActivePlot = observer(
     }
 
     useEffect(() => {
-      if (state?.selectedItems) {
-        if (state?.selectedItems.type === 'character') {
-          worldsCharactersStore.toggleWorldCharacters(state.selectedItems.ids, worldsStore.selectedWorld);
+      const worldId = worldsStore.selectedWorld;
+
+      if (worldId) {
+        worldsCharactersStore.list(worldId);
+        worldLawsStore.list(worldId);
+        worldWaterholesStore.list(worldId);
+        worldEdgeStore.list(worldId);
+      }
+    }, [worldsStore.selectedWorld]);
+
+    useEffect(() => {
+      const edgeId = worldEdgeStore.edge?.id;
+
+      if (edgeId) {
+        edgeRewardsStore.list(edgeId);
+        edgeTasksStore.list(edgeId);
+      }
+    }, [worldEdgeStore.edge]);
+
+    useEffect(() => {
+      const selectedItems = state?.selectedItems;
+
+      if (state?.isBack && selectedItems) {
+        const selectedType = selectedItems?.type;
+        const selectedIds = selectedItems?.ids;
+        const worldId = worldsStore.selectedWorld;
+
+        if (selectedType === 'character') {
+          worldsCharactersStore.toggleWorldCharacters(selectedIds, worldId);
+        }
+
+        if (selectedType === 'law') {
+          worldLawsStore.toggleWorldLaws(selectedIds, worldId);
+        }
+
+        if (selectedType === 'waterholes') {
+          worldWaterholesStore.toggleWorldWaterholes(selectedIds, worldId);
+        }
+
+        if (selectedType === 'edge') {
+          worldEdgeStore.toggleWorldEdge(selectedIds[0], worldId);
+        }
+
+        if (selectedType === 'task') {
+          edgeTasksStore.toggleEdgeTasks(selectedIds, worldEdgeStore.edge?.id);
+        }
+
+        if (selectedType === 'reward') {
+          edgeRewardsStore.toggleEdgeRewards(selectedIds, worldEdgeStore.edge?.id);
         }
       }
     }, [state]);
@@ -72,48 +122,6 @@ export const ActivePlot = observer(
       navigate(ROUTES.plotList);
     }
 
-    function onOpenPropertyHandler(options: PropertyProps): void {
-      const { type, id, parentId } = options;
-
-      if (type === 'world') {
-        navigate(id, {
-          state: {
-            id: parentId,
-          },
-        });
-      }
-
-      if (type === 'npc' && id) {
-        navigate(ROUTES.characters, {
-          state: {
-            characterType: id as CharacterEnum,
-            selectable: true,
-            selectedItems: {
-              ids: worldsCharactersStore.characters.map(({ id }) => id),
-              type: 'character',
-            },
-          },
-        });
-      }
-
-      if (type === 'reward') {
-        navigate(ROUTES.rewards, {
-          state: {
-            worldId: parentId,
-          },
-        });
-      }
-
-      if (type === 'edge') {
-        navigate(ROUTES.rewards, {
-          state: {
-            edgeType: id,
-            worldId: parentId,
-          },
-        });
-      }
-    }
-
     return (
       <ScreenView
         header={{
@@ -136,11 +144,17 @@ export const ActivePlot = observer(
             <Flex direction="column" fullWidth>
               {activePlotStore?.plot?.worlds?.map(world => (
                 <WorldWidget
+                  tasks={edgeTasksStore.tasks}
+                  onToggleWorld={(worldId: string): void => worldsStore.setWorldId(worldId)}
+                  isOpenWorld={worldsStore.selectedWorld === world?.worldData?.id}
+                  laws={worldLawsStore.laws}
+                  waterholes={worldWaterholesStore.waterholeDTOS}
                   characters={worldsCharactersStore.characters}
+                  edge={worldEdgeStore.edge}
+                  rewards={edgeRewardsStore.rewards}
                   key={world.worldData.id}
                   worldInfo={world}
                   onEditWorld={onEditWorldHandler}
-                  onOpenWorldProperty={onOpenPropertyHandler}
                 />
               ))}
 

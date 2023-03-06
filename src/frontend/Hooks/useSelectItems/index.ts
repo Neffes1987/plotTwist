@@ -9,11 +9,17 @@ interface UseSelectItemsProps {
   sendBack: () => void;
 }
 
-export function useSelectItems(type: SelectedItemsType, selectedIds?: string[]): UseSelectItemsProps {
+export function useSelectItems(type: SelectedItemsType, selectedIds?: string[], isSingle?: boolean): UseSelectItemsProps {
   const [selectedItems, setSelectedItems] = useState<string[]>(selectedIds ?? []);
   const { goBack } = useAppNavigation();
 
   function toggleItem(id: string): void {
+    if (isSingle) {
+      setSelectedItems([id]);
+
+      return;
+    }
+
     if (selectedItems?.includes(id)) {
       setSelectedItems(selectedItems.filter(itemId => itemId !== id));
 

@@ -1,23 +1,29 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import { useNavigation } from '@react-navigation/native';
 
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
 import notifier from '../../App/notify/notify';
-import { waterholeList } from '../../Stores/Waterholes.store';
+import { useAppNavigation } from '../../Hooks/useAppNavigation';
+import { useSelectItems } from '../../Hooks/useSelectItems';
 import { UIInput } from '../../UI/UIInput/UIInput';
 import { CommonListView } from '../../Widgets/CommonListView/CommonListView';
 import { BIG_VALUE_MAX_LENGTH, NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../Tasks/constants';
 
-import { DEFAULT_FORM_VALUES, waterholesListTranslations } from './constants';
+import { waterholeList } from './stores/Waterholes.store';
+import { DEFAULT_FORM_VALUES, waterholesListTranslations } from './translation/waterholesListTranslations';
+import { WaterholeWidget } from './WaterholeWidget';
 
 export const Waterholes = observer(
   (): ReactElement => {
     const { t } = useTranslation();
-    const { goBack } = useNavigation();
+    const { goBack, state } = useAppNavigation();
+    const isSelectable = state?.selectable;
+    const selectedItem = state?.selectedItems;
+    const { selectedItems, toggleItem, sendBack } = useSelectItems('waterholes', selectedItem?.ids);
+
     const { updateContextErrors } = useErrorContext();
     const { isEditDrawerOpen, onOpenPopoverHandler, onClosePopoverHandler } = useTogglePopover();
     const { form, setFormFieldData, formErrors, resetForm } = useForm<WaterholeInWorldDTO>(DEFAULT_FORM_VALUES, DEFAULT_FORM_VALUES);
@@ -80,14 +86,21 @@ export const Waterholes = observer(
 
     return (
       <CommonListView
+        onSelect={isSelectable ? sendBack : undefined}
         title={t(waterholesListTranslations.caption)}
         onBackClick={goBack}
-        list={waterholeList.waterholes}
-        onEditHandler={onEditHandler}
-        onOpen={onEditHandler}
-        onCreate={onOpenPopoverHandler}
+        list={waterholeList.waterholes.map(data => (
+          <WaterholeWidget
+            key={data.id}
+            onDelete={onDeleteHandler}
+            data={data}
+            onEdit={onEditHandler}
+            onSelect={toggleItem}
+            isSelect={selectedItems.includes(data.id)}
+          />
+        ))}
         onApply={!form.id ? onCreateHandler : onUpdateHandler}
-        onDelete={form.id ? onDeleteHandler : undefined}
+        onCreate={onOpenPopoverHandler}
         popupTitle={t(!form.id ? waterholesListTranslations.actions.addNew : waterholesListTranslations.actions.update)}
         isEditDrawerOpen={isEditDrawerOpen}
         onClosePopup={onClosePopoverHandler}

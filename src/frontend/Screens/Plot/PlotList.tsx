@@ -6,17 +6,18 @@ import { PlotDTO } from '../../../types/entities/plot';
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
 import { useTogglePopover } from '../../App/hooks/useTogglePopover';
-import { DEFAULT_FORM_VALUES, plotListTranslations } from '../../App/initI18n/schemas/plotListTranslations';
 import notifier from '../../App/notify/notify';
 import { useAppNavigation } from '../../Hooks/useAppNavigation';
-import activePlotStore from '../../Stores/ActivePlot.store';
-import { plotsStore } from '../../Stores/Plots.store';
 import { UIInput } from '../../UI/UIInput/UIInput';
 import { UIList } from '../../UI/UIList/UIList';
 import { CreateEntityWidget } from '../../Widgets/CreateEntityWidget/CreateEntityWidget';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 import { ROUTES } from '../routes';
 import { NAME_VALUE_MIN_LENGTH, SHORT_VALUE_MAX_LENGTH } from '../Tasks/constants';
+
+import activePlotStore from './stores/ActivePlot.store';
+import { plotsStore } from './stores/Plots.store';
+import { DEFAULT_FORM_VALUES, plotListTranslations } from './translation/plotListTranslations';
 
 export const PlotList = observer(
   (): ReactElement => {

@@ -9,3 +9,8 @@ interface IActiveRecord {
   remove: () => Promise<boolean>;
   validate: () => void;
 }
+
+interface ICommonCrossConstructor<T extends CommonEntityDTO> {
+  toggle: (addedIds: string[], parentId: string) => Promise<T[]>;
+  assignedList: (parentId: string) => Promise<T[]>;
+}

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ScrollView } from 'react-native';
 
 import { ActivePlotWorld } from '../../../../types/entities/world';
-import { COMMON_WORLD_FIELDS_CONFIG } from '../../../App/initI18n/schemas/worldTranslations';
+import { COMMON_WORLD_FIELDS_CONFIG } from '../../../Screens/WorldEditor/translation/worldTranslations';
 import { Card } from '../../../UI/Card/Card';
 import { Flex } from '../../../UI/Flex/Flex';
 import { Typography } from '../../../UI/Typography/Typography';

@@ -8,3 +8,8 @@ type TaskDTO = CommonEntityDTO & {
   mainEdgeType?: MainEdgeType;
   shadowEncounterType?: ShadowEncounterType;
 };
+
+export type TaskInWorldDTO = TaskDTO & {
+  isSolved: boolean;
+  rewardId?: string;
+};

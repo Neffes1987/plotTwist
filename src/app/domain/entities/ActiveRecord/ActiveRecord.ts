@@ -29,6 +29,14 @@ export abstract class ActiveRecord<DTO extends CommonEntityDTO> implements IActi
     return this.id;
   }
 
+  async saveButch(dtos: DTO[]): Promise<boolean> {
+    return this._gateway.saveInBatch(dtos);
+  }
+
+  async removeButch(ids: string[]): Promise<boolean> {
+    return this._gateway.deleteButch(ids);
+  }
+
   remove(): Promise<boolean> {
     if (!this.id) {
       return Promise.resolve(false);

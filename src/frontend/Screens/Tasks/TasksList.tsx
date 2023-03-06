@@ -1,64 +1,74 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { CommonListView } from 'src/frontend/Widgets/CommonListView/CommonListView';
 
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
-import { taskTranslations } from '../../App/initI18n/schemas/taskTranslations';
 import { useAppNavigation } from '../../Hooks/useAppNavigation';
-import { taskStore } from '../../Stores/TaskStore';
+import { useDeleteConfirm } from '../../Hooks/useDeleteConfirm';
+import { useSelectItems } from '../../Hooks/useSelectItems';
 import { ConfirmDrawer } from '../../UI/ConfirmDrower';
-import { TaskWidget } from '../../Widgets/EntityListWidget/TaskWidget';
 import { ROUTES } from '../routes';
+
+import { taskStore } from './stores/TaskStore';
+import { TaskWidget } from './TaskWidget';
+import { taskTranslations } from './translation/taskTranslations';
 
 export const TaskList = observer(
   (): ReactElement => {
-    const { goBack, navigate } = useAppNavigation();
+    const { navigate, state, goBackSameState } = useAppNavigation();
     const { t } = useTranslation();
     const { updateContextErrors } = useErrorContext();
-    const [selectedItem, setSelectedItem] = useState<string>();
+    const isSelectable = state?.selectable;
+    const selectedItem = state?.selectedItems;
+    const isSingle = state?.selectedItems?.single;
+    const edgeType = state?.edgeType;
+    const { deletedItemId, setDeletedItemId, clearDeleteItemId } = useDeleteConfirm();
+
+    const { selectedItems, toggleItem, sendBack } = useSelectItems(state?.selectedItems?.type ?? 'task', selectedItem?.ids, isSingle);
 
     useEffect(() => {
+      taskStore.edgeType = edgeType;
       taskStore.list().catch(updateContextErrors);
-    }, []);
+    }, [edgeType]);
 
     function onCreateHandler(): void {
-      navigate(ROUTES.taskConstructor);
+      navigate(ROUTES.taskConstructor, { state: { edgeType, selectable: isSelectable } });
     }
 
     function onOpenHandler(id: string): void {
-      navigate(ROUTES.taskConstructor, { state: { id } });
+      navigate(ROUTES.taskConstructor, { state: { id, edgeType, selectable: isSelectable } });
     }
 
     function onDeleteHandler(): void {
-      if (!selectedItem) {
+      if (!deletedItemId) {
         return;
       }
 
-      taskStore.delete(selectedItem);
-      onCloseDeleteConfirmHandler();
-    }
-
-    function onShowDeleteConfirmHandler(callId: string): void {
-      setSelectedItem(callId);
-    }
-
-    function onCloseDeleteConfirmHandler(): void {
-      setSelectedItem('');
+      taskStore.delete(deletedItemId);
+      clearDeleteItemId();
     }
 
     return (
       <>
         <CommonListView
-          title={t(taskTranslations.labels.listCaption)}
-          onBackClick={goBack}
+          onSelect={isSelectable ? sendBack : undefined}
+          title={`${t(taskTranslations.labels.listCaption)} (${edgeType})`}
+          onBackClick={goBackSameState}
           list={taskStore.tasks.map(task => (
-            <TaskWidget key={task.id} onSelect={onOpenHandler} onDelete={onShowDeleteConfirmHandler} data={task} />
+            <TaskWidget
+              onEdit={onOpenHandler}
+              key={task.id}
+              onSelect={toggleItem}
+              isSelect={selectedItems.includes(task.id)}
+              onDelete={setDeletedItemId}
+              data={task}
+            />
           ))}
           onCreate={onCreateHandler}
         />
 
-        <ConfirmDrawer onConfirm={onDeleteHandler} onClose={onCloseDeleteConfirmHandler} isOpen={!!selectedItem} />
+        <ConfirmDrawer onConfirm={onDeleteHandler} onClose={clearDeleteItemId} isOpen={!!deletedItemId} />
       </>
     );
   },

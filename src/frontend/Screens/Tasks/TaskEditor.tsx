@@ -5,36 +5,41 @@ import { ValidationError } from '../../../app/errors/ValidationError';
 import { TaskDTO } from '../../../types/entities/task';
 import { useErrorContext } from '../../App/hooks/ErrorBoundaryContext/useErrorContext';
 import { useForm } from '../../App/hooks/useForm';
-import { EDGE_FIELDS_CONFIG, EDGE_OPTIONS_FIELDS_CONFIG, SHADOW_ENCOUNTER_FIELDS_CONFIG, taskTranslations } from '../../App/initI18n/schemas/taskTranslations';
 import notify from '../../App/notify/notify';
 import { useAppNavigation } from '../../Hooks/useAppNavigation';
-import { taskStore } from '../../Stores/TaskStore';
 import { Flex } from '../../UI/Flex/Flex';
 import { UIStepper } from '../../UI/Stepper/UiStepper';
 import { Typography } from '../../UI/Typography/Typography';
 import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 
 import { TASK_FORM_DEFAULT_STATE } from './constants';
+import { taskStore } from './stores/TaskStore';
+import { EDGE_FIELDS_CONFIG, EDGE_OPTIONS_FIELDS_CONFIG, SHADOW_ENCOUNTER_FIELDS_CONFIG, taskTranslations } from './translation/taskTranslations';
 
 export const TaskEditor = (): JSX.Element | null => {
   const { t } = useTranslation();
-  const { goBack, state } = useAppNavigation();
+  const { state, goBackSameState } = useAppNavigation();
   const { updateContextErrors } = useErrorContext();
   const taskId = state?.id;
-  const { form, setFormFieldData, formErrors, resetForm, formErrorsQuantity } = useForm<Partial<TaskDTO>>(TASK_FORM_DEFAULT_STATE, TASK_FORM_DEFAULT_STATE);
+  const edgeType = state?.edgeType;
+  const { form, setFormFieldData, formErrors, resetForm, formErrorsQuantity } = useForm<Partial<TaskDTO>>(
+    edgeType ? { ...TASK_FORM_DEFAULT_STATE, type: edgeType } : TASK_FORM_DEFAULT_STATE,
+    TASK_FORM_DEFAULT_STATE,
+  );
 
   const currentFieldsConfig = useMemo(() => {
     const { mainEdgeType, type } = form;
+    const currentConfig = edgeType ? EDGE_FIELDS_CONFIG.filter(({ name }) => name !== 'type') : EDGE_FIELDS_CONFIG;
 
     if (type === 'task') {
-      return EDGE_FIELDS_CONFIG;
+      return currentConfig;
     }
 
     if (mainEdgeType === 'shadowEncounter') {
-      return [...EDGE_FIELDS_CONFIG, ...EDGE_OPTIONS_FIELDS_CONFIG, ...SHADOW_ENCOUNTER_FIELDS_CONFIG];
+      return [...currentConfig, ...EDGE_OPTIONS_FIELDS_CONFIG, ...SHADOW_ENCOUNTER_FIELDS_CONFIG];
     }
 
-    return [...EDGE_FIELDS_CONFIG, ...EDGE_OPTIONS_FIELDS_CONFIG];
+    return [...currentConfig, ...EDGE_OPTIONS_FIELDS_CONFIG];
   }, [form]);
 
   useEffect(() => {
@@ -48,7 +53,7 @@ export const TaskEditor = (): JSX.Element | null => {
   }, [taskId]);
 
   function onNavigateToHomeHandler(): void {
-    goBack();
+    goBackSameState();
   }
 
   async function onStepperFinished(): Promise<void> {

@@ -1,3 +1,1 @@
-export type ILawConstructor = ICommonConstructor<LawDTO> & {
-  getWorldLaws: (worldId: string) => Promise<LawInWorldDTO[]>;
-};
+export type ILawConstructor = ICommonConstructor<LawDTO>;

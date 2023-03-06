@@ -5,17 +5,8 @@ import { observer } from 'mobx-react';
 import { WorldEnum } from '../../../constants/world.enum';
 import { WorldDTO } from '../../../types/entities/world';
 import { useForm } from '../../App/hooks/useForm';
-import {
-  COMMON_WORLD_FIELDS_CONFIG,
-  HIDDEN_CAVE_WORLD_FIELDS_CONFIG,
-  HOLIDAY_WORLD_FIELDS_CONFIG,
-  PLAIN_WORLD_FIELDS_CONFIG,
-  PRIVATE_WORLD_FIELDS_CONFIG,
-  RETURN_WITH_POTION_WORLD_FIELDS_CONFIG,
-} from '../../App/initI18n/schemas/worldTranslations';
 import { useAppNavigation } from '../../Hooks/useAppNavigation';
 import { useStepperFinished } from '../../Hooks/useStepperFinished';
-import { worldsStore } from '../../Stores/Worlds.store';
 import { Flex } from '../../UI/Flex/Flex';
 import { UIStepper } from '../../UI/Stepper/UiStepper';
 import { Typography } from '../../UI/Typography/Typography';
@@ -23,6 +14,15 @@ import { ScreenView } from '../../Widgets/ScreenView/ScreenView';
 import { worldWidgetInfoTranslations } from '../../Widgets/WorldWidget/worldWidgetTranslations';
 
 import { DEFAULT_WORLD_FORM_STATE } from './constants';
+import { worldsStore } from './stores/Worlds.store';
+import {
+  COMMON_WORLD_FIELDS_CONFIG,
+  HIDDEN_CAVE_WORLD_FIELDS_CONFIG,
+  HOLIDAY_WORLD_FIELDS_CONFIG,
+  PLAIN_WORLD_FIELDS_CONFIG,
+  PRIVATE_WORLD_FIELDS_CONFIG,
+  RETURN_WITH_POTION_WORLD_FIELDS_CONFIG,
+} from './translation/worldTranslations';
 
 export const WorldEditor = observer(
   (): Nullable<JSX.Element> => {

@@ -5,12 +5,20 @@ import { IPlotConstructor } from '../../types/constructors/plot.constructor';
 import { IRewardConstructor } from '../../types/constructors/reward.constructor';
 import { ITaskConstructor } from '../../types/constructors/task.constructor';
 import { IWaterholeConstructor } from '../../types/constructors/waterhole.constructor';
-import { IWorldCharacterConstructor, IWorldConstructor } from '../../types/constructors/world.constructor';
+import {
+  IEdgeRewardConstructor,
+  IEdgeTaskConstructor,
+  IWorldCharacterConstructor,
+  IWorldConstructor,
+  IWorldLawConstructor,
+  IWorldTaskConstructor,
+  IWorldWaterholeConstructor,
+} from '../../types/constructors/world.constructor';
 import { ICommonController } from '../../types/controllers/controller';
 import { CallDTO } from '../../types/entities/call';
 import { CharacterDTO, InWorldCharacterDTO } from '../../types/entities/character';
 import { PlotDTO } from '../../types/entities/plot';
-import { TaskDTO } from '../../types/entities/task';
+import { TaskDTO, TaskInWorldDTO } from '../../types/entities/task';
 import { ActivePlotWorld, WorldDTO } from '../../types/entities/world';
 
 export class Controller implements ICommonController {
@@ -23,6 +31,11 @@ export class Controller implements ICommonController {
   protected readonly characterConstructor: ICharacterConstructor;
   protected readonly callsConstructor: ICallConstructor;
   protected readonly crossWorldCharacterConstructor: IWorldCharacterConstructor;
+  protected readonly crossWorldLawsConstructor: IWorldLawConstructor;
+  protected readonly crossWorldWaterholeConstructor: IWorldWaterholeConstructor;
+  protected readonly crossWorldEdgeConstructor: IWorldTaskConstructor;
+  protected readonly crossEdgeRewardConstructor: IEdgeRewardConstructor;
+  protected readonly crossEdgeTaskConstructor: IEdgeTaskConstructor;
 
   constructor(
     plotConstructor: IPlotConstructor,
@@ -34,6 +47,11 @@ export class Controller implements ICommonController {
     characterConstructor: ICharacterConstructor,
     callsConstructor: ICallConstructor,
     crossWorldCharacterConstructor: IWorldCharacterConstructor,
+    crossWorldLawsConstructor: IWorldLawConstructor,
+    crossWorldWaterholeConstructor: IWorldWaterholeConstructor,
+    crossWorldEdgeConstructor: IWorldTaskConstructor,
+    crossEdgeRewardConstructor: IEdgeRewardConstructor,
+    crossEdgeTaskConstructor: IEdgeTaskConstructor,
   ) {
     this.plotConstructor = plotConstructor;
     this.worldConstructor = worldConstructor;
@@ -44,6 +62,59 @@ export class Controller implements ICommonController {
     this.characterConstructor = characterConstructor;
     this.callsConstructor = callsConstructor;
     this.crossWorldCharacterConstructor = crossWorldCharacterConstructor;
+    this.crossWorldLawsConstructor = crossWorldLawsConstructor;
+    this.crossWorldWaterholeConstructor = crossWorldWaterholeConstructor;
+    this.crossWorldEdgeConstructor = crossWorldEdgeConstructor;
+    this.crossEdgeRewardConstructor = crossEdgeRewardConstructor;
+    this.crossEdgeTaskConstructor = crossEdgeTaskConstructor;
+  }
+
+  getTasksInEdge(parentId: string): Promise<TaskInWorldDTO[]> {
+    return this.crossEdgeTaskConstructor.assignedList(parentId);
+  }
+
+  toggleEdgeTasks(addedIds: string[], parentId: string): Promise<TaskInWorldDTO[]> {
+    return this.crossEdgeTaskConstructor.toggle(addedIds, parentId);
+  }
+
+  toggleRewardInTask(rewardId: string, taskId: string): Promise<boolean> {
+    return this.crossEdgeTaskConstructor.toggleRewardInTask(rewardId, taskId);
+  }
+
+  getRewardsInEdge(parentId: string): Promise<RewardInEdgeDTO[]> {
+    return this.crossEdgeRewardConstructor.assignedList(parentId);
+  }
+
+  toggleEdgeRewards(addedIds: string[], parentId: string): Promise<RewardInEdgeDTO[]> {
+    return this.crossEdgeRewardConstructor.toggle(addedIds, parentId);
+  }
+
+  getEdgesInWorld(parentId: string): Promise<TaskInWorldDTO[]> {
+    return this.crossWorldEdgeConstructor.assignedList(parentId);
+  }
+
+  toggleWorldEdges(addedIds: string[], parentId: string): Promise<TaskInWorldDTO[]> {
+    return this.crossWorldEdgeConstructor.toggle(addedIds, parentId);
+  }
+
+  getWaterholesInWorld(parentId: string): Promise<WaterholeDTO[]> {
+    return this.crossWorldWaterholeConstructor.assignedList(parentId);
+  }
+
+  toggleWorldWaterholes(addedIds: string[], parentId: string): Promise<WaterholeDTO[]> {
+    return this.crossWorldWaterholeConstructor.toggle(addedIds, parentId);
+  }
+
+  getLawsInWorld(worldId: string): Promise<LawInWorldDTO[]> {
+    return this.crossWorldLawsConstructor.assignedList(worldId);
+  }
+
+  toggleWorldLawsStatus(lawId: string, isBroken: boolean): Promise<boolean> {
+    return this.crossWorldLawsConstructor.toggleWorldLawsStatus(lawId, isBroken);
+  }
+
+  toggleWorldLaws(lawIds: string[], worldId: string): Promise<LawInWorldDTO[]> {
+    return this.crossWorldLawsConstructor.toggle(lawIds, worldId);
   }
 
   getTasks(params: ListParams<TaskDTO>): Promise<TaskDTO[]> {
@@ -118,24 +189,12 @@ export class Controller implements ICommonController {
     return this.lawsConstructor.list(params);
   }
 
-  toggleLawInWorld(lawId: string, worldId: string): Promise<boolean> {
-    return this.worldConstructor.toggleWorldLawRelation(lawId, worldId);
-  }
-
-  toggleLawStatus(lawId: string, isBroken: boolean): Promise<boolean> {
-    return this.worldConstructor.toggleWorldLawStatus(lawId, isBroken);
-  }
-
   saveLaw(dto: LawDTO): Promise<string> {
     return this.lawsConstructor.save(dto);
   }
 
   getLaw(id: string): Promise<Nullable<LawDTO>> {
     return this.lawsConstructor.get(id);
-  }
-
-  toggleWaterholeInWorld(waterholeId: string, worldId: string): Promise<boolean> {
-    return this.worldConstructor.toggleWorldWaterholeRelation(waterholeId, worldId);
   }
 
   removeReward(id: string): Promise<boolean> {
@@ -179,10 +238,10 @@ export class Controller implements ICommonController {
   }
 
   getWorldCharacters(worldId: string): Promise<InWorldCharacterDTO[]> {
-    return this.crossWorldCharacterConstructor.getCharactersInWorld(worldId);
+    return this.crossWorldCharacterConstructor.assignedList(worldId);
   }
 
   toggleWorldCharacters(characters: string[], worldId: string): Promise<InWorldCharacterDTO[]> {
-    return this.crossWorldCharacterConstructor.toggleCharactersInWorld(characters, worldId);
+    return this.crossWorldCharacterConstructor.toggle(characters, worldId);
   }
 }

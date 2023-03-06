@@ -1,4 +1,5 @@
 import { InWorldCharacterDTO } from '../../../types/entities/character';
+import { TaskInWorldDTO } from '../../../types/entities/task';
 import { ActivePlotWorld, WorldDTO } from '../../../types/entities/world';
 import { TypographyProps } from '../../UI/interface';
 
@@ -10,9 +11,15 @@ export interface PropertyProps {
 
 export interface WorldWidgetProps {
   worldInfo: ActivePlotWorld;
+  laws: LawInWorldDTO[];
+  edge: Nullable<TaskInWorldDTO>;
+  waterholes: WaterholeInWorldDTO[];
   characters: InWorldCharacterDTO[];
+  rewards: RewardInEdgeDTO[];
+  tasks: TaskInWorldDTO[];
+  onToggleWorld: (worldId: string) => void;
+  isOpenWorld: boolean;
   onEditWorld: (type: WorldDTO['type'], id: string) => void;
-  onOpenWorldProperty: (options: PropertyProps) => void;
 }
 
 export interface PropertyRowProps extends TypographyProps {

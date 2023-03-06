@@ -44,7 +44,6 @@ interface WorldDTO extends CommonEntityDTO, PlainWorldDTO, PrivateWorldDTO, Hidd
 
 interface ActivePlotWorld {
   worldData: WorldDTO;
-  laws: LawInWorldDTO[];
   waterholes: WaterholeInWorldDTO[];
   edge?: ActiveWorldEdge;
 }

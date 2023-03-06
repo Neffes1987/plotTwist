@@ -4,14 +4,14 @@ import { observer } from 'mobx-react';
 import { CommonListView } from 'src/frontend/Widgets/CommonListView/CommonListView';
 
 import { useErrorContext } from '../../../App/hooks/ErrorBoundaryContext/useErrorContext';
-import { charactersTranslations } from '../../../App/initI18n/schemas/characterTranslation';
 import { useAppNavigation } from '../../../Hooks/useAppNavigation';
 import { useDeleteConfirm } from '../../../Hooks/useDeleteConfirm';
 import { useSelectItems } from '../../../Hooks/useSelectItems';
-import { charactersStore } from '../../../Stores/Characters.store';
 import { ConfirmDrawer } from '../../../UI/ConfirmDrower';
-import { CharacterWidget } from '../../../Widgets/EntityListWidget/CharacterWidget';
 import { ROUTES } from '../../routes';
+import { CharacterWidget } from '../CharacterWidget';
+import { charactersStore } from '../stores/Characters.store';
+import { charactersTranslations } from '../translation/characterTranslation';
 
 export const CharactersList = observer(
   (): ReactElement => {
@@ -41,11 +41,11 @@ export const CharactersList = observer(
     }, [characterType]);
 
     function onCreateHandler(): void {
-      navigate(ROUTES.charactersConstructor, { state: { characterType } });
+      navigate(ROUTES.charactersConstructor, { state: { characterType, selectable } });
     }
 
     function onEditHandler(id: string): void {
-      navigate(ROUTES.charactersConstructor, { state: { id, characterType } });
+      navigate(ROUTES.charactersConstructor, { state: { id, characterType, selectable } });
     }
 
     function onDeleteHandler(): void {

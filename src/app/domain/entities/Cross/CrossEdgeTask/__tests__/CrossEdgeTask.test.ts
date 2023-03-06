@@ -1,8 +1,8 @@
-import { CrossEdgeTaskDTO } from '../../../../../../types/entities/cross';
+import { CrossEdgeTaskRewardDTO } from '../../../../../../types/entities/cross';
 import { CrossEdgeTask } from '../CrossEdgeTask';
 
 describe('WHEN "CrossEdgeReward" is created', () => {
-  const relationDTO: CrossEdgeTaskDTO = {
+  const relationDTO: CrossEdgeTaskRewardDTO = {
     id: 'Id',
     taskId: 'taskId',
     rewardId: 'rewardId',

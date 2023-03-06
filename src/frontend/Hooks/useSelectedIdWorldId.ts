@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 
 import { RouteParams } from '../Screens/interface';
-import { worldsStore } from '../Stores/Worlds.store';
+import { worldsStore } from '../Screens/WorldEditor/stores/Worlds.store';
 
 export function useSelectedIdWorldId(): string {
   const { params } = useRoute<RouteParams>();

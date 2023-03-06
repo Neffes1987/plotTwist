@@ -37,9 +37,15 @@ interface CrossEdgeRewardDTO extends CommonEntityDTO {
   rewardId: string;
 }
 
-interface CrossEdgeTaskDTO extends CommonEntityDTO {
+interface CrossEdgeTaskRewardDTO extends CommonEntityDTO {
   isAchieved: boolean;
   edgeId: string;
   taskId: string;
   rewardId: string;
+}
+
+interface CrossTaskCallDTO extends CommonEntityDTO {
+  callId: string;
+  taskId: string;
+  isActive: boolean;
 }

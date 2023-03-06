@@ -1,18 +1,13 @@
-import { ILawConstructor } from '../../../../types/constructors/law.constructor';
 import { IWaterholeConstructor } from '../../../../types/constructors/waterhole.constructor';
 import { IWorldConstructor } from '../../../../types/constructors/world.constructor';
 import { ActivePlotWorld, WorldDTO } from '../../../../types/entities/world';
-import { CrossWorldLaw } from '../../entities/Cross/CrossWorldLaw/CrossWorldLaw';
 import { CrossWorldPlot } from '../../entities/Cross/CrossWorldPlot/CrossWorldPlot';
-import { CrossWorldWaterhole } from '../../entities/Cross/CrossWorldWaterhole/CrossWorldWaterhole';
 import { World } from '../../entities/World/World';
 
 export class WorldConstructor implements IWorldConstructor {
-  private readonly lawConstructor: ILawConstructor;
   private readonly waterholeConstructor: IWaterholeConstructor;
 
-  constructor(lawConstructor: ILawConstructor, waterholeConstructor: IWaterholeConstructor) {
-    this.lawConstructor = lawConstructor;
+  constructor(waterholeConstructor: IWaterholeConstructor) {
     this.waterholeConstructor = waterholeConstructor;
   }
 
@@ -46,12 +41,11 @@ export class WorldConstructor implements IWorldConstructor {
       await world.load();
       world.status = status;
 
-      const laws = await this.lawConstructor.getWorldLaws(world.id);
       const waterholes = await this.waterholeConstructor.getWorldWaterholes(world.id);
 
       return {
         worldData: world.serialize(),
-        laws,
+        laws: [],
         waterholes,
         edge: null,
         characters: [],
@@ -78,51 +72,5 @@ export class WorldConstructor implements IWorldConstructor {
     await world.load();
 
     return world.serialize();
-  }
-
-  async toggleWorldLawRelation(lawId: string, worldId: string): Promise<boolean> {
-    const crossWorldLaw = new CrossWorldLaw();
-
-    await crossWorldLaw.loadByLawId(lawId);
-
-    if (crossWorldLaw.worldId) {
-      await crossWorldLaw.remove();
-    } else {
-      crossWorldLaw.worldId = worldId;
-      crossWorldLaw.lawId = lawId;
-      crossWorldLaw.isBroken = false;
-
-      await crossWorldLaw.save();
-    }
-
-    return true;
-  }
-
-  async toggleWorldWaterholeRelation(waterholeId: string, worldId: string): Promise<boolean> {
-    const crossWorldWaterhole = new CrossWorldWaterhole();
-
-    await crossWorldWaterhole.loadByWaterholeId(waterholeId);
-
-    if (crossWorldWaterhole.worldId) {
-      await crossWorldWaterhole.remove();
-    } else {
-      crossWorldWaterhole.worldId = worldId;
-      crossWorldWaterhole.waterholeId = waterholeId;
-
-      await crossWorldWaterhole.save();
-    }
-
-    return true;
-  }
-
-  async toggleWorldLawStatus(lawId: string, isBroken: boolean): Promise<boolean> {
-    const crossWorldLaw = new CrossWorldLaw();
-
-    await crossWorldLaw.loadByLawId(lawId);
-    crossWorldLaw.isBroken = isBroken;
-
-    await crossWorldLaw.save();
-
-    return true;
   }
 }

@@ -41,24 +41,4 @@ export class LawsConstructor implements ILawConstructor {
 
     return law.id;
   }
-
-  async getWorldLaws(worldId: string): Promise<LawInWorldDTO[]> {
-    const crossWorldLaw = new CrossWorldLaw();
-    const law = new Law();
-
-    const crossWorldLawList = await crossWorldLaw.listByWorldId(worldId);
-    const lawIsBroken: Record<string, boolean> = {};
-
-    crossWorldLawList.forEach(({ lawId, isBroken }) => {
-      lawIsBroken[lawId] = isBroken;
-    });
-
-    const commonLaws = await law.list({
-      query: {
-        id: Object.keys(lawIsBroken),
-      },
-    });
-
-    return commonLaws.map(law => ({ ...law, isBroken: lawIsBroken[law.id] }));
-  }
 }

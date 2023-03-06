@@ -5,6 +5,15 @@ import { observer } from 'mobx-react';
 import { CharacterEnum } from '../../../../constants/character.enum';
 import { CharacterDTO } from '../../../../types/entities/character';
 import { useForm } from '../../../App/hooks/useForm';
+import { optionsListTranslations } from '../../../App/initI18n/schemas/common-options';
+import { useAppNavigation } from '../../../Hooks/useAppNavigation';
+import { useStepperFinished } from '../../../Hooks/useStepperFinished';
+import { Flex } from '../../../UI/Flex/Flex';
+import { UIStepper } from '../../../UI/Stepper/UiStepper';
+import { Typography } from '../../../UI/Typography/Typography';
+import { ScreenView } from '../../../Widgets/ScreenView/ScreenView';
+import { CHARACTER_FORM_DEFAULTS } from '../characterDefaults';
+import { charactersStore } from '../stores/Characters.store';
 import {
   ALLY_FIELDS,
   charactersTranslations,
@@ -12,22 +21,13 @@ import {
   GUARD_FIELDS,
   MENTORS_FIELDS,
   MESSENGER_SHADOW_FIELDS,
-} from '../../../App/initI18n/schemas/characterTranslation';
-import { optionsListTranslations } from '../../../App/initI18n/schemas/common-options';
-import { useAppNavigation } from '../../../Hooks/useAppNavigation';
-import { useStepperFinished } from '../../../Hooks/useStepperFinished';
-import { charactersStore } from '../../../Stores/Characters.store';
-import { Flex } from '../../../UI/Flex/Flex';
-import { UIStepper } from '../../../UI/Stepper/UiStepper';
-import { Typography } from '../../../UI/Typography/Typography';
-import { ScreenView } from '../../../Widgets/ScreenView/ScreenView';
-import { CHARACTER_FORM_DEFAULTS } from '../characterDefaults';
+} from '../translation/characterTranslation';
 
 export const CharacterEditor = observer(
   (): Nullable<JSX.Element> => {
     const { t } = useTranslation();
 
-    const { goBack, state } = useAppNavigation();
+    const { goBackSameState, state } = useAppNavigation();
     const characterId = state?.id;
     const characterType = state?.characterType;
     const store = charactersStore;
@@ -87,7 +87,7 @@ export const CharacterEditor = observer(
     }, [characterId]);
 
     function onNavigateToHomeHandler(): void {
-      goBack();
+      goBackSameState();
     }
 
     return (
