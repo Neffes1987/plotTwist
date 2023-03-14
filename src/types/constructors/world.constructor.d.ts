@@ -1,4 +1,4 @@
-import { InWorldCharacterDTO } from '../entities/character';
+import { InTaskCharacterDTO, InWorldCharacterDTO } from '../entities/character';
 import { TaskInWorldDTO } from '../entities/task';
 import { ActivePlotWorld, WorldDTO } from '../entities/world';
 
@@ -19,3 +19,5 @@ export type IEdgeRewardConstructor = ICommonCrossConstructor<RewardInEdgeDTO>;
 export type IEdgeTaskConstructor = ICommonCrossConstructor<TaskInWorldDTO> & {
   toggleRewardInTask: (rewardId: string, taskId: string) => Promise<boolean>;
 };
+
+export type ITaskCharacterConstructor = ICommonCrossConstructor<InTaskCharacterDTO>;

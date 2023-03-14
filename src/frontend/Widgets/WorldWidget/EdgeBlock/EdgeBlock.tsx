@@ -32,18 +32,6 @@ export const EdgeBlock = ({
     });
   }
 
-  function handleOpenRewardsProperty(): void {
-    navigate(ROUTES.rewards, {
-      state: {
-        selectable: true,
-        selectedItems: {
-          ids: rewards.map(({ id }) => id),
-          type: 'reward',
-        },
-      },
-    });
-  }
-
   function handleOpenTasksProperty(): void {
     navigate(ROUTES.tasks, {
       state: {
@@ -78,7 +66,6 @@ export const EdgeBlock = ({
       {!!edge?.id && (
         <>
           <PropertyRow
-            onPress={handleOpenRewardsProperty}
             quantity={`${achievedRewards}/${rewards?.length}`}
             caption={t(worldWidgetEdgeTranslations.labels.rewards)}
             showAlert={!rewards?.length}

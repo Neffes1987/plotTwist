@@ -55,6 +55,8 @@ export type IconType =
   | 'person'
   | 'list'
   | 'gavel'
+  | 'edge'
+  | 'task'
   | 'flame';
 export interface IconProps {
   type: IconType;

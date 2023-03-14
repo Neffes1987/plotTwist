@@ -35,3 +35,7 @@ interface CharacterDTO extends CommonEntityDTO {
 interface InWorldCharacterDTO extends CharacterDTO {
   isAlive?: boolean;
 }
+
+interface InTaskCharacterDTO extends CharacterDTO {
+  isAlive?: boolean;
+}

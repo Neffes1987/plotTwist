@@ -10,12 +10,15 @@ export class NavigationStore {
   }
 
   get(): Nullable<RouteParams['params']['state']> {
-    return this.state;
+    return this.state ?? {};
   }
 
   set(state: Nullable<RouteParams['params']['state']>): void {
     runInAction(() => {
-      this.state = state;
+      this.state = {
+        ...this.get(),
+        ...state,
+      };
     });
   }
 }

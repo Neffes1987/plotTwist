@@ -13,7 +13,7 @@ export const PropertyRow = (props: PropertyRowProps): ReactElement => {
       <Flex justify="flex-start" flex={1}>
         <Icon type="chevron" rotate={180} />
 
-        <Flex onPress={(): void => onPress(id)}>
+        <Flex onPress={(): void => onPress?.(id)}>
           <Typography mode="caption-medium" {...rest}>
             {caption}
           </Typography>

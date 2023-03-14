@@ -8,6 +8,7 @@ import { IWaterholeConstructor } from '../constructors/waterhole.constructor';
 import {
   IEdgeRewardConstructor,
   IEdgeTaskConstructor,
+  ITaskCharacterConstructor,
   IWorldCharacterConstructor,
   IWorldConstructor,
   IWorldLawConstructor,
@@ -101,6 +102,11 @@ interface IEdgeTaskController {
   toggleRewardInTask: IEdgeTaskConstructor['toggleRewardInTask'];
 }
 
+interface ITaskCharacterController {
+  getCharactersInTask: ITaskCharacterConstructor['assignedList'];
+  toggleTaskCharacters: ITaskCharacterConstructor['toggle'];
+}
+
 export type ICommonController = ILawController &
   IWorldController &
   IPlotController &
@@ -114,4 +120,5 @@ export type ICommonController = ILawController &
   IWorldWaterholesController &
   IWorldEdgeController &
   IEdgeRewardController &
-  IEdgeTaskController;
+  IEdgeTaskController &
+  ITaskCharacterController;

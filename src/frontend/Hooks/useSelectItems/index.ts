@@ -35,6 +35,7 @@ export function useSelectItems(type: SelectedItemsType, selectedIds?: string[], 
         selectedItems: {
           type,
           ids: selectedItems,
+          single: isSingle,
         },
       },
     });

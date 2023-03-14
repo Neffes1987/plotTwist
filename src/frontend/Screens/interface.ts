@@ -15,6 +15,7 @@ export interface RouteParams extends RouteProp<ParamListBase> {
       plotId?: string;
       characterType?: CharacterEnum;
       edgeType?: TaskDTO['type'];
+      edgeId?: string;
       selectable?: boolean;
       isBack?: boolean;
       selectedItems?: {

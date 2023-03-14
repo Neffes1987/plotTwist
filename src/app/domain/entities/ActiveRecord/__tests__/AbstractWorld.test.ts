@@ -8,6 +8,8 @@ const mockedGateway = {
   get: jest.fn(),
   list: jest.fn(),
   save: jest.fn(),
+  saveInBatch: jest.fn(),
+  deleteButch: jest.fn(),
 };
 
 const validateMock = jest.fn();

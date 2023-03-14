@@ -23,7 +23,7 @@ export interface WorldWidgetProps {
 }
 
 export interface PropertyRowProps extends TypographyProps {
-  onPress: (propertyId: string) => void;
+  onPress?: (propertyId: string) => void;
   caption: string;
   quantity?: string;
   id: string;

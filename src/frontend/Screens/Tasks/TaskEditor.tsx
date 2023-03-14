@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { observer } from 'mobx-react';
 
 import { ValidationError } from '../../../app/errors/ValidationError';
 import { TaskDTO } from '../../../types/entities/task';
@@ -16,7 +17,7 @@ import { TASK_FORM_DEFAULT_STATE } from './constants';
 import { taskStore } from './stores/TaskStore';
 import { EDGE_FIELDS_CONFIG, EDGE_OPTIONS_FIELDS_CONFIG, SHADOW_ENCOUNTER_FIELDS_CONFIG, taskTranslations } from './translation/taskTranslations';
 
-export const TaskEditor = (): JSX.Element | null => {
+export const TaskEditor = observer((): JSX.Element | null => {
   const { t } = useTranslation();
   const { state, goBackSameState } = useAppNavigation();
   const { updateContextErrors } = useErrorContext();
@@ -93,4 +94,4 @@ export const TaskEditor = (): JSX.Element | null => {
       <Flex height={100} />
     </ScreenView>
   );
-};
+});

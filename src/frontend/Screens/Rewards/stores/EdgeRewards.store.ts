@@ -30,6 +30,8 @@ export class EdgeRewardsStore {
     runInAction(() => {
       this.rewards = data;
     });
+
+    await this.list(parentId);
   }
 }
 

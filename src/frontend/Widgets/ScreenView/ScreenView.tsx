@@ -23,7 +23,9 @@ export const ScreenView = (props: PropsWithChildren<ScreenViewProps>): ReactElem
       <Flex height={1} />
 
       <ScrollView {...rest} contentInsetAdjustmentBehavior={rest.contentInsetAdjustmentBehavior ?? 'automatic'} style={backgroundStyle}>
-        <Flex direction="column">{children}</Flex>
+        <Flex direction="column" height={backgroundStyle.height}>
+          {children}
+        </Flex>
       </ScrollView>
     </SafeAreaView>
   );

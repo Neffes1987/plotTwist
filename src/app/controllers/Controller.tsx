@@ -8,6 +8,7 @@ import { IWaterholeConstructor } from '../../types/constructors/waterhole.constr
 import {
   IEdgeRewardConstructor,
   IEdgeTaskConstructor,
+  ITaskCharacterConstructor,
   IWorldCharacterConstructor,
   IWorldConstructor,
   IWorldLawConstructor,
@@ -16,7 +17,7 @@ import {
 } from '../../types/constructors/world.constructor';
 import { ICommonController } from '../../types/controllers/controller';
 import { CallDTO } from '../../types/entities/call';
-import { CharacterDTO, InWorldCharacterDTO } from '../../types/entities/character';
+import { CharacterDTO, InTaskCharacterDTO, InWorldCharacterDTO } from '../../types/entities/character';
 import { PlotDTO } from '../../types/entities/plot';
 import { TaskDTO, TaskInWorldDTO } from '../../types/entities/task';
 import { ActivePlotWorld, WorldDTO } from '../../types/entities/world';
@@ -36,6 +37,7 @@ export class Controller implements ICommonController {
   protected readonly crossWorldEdgeConstructor: IWorldTaskConstructor;
   protected readonly crossEdgeRewardConstructor: IEdgeRewardConstructor;
   protected readonly crossEdgeTaskConstructor: IEdgeTaskConstructor;
+  protected readonly crossTaskCharacterConstructor: ITaskCharacterConstructor;
 
   constructor(
     plotConstructor: IPlotConstructor,
@@ -52,6 +54,7 @@ export class Controller implements ICommonController {
     crossWorldEdgeConstructor: IWorldTaskConstructor,
     crossEdgeRewardConstructor: IEdgeRewardConstructor,
     crossEdgeTaskConstructor: IEdgeTaskConstructor,
+    crossTaskCharacterConstructor: ITaskCharacterConstructor,
   ) {
     this.plotConstructor = plotConstructor;
     this.worldConstructor = worldConstructor;
@@ -67,6 +70,7 @@ export class Controller implements ICommonController {
     this.crossWorldEdgeConstructor = crossWorldEdgeConstructor;
     this.crossEdgeRewardConstructor = crossEdgeRewardConstructor;
     this.crossEdgeTaskConstructor = crossEdgeTaskConstructor;
+    this.crossTaskCharacterConstructor = crossTaskCharacterConstructor;
   }
 
   getTasksInEdge(parentId: string): Promise<TaskInWorldDTO[]> {
@@ -243,5 +247,13 @@ export class Controller implements ICommonController {
 
   toggleWorldCharacters(characters: string[], worldId: string): Promise<InWorldCharacterDTO[]> {
     return this.crossWorldCharacterConstructor.toggle(characters, worldId);
+  }
+
+  getCharactersInTask(parentId: string): Promise<InTaskCharacterDTO[]> {
+    return this.crossTaskCharacterConstructor.assignedList(parentId);
+  }
+
+  toggleTaskCharacters(addedIds: string[], parentId: string): Promise<InTaskCharacterDTO[]> {
+    return this.crossTaskCharacterConstructor.toggle(addedIds, parentId);
   }
 }

@@ -3,6 +3,7 @@ import { CallsConstructor } from './domain/use-cases/constructors/CallsConstruct
 import { CharacterConstructor } from './domain/use-cases/constructors/CharacterConstructor';
 import { CrossEdgeRewardConstructor } from './domain/use-cases/constructors/cross/CrossEdgeRewardConstructor';
 import { CrossEdgeTaskConstructor } from './domain/use-cases/constructors/cross/CrossEdgeTaskConstructor';
+import { CrossTaskCharacterConstructor } from './domain/use-cases/constructors/cross/CrossTaskCharacterConstructor';
 import { CrossWorldCharacterConstructor } from './domain/use-cases/constructors/cross/CrossWorldCharacterConstructor';
 import { CrossWorldEdgeConstructor } from './domain/use-cases/constructors/cross/CrossWorldEdgeConstructor';
 import { CrossWorldLawConstructor } from './domain/use-cases/constructors/cross/CrossWorldLawConstructor';
@@ -28,6 +29,7 @@ const crossWorldWaterholesConstructor = new CrossWorldWaterholeConstructor(water
 const crossWorldEdgesConstructor = new CrossWorldEdgeConstructor(taskConstructor);
 const crossEdgeRewardsConstructor = new CrossEdgeRewardConstructor(rewardsConstructor);
 const crossEdgeTasksConstructor = new CrossEdgeTaskConstructor(taskConstructor);
+const crossTaskCharactersConstructor = new CrossTaskCharacterConstructor(charactersConstructor);
 
 export const appController = new Controller(
   plotConstructor,
@@ -44,4 +46,5 @@ export const appController = new Controller(
   crossWorldEdgesConstructor,
   crossEdgeRewardsConstructor,
   crossEdgeTasksConstructor,
+  crossTaskCharactersConstructor,
 );

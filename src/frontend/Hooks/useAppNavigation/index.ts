@@ -13,22 +13,23 @@ export const useAppNavigation = (): UseAppNavigationProps => {
 
   return {
     navigate: (route, options): void => {
-      navigate(route);
       const state = options?.state ?? {};
 
       navigationStore.set({
         ...state,
         isBack: false,
       });
+      navigate(route);
     },
     goBack: (options): void => {
-      goBack();
       const state = options?.state ?? {};
 
       navigationStore.set({
         ...state,
         isBack: true,
       });
+
+      goBack();
     },
     goBackSameState: goBack,
     state: navigationStore.get(),

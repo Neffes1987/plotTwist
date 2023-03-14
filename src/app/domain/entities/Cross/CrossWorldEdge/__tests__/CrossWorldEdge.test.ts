@@ -1,7 +1,7 @@
 import { CrossWorldEdgeDTO } from '../../../../../../types/entities/cross';
 import { CrossWorldEdge } from '../CrossWorldEdge';
 
-describe('WHEN "CrossWorldCharacter" is created', () => {
+describe('WHEN "CrossTaskCharacter" is created', () => {
   const relationDTO: CrossWorldEdgeDTO = {
     id: 'Id',
     edgeId: 'edgeId',

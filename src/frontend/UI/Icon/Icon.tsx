@@ -6,6 +6,7 @@ import Attention from './assets/attention.svg';
 import Chat from './assets/chat.svg';
 import Chevron from './assets/chevron.svg';
 import Close from './assets/close.svg';
+import Edge from './assets/edge.svg';
 import Events from './assets/events.svg';
 import Faq from './assets/faq.svg';
 import Flame from './assets/flame.svg';
@@ -18,6 +19,7 @@ import Place from './assets/place.svg';
 import Plot from './assets/plot.svg';
 import Plus from './assets/plus.svg';
 import Search from './assets/search.svg';
+import Task from './assets/task.svg';
 import Tick from './assets/tick.svg';
 
 import { UI_COLORS } from '../colors';
@@ -43,6 +45,8 @@ export const Icons: Record<IconType, React.FunctionComponent<SVGProps> | undefin
   person: Person,
   list: List,
   gavel: Gavel,
+  edge: Edge,
+  task: Task,
   'active-plot': ActivePlot,
 };
 

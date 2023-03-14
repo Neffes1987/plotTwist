@@ -74,16 +74,8 @@ export const ActivePlot = observer(
           worldWaterholesStore.toggleWorldWaterholes(selectedIds, worldId);
         }
 
-        if (selectedType === 'edge') {
-          worldEdgeStore.toggleWorldEdge(selectedIds[0], worldId);
-        }
-
         if (selectedType === 'task') {
           edgeTasksStore.toggleEdgeTasks(selectedIds, worldEdgeStore.edge?.id);
-        }
-
-        if (selectedType === 'reward') {
-          edgeRewardsStore.toggleEdgeRewards(selectedIds, worldEdgeStore.edge?.id);
         }
       }
     }, [state]);

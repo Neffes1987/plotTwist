@@ -49,3 +49,9 @@ interface CrossTaskCallDTO extends CommonEntityDTO {
   taskId: string;
   isActive: boolean;
 }
+
+interface CrossTaskCharacterDTO extends CommonEntityDTO {
+  isAlive: boolean;
+  characterId: string;
+  taskId: string;
+}
